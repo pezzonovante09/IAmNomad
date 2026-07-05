@@ -255,7 +255,13 @@ h4 { font-size: 1.125rem; }
 
 .placeholder--video {
   aspect-ratio: 16 / 9;
-  min-height: 300px;
+  width: 100%;
+  max-width: 100%;
+  min-height: 0;
+  padding: 16px;
+  box-sizing: border-box;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .placeholder--card {
