@@ -53,6 +53,7 @@ const translations = {
     "btn.requestQuote": "Request Quote",
     "btn.prev": "Previous",
     "btn.next": "Next",
+    "theme.toggle": "Toggle dark mode",
 
     // Footer
     "footer.quickLinks": "Quick Links",
@@ -429,6 +430,7 @@ const translations = {
     "btn.requestQuote": "Запросить расчёт",
     "btn.prev": "Назад",
     "btn.next": "Далее",
+    "theme.toggle": "Переключить тёмную тему",
 
     // Footer
     "footer.quickLinks": "Навигация",
