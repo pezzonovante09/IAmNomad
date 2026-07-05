@@ -55,6 +55,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 body {
@@ -118,6 +119,7 @@ h4 { font-size: 1.125rem; }
   max-width: var(--container-max);
   margin: 0 auto;
   padding: 0 20px;
+  min-width: 0;
 }
 
 .section {
@@ -142,6 +144,8 @@ h4 { font-size: 1.125rem; }
   color: var(--color-medium-gray);
   max-width: 600px;
   margin: 0 auto;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .page-hero {
@@ -246,6 +250,15 @@ h4 { font-size: 1.125rem; }
   text-transform: uppercase;
   border-radius: var(--radius);
   overflow: hidden;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.media-frame {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .placeholder--hero {
@@ -257,11 +270,19 @@ h4 { font-size: 1.125rem; }
   aspect-ratio: 16 / 9;
   width: 100%;
   max-width: 100%;
+  min-width: 0;
   min-height: 0;
-  padding: 16px;
-  box-sizing: border-box;
-  word-break: break-word;
-  overflow-wrap: anywhere;
+  padding: 0;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.placeholder__play {
+  width: clamp(48px, 14vw, 72px);
+  height: clamp(48px, 14vw, 72px);
+  color: var(--color-medium-gray);
+  opacity: 0.75;
+  flex-shrink: 0;
 }
 
 .placeholder--card {
@@ -758,11 +779,16 @@ h4 { font-size: 1.125rem; }
 .slider {
   position: relative;
   overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .slider__track {
   display: flex;
   gap: 24px;
+  width: 100%;
+  max-width: 100%;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
@@ -794,6 +820,10 @@ h4 { font-size: 1.125rem; }
 
 .slider--single .slider__slide {
   flex: 0 0 100%;
+}
+
+.slider--single .slider__track {
+  overflow-x: hidden;
 }
 
 .slider__controls {

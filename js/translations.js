@@ -137,7 +137,7 @@ const translations = {
 
     // Placeholders
     "placeholder.hero": "IMAGE PLACEHOLDER — hero-banner",
-    "placeholder.video": "VIDEO PLACEHOLDER — Kyrgyzstan showcase",
+    "placeholder.video": "Video placeholder",
     "placeholder.photo": "IMAGE PLACEHOLDER",
     "placeholder.map": "MAP PLACEHOLDER",
     "placeholder.icon": "ICON",
@@ -209,7 +209,7 @@ const translations = {
     "tour.title": "Issyk-Kul Lake Adventure",
     "tour.subtitle": "5 days · Issyk-Kul Region · Classic Tour",
     "tour.gallery.label": "PHOTO: tour-gallery",
-    "tour.video.label": "VIDEO PLACEHOLDER — tour preview",
+    "tour.video.label": "Tour video preview",
     "tour.map.label": "MAP PLACEHOLDER — route map",
     "tour.program.title": "Day-by-Day Program",
     "tour.program.day1.title": "Day 1 — Arrival in Bishkek",
@@ -514,7 +514,7 @@ const translations = {
 
     // Placeholders
     "placeholder.hero": "IMAGE PLACEHOLDER — hero-banner",
-    "placeholder.video": "VIDEO PLACEHOLDER — Kyrgyzstan showcase",
+    "placeholder.video": "Видео-плейсхолдер",
     "placeholder.photo": "IMAGE PLACEHOLDER",
     "placeholder.map": "MAP PLACEHOLDER",
     "placeholder.icon": "ICON",
@@ -586,7 +586,7 @@ const translations = {
     "tour.title": "Приключение на Иссык-Куле",
     "tour.subtitle": "5 дней · Иссык-Кульская область · Классический тур",
     "tour.gallery.label": "PHOTO: tour-gallery",
-    "tour.video.label": "VIDEO PLACEHOLDER — превью тура",
+    "tour.video.label": "Превью видео тура",
     "tour.map.label": "MAP PLACEHOLDER — карта маршрута",
     "tour.program.title": "Программа по дням",
     "tour.program.day1.title": "День 1 — Прибытие в Бишкек",
