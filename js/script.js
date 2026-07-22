@@ -7,7 +7,6 @@
     { key: 'home', href: 'index.html', i18n: 'nav.home' },
     { key: 'about', href: 'about.html', i18n: 'nav.about' },
     { key: 'tours', href: 'tours.html', i18n: 'nav.tours' },
-    { key: 'mice', href: 'mice.html', i18n: 'nav.mice' },
     { key: 'blog', href: 'blog.html', i18n: 'nav.blog' },
     { key: 'reviews', href: 'reviews.html', i18n: 'nav.reviews' },
     { key: 'gallery', href: 'gallery.html', i18n: 'nav.gallery' },
@@ -21,7 +20,7 @@
 
   function getPage() {
     const page = document.body.getAttribute('data-page') || 'home';
-    const parentMap = { 'tour-single': 'tours', 'blog-single': 'blog' };
+    const parentMap = { 'tour-single': 'tours', 'tour-classic': 'tours', 'tour-adventure': 'tours', 'tour-winter': 'tours', 'blog-single': 'blog' };
     return parentMap[page] || page;
   }
 

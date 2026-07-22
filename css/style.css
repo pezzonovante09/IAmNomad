@@ -1053,6 +1053,7 @@ h4 { font-size: 1.125rem; }
   padding: 0 24px 20px;
   font-size: 0.9375rem;
   color: var(--color-medium-gray);
+  white-space: pre-line;
 }
 
 .accordion__item--open .accordion__body {
