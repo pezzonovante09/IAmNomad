@@ -231,6 +231,12 @@ h4 { font-size: 1.125rem; }
   color: var(--color-white);
 }
 
+.btn[aria-disabled="true"] {
+  opacity: 0.55;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
 .btn--sm {
   padding: 10px 20px;
   font-size: 0.875rem;
@@ -766,6 +772,15 @@ h4 { font-size: 1.125rem; }
   padding: 24px;
 }
 
+.feature__step {
+  font-family: var(--font-display, 'Poppins', sans-serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-green);
+  margin-bottom: 12px;
+  letter-spacing: 0.04em;
+}
+
 .feature__title {
   margin-bottom: 8px;
 }
@@ -1096,6 +1111,11 @@ h4 { font-size: 1.125rem; }
 @media (min-width: 768px) {
   .pricing {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pricing--single {
+    grid-template-columns: minmax(280px, 420px);
+    justify-content: center;
   }
 }
 

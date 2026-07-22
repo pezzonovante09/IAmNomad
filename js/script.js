@@ -20,7 +20,7 @@
 
   function getPage() {
     const page = document.body.getAttribute('data-page') || 'home';
-    const parentMap = { 'tour-single': 'tours', 'tour-classic': 'tours', 'tour-adventure': 'tours', 'tour-winter': 'tours', 'blog-single': 'blog' };
+    const parentMap = { 'tour-single': 'tours', 'tour-classic': 'tours', 'tour-adventure': 'tours', 'tour-winter': 'tours', 'tour-custom': 'tours', 'blog-single': 'blog' };
     return parentMap[page] || page;
   }
 
