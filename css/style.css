@@ -1108,14 +1108,25 @@ h4 { font-size: 1.125rem; }
   gap: 24px;
 }
 
-@media (min-width: 768px) {
-  .pricing {
-    grid-template-columns: repeat(2, 1fr);
-  }
+.pricing--single {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
 
-  .pricing--single {
-    grid-template-columns: minmax(280px, 420px);
-    justify-content: center;
+.pricing--single .pricing__card {
+  width: 100%;
+}
+
+.pricing--single .pricing__features {
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .pricing:not(.pricing--single) {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
