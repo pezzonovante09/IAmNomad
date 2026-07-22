@@ -98,7 +98,7 @@ const translations = {
     "home.tours.card4.title": "Custom Tours",
     "home.tours.card4.location": "Anywhere in Kyrgyzstan",
     "home.tours.card4.duration": "Your dates",
-    "home.tours.card4.excerpt": "No fixed itinerary: choose what to see — yurts, mountains, the lake or winter — and we arrange the rest.",
+    "home.tours.card4.excerpt": "Everything is on request and discussed individually.",
     "home.tours.price": "from $1599",
 
     // Home — Why Us
@@ -190,7 +190,7 @@ const translations = {
     "tours.card4.location": "Anywhere in Kyrgyzstan",
     "tours.card4.duration": "Your dates",
     "tours.card4.price": "On request",
-    "tours.card4.excerpt": "No fixed itinerary: choose what to see — yurts, mountains, the lake or winter — and we arrange the rest.",
+    "tours.card4.excerpt": "Everything is on request and discussed individually.",
 
     // Tour Single (shared)
     "tour.title": "Classic Kyrgyzstan",
@@ -618,7 +618,7 @@ const translations = {
     "home.tours.card4.title": "Индивидуальные туры",
     "home.tours.card4.location": "По всему Кыргызстану",
     "home.tours.card4.duration": "Свои даты",
-    "home.tours.card4.excerpt": "Маршрут без шаблона: вы выбираете, что увидеть — юрты, горы, озеро или зиму, — а мы организуем всё остальное.",
+    "home.tours.card4.excerpt": "Всё по запросу — обсуждается индивидуально.",
     "home.tours.price": "от $1599",
 
     // Home — Why Us
@@ -710,7 +710,7 @@ const translations = {
     "tours.card4.location": "По всему Кыргызстану",
     "tours.card4.duration": "Свои даты",
     "tours.card4.price": "По запросу",
-    "tours.card4.excerpt": "Маршрут без шаблона: вы выбираете, что увидеть — юрты, горы, озеро или зиму, — а мы организуем всё остальное.",
+    "tours.card4.excerpt": "Всё по запросу — обсуждается индивидуально.",
 
     // Tour Single (shared)
     "tour.title": "Классический Кыргызстан",

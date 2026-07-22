@@ -386,7 +386,8 @@ h4 { font-size: 1.125rem; }
 
 .card__excerpt--tour {
   line-height: 1.45;
-  min-height: 4.35em;
+  min-height: 0;
+  -webkit-line-clamp: 2;
 }
 
 .card__date {
