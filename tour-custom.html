@@ -5,15 +5,15 @@
   <script src="js/theme-init.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Индивидуальные туры — I AM NOMAD</title>
-  <meta name="description" content="Соберите свой тур по Кыргызстану — выбирайте, что добавить в маршрут.">
+  <meta name="description" content="Соберите свой тур по Кыргызстану — перетаскивайте блоки в маршрут.">
   <meta property="og:title" content="Индивидуальные туры — I AM NOMAD">
-  <meta property="og:description" content="Соберите свой тур по Кыргызстану — выбирайте, что добавить в маршрут.">
+  <meta property="og:description" content="Соберите свой тур по Кыргызстану — перетаскивайте блоки в маршрут.">
   <meta property="og:image" content="https://images.unsplash.com/photo-1760630149964-200517d8d437?w=1200&q=80&auto=format&fit=crop">
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=3">
+  <link rel="stylesheet" href="css/style.css?v=4">
 </head>
 <body data-page="tour-custom">
 
@@ -27,78 +27,57 @@
       </div>
     </section>
 
-    <!-- Intro -->
     <section class="section">
-      <div class="container about-history">
-        <img src="https://images.unsplash.com/photo-1760630149964-200517d8d437?w=1200&q=65&auto=format&fit=crop" alt="Custom journey through Kyrgyzstan" width="1200" height="675" loading="lazy">
-        <h2 class="section__title mb-24" data-i18n="tour.custom.intro.title">Вы выбираете — мы организуем</h2>
-        <p class="mb-24" data-i18n="tour.custom.intro.p1">Индивидуальный тур — это не готовая программа. Вы сами собираете поездку: отмечаете, что хотите добавить, сколько дней и какой темп вам комфортен.</p>
-        <p class="mb-24" data-i18n="tour.custom.intro.p2">Юрта на Сон-Куле, конные прогулки, Иссык-Куль, горы, зима, бани, фотосессия — комбинируйте блоки как угодно. Мы подскажем, что сочетается лучше всего, и возьмём на себя логистику, гидов и бронирования.</p>
-        <p data-i18n="tour.custom.intro.p3">Напишите, что вам интересно — получите маршрут и стоимость под ваш набор.</p>
+      <div class="container">
+        <h2 class="section__title mb-24 text-center" data-i18n="tour.custom.intro.title">Вы выбираете — мы организуем</h2>
+        <p class="text-center text-muted mb-24" style="max-width:640px;margin-left:auto;margin-right:auto" data-i18n="tour.custom.intro.p1">Индивидуальный тур — это не готовая программа. Перетащите нужные блоки в маршрут справа — или нажмите на блок, чтобы добавить.</p>
       </div>
     </section>
 
-    <!-- How it works -->
-    <section class="section section--gray">
+    <!-- Interactive tour builder -->
+    <section class="section section--gray" id="tour-builder">
       <div class="container">
         <div class="section__header">
-          <h2 class="section__title" data-i18n="tour.custom.steps.title">Как собрать тур</h2>
-          <p class="section__subtitle" data-i18n="tour.custom.steps.subtitle">Четыре шага от идеи до поездки</p>
+          <h2 class="section__title" data-i18n="builder.title">Конструктор тура</h2>
+          <p class="section__subtitle" data-i18n="builder.subtitle">Перетащите возможности в свой маршрут</p>
         </div>
-        <div class="grid grid--4">
-          <article class="feature">
-            <p class="feature__step">01</p>
-            <h3 class="feature__title" data-i18n="tour.custom.steps.step1.title">Выберите, что добавить</h3>
-            <p class="feature__text" data-i18n="tour.custom.steps.step1.text">Отметьте активности и формат: культура, горы, озеро, зима, семья, фото — в любой комбинации.</p>
-          </article>
-          <article class="feature">
-            <p class="feature__step">02</p>
-            <h3 class="feature__title" data-i18n="tour.custom.steps.step2.title">Укажите даты и группу</h3>
-            <p class="feature__text" data-i18n="tour.custom.steps.step2.text">Сколько дней, кто едет, какой комфорт нужен — от юрты до отеля.</p>
-          </article>
-          <article class="feature">
-            <p class="feature__step">03</p>
-            <h3 class="feature__title" data-i18n="tour.custom.steps.step3.title">Получите маршрут и цену</h3>
-            <p class="feature__text" data-i18n="tour.custom.steps.step3.text">Мы соберём ваш набор в понятную программу по дням и прозрачную смету.</p>
-          </article>
-          <article class="feature">
-            <p class="feature__step">04</p>
-            <h3 class="feature__title" data-i18n="tour.custom.steps.step4.title">Отправляемся</h3>
-            <p class="feature__text" data-i18n="tour.custom.steps.step4.text">Гиды, трансферы и детали — на нас. Вы просто путешествуете по своему сценарию.</p>
-          </article>
+
+        <div class="builder" data-tour-builder>
+          <div class="builder__col">
+            <h3 class="builder__heading" data-i18n="builder.poolTitle">Все возможности</h3>
+            <p class="builder__hint" data-i18n="builder.poolHint">Перетащите в маршрут или нажмите «+»</p>
+            <div class="builder__pool" data-builder-pool></div>
+          </div>
+
+          <div class="builder__col builder__col--route">
+            <h3 class="builder__heading" data-i18n="builder.routeTitle">Ваш маршрут</h3>
+            <p class="builder__hint" data-i18n="builder.routeHint">Можно менять порядок перетаскиванием</p>
+            <div class="builder__route" data-builder-route>
+              <p class="builder__empty" data-builder-empty data-i18n="builder.empty">Перетащите сюда блоки из списка слева</p>
+            </div>
+            <div class="builder__footer">
+              <p class="builder__count"><span data-builder-count>0</span> <span data-i18n="builder.blocks">блоков</span></p>
+              <div class="builder__actions">
+                <button type="button" class="btn btn--outline btn--sm" data-builder-clear data-i18n="builder.clear">Очистить</button>
+                <a href="contact.html" class="btn btn--primary btn--sm" data-builder-submit data-i18n="builder.submit">Запросить этот тур</a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Building blocks -->
     <section class="section">
-      <div class="container">
-        <h2 class="section__title mb-24" data-i18n="tour.custom.options.title">Что можно добавить в тур</h2>
-        <p class="section__subtitle mb-24" data-i18n="tour.custom.options.subtitle">Выбирайте блоки — маршрут собирается из того, что нужно именно вам</p>
-        <ul class="included-list">
-          <li class="included-list__item"><span class="included-list__icon included-list__icon--yes">+</span><span data-i18n="tour.custom.options.item1">Кочевая культура — юрты, конные игры, охота с беркутом, ремёсла</span></li>
-          <li class="included-list__item"><span class="included-list__icon included-list__icon--yes">+</span><span data-i18n="tour.custom.options.item2">Горы и треккинг — тропы, ущелья, перевалы</span></li>
-          <li class="included-list__item"><span class="included-list__icon included-list__icon--yes">+</span><span data-i18n="tour.custom.options.item3">Иссык-Куль — южный или северный берег, отдых у воды</span></li>
-          <li class="included-list__item"><span class="included-list__icon included-list__icon--yes">+</span><span data-i18n="tour.custom.options.item4">Зима — лыжи, фрирайд, SPA, горные отели</span></li>
-          <li class="included-list__item"><span class="included-list__icon included-list__icon--yes">+</span><span data-i18n="tour.custom.options.item5">Активности — квадроциклы, рафтинг, конные прогулки, вертолёт</span></li>
-          <li class="included-list__item"><span class="included-list__icon included-list__icon--yes">+</span><span data-i18n="tour.custom.options.item6">Дополнительно — фотосессия, баня, семейный мягкий темп</span></li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- CTA band -->
-    <section class="section section--gray">
       <div class="container">
         <div class="mission">
           <h2 class="mission__title" data-i18n="tour.custom.cta.title">Готовы собрать свой тур?</h2>
-          <p class="mission__text mb-24" data-i18n="tour.custom.cta.text">Напишите, что хотите включить — мы ответим маршрутом и стоимостью.</p>
-          <a href="contact.html" class="btn btn--primary" data-i18n="tour.custom.cta.button">Собрать свой тур</a>
+          <p class="mission__text mb-24" data-i18n="tour.custom.cta.text">Соберите блоки выше — или напишите нам, и мы поможем с маршрутом.</p>
+          <a href="#tour-builder" class="btn btn--primary" data-i18n="tour.custom.cta.button">Собрать свой тур</a>
         </div>
       </div>
     </section>
 
-    <!-- Similar Tours -->
-    <section class="section">
+    <section class="section section--gray">
       <div class="container">
         <h2 class="section__title mb-24" data-i18n="tour.similar.title">Похожие туры</h2>
         <div class="slider">
@@ -110,7 +89,7 @@
                 </div>
                 <div class="card__body">
                   <h3 class="card__title" data-i18n="home.tours.card1.title">Классический Кыргызстан</h3>
-                  <p class="card__price" data-i18n="home.tours.card1.price">от $1599</p>
+                  <p class="card__price" data-i18n="home.tours.card1.price">$1599</p>
                   <a href="tour-classic.html" class="btn btn--outline btn--sm" data-i18n="btn.viewDetails">Подробнее</a>
                 </div>
               </article>
@@ -122,7 +101,7 @@
                 </div>
                 <div class="card__body">
                   <h3 class="card__title" data-i18n="home.tours.card2.title">Приключения в Кыргызстане</h3>
-                  <p class="card__price" data-i18n="home.tours.card2.price">от $2499</p>
+                  <p class="card__price" data-i18n="home.tours.card2.price">$2499</p>
                   <a href="tour-adventure.html" class="btn btn--outline btn--sm" data-i18n="btn.viewDetails">Подробнее</a>
                 </div>
               </article>
@@ -155,13 +134,13 @@
         <p class="sticky-cta__label" data-i18n="tour.custom.title">Индивидуальные туры</p>
         <p class="sticky-cta__price" data-i18n="tour.custom.sticky.from">По запросу</p>
       </div>
-      <a href="contact.html" class="btn btn--primary" data-i18n="tour.custom.cta.button">Собрать свой тур</a>
+      <a href="#tour-builder" class="btn btn--primary" data-i18n="tour.custom.cta.button">Собрать свой тур</a>
     </div>
   </div>
 
   <div id="site-footer"></div>
 
-  <script src="js/translations.js?v=3"></script>
-  <script src="js/script.js?v=3"></script>
+  <script src="js/translations.js?v=4"></script>
+  <script src="js/script.js?v=4"></script>
 </body>
 </html>

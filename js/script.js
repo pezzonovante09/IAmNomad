@@ -185,6 +185,7 @@
         localStorage.setItem('lang', lang);
         applyTranslations();
         updateLangButtons();
+        document.dispatchEvent(new CustomEvent('langchange'));
       }
     });
   }
@@ -358,6 +359,255 @@
   }
 
   // Web3Forms integration — replace YOUR_WEB3FORMS_KEY with a key from https://web3forms.com/
+  function initTourBuilder() {
+    var root = document.querySelector('[data-tour-builder]');
+    if (!root) return;
+
+    var ITEMS = [
+      { id: 'yurt', icon: '🏕️' },
+      { id: 'eagle', icon: '🦅' },
+      { id: 'horses', icon: '🐎' },
+      { id: 'riding', icon: '🏇' },
+      { id: 'issykSouth', icon: '🌊' },
+      { id: 'issykNorth', icon: '🏖️' },
+      { id: 'trek', icon: '🥾' },
+      { id: 'atv', icon: '🏍️' },
+      { id: 'rafting', icon: '🛶' },
+      { id: 'wakeboard', icon: '🏄' },
+      { id: 'ski', icon: '🎿' },
+      { id: 'heli', icon: '🚁' },
+      { id: 'spa', icon: '♨️' },
+      { id: 'photo', icon: '📸' },
+      { id: 'bishkek', icon: '🏙️' },
+      { id: 'burana', icon: '🏛️' }
+    ];
+
+    var poolEl = root.querySelector('[data-builder-pool]');
+    var routeEl = root.querySelector('[data-builder-route]');
+    var emptyEl = root.querySelector('[data-builder-empty]');
+    var countEl = root.querySelector('[data-builder-count]');
+    var clearBtn = root.querySelector('[data-builder-clear]');
+    var submitBtn = root.querySelector('[data-builder-submit]');
+    var routeIds = [];
+    var dragId = null;
+    var dragFrom = null;
+
+    function itemById(id) {
+      for (var i = 0; i < ITEMS.length; i++) {
+        if (ITEMS[i].id === id) return ITEMS[i];
+      }
+      return null;
+    }
+
+    function labelOf(id) {
+      return t('builder.item.' + id);
+    }
+
+    function renderPool() {
+      poolEl.innerHTML = '';
+      ITEMS.forEach(function (item) {
+        var used = routeIds.indexOf(item.id) !== -1;
+        var chip = document.createElement('div');
+        chip.className = 'builder__chip' + (used ? ' builder__chip--used' : '');
+        chip.setAttribute('draggable', used ? 'false' : 'true');
+        chip.dataset.id = item.id;
+        chip.dataset.source = 'pool';
+        chip.innerHTML =
+          '<span class="builder__chip-icon" aria-hidden="true">' + item.icon + '</span>' +
+          '<span class="builder__chip-label">' + labelOf(item.id) + '</span>' +
+          (used ? '' : '<button type="button" class="builder__chip-btn" data-add aria-label="+">+</button>');
+        poolEl.appendChild(chip);
+      });
+    }
+
+    function renderRoute() {
+      var chips = routeEl.querySelectorAll('.builder__chip');
+      chips.forEach(function (c) { c.remove(); });
+
+      if (emptyEl) {
+        emptyEl.hidden = routeIds.length > 0;
+      }
+
+      routeIds.forEach(function (id) {
+        var item = itemById(id);
+        if (!item) return;
+        var chip = document.createElement('div');
+        chip.className = 'builder__chip builder__chip--in-route';
+        chip.setAttribute('draggable', 'true');
+        chip.dataset.id = id;
+        chip.dataset.source = 'route';
+        chip.innerHTML =
+          '<span class="builder__chip-handle" aria-hidden="true">⋮⋮</span>' +
+          '<span class="builder__chip-icon" aria-hidden="true">' + item.icon + '</span>' +
+          '<span class="builder__chip-label">' + labelOf(id) + '</span>' +
+          '<button type="button" class="builder__chip-btn builder__chip-btn--remove" data-remove aria-label="×">×</button>';
+        routeEl.appendChild(chip);
+      });
+
+      if (countEl) countEl.textContent = String(routeIds.length);
+      if (submitBtn) {
+        submitBtn.classList.toggle('btn--disabled', routeIds.length === 0);
+        if (routeIds.length === 0) {
+          submitBtn.setAttribute('aria-disabled', 'true');
+        } else {
+          submitBtn.removeAttribute('aria-disabled');
+        }
+      }
+    }
+
+    function render() {
+      renderPool();
+      renderRoute();
+    }
+
+    function addItem(id) {
+      if (routeIds.indexOf(id) !== -1) return;
+      routeIds.push(id);
+      render();
+    }
+
+    function removeItem(id) {
+      routeIds = routeIds.filter(function (x) { return x !== id; });
+      render();
+    }
+
+    function moveItem(id, toIndex) {
+      var from = routeIds.indexOf(id);
+      if (from === -1) return;
+      routeIds.splice(from, 1);
+      if (toIndex > from) toIndex -= 1;
+      if (toIndex < 0) toIndex = 0;
+      if (toIndex > routeIds.length) toIndex = routeIds.length;
+      routeIds.splice(toIndex, 0, id);
+      render();
+    }
+
+    function insertFromPool(id, toIndex) {
+      if (routeIds.indexOf(id) !== -1) return;
+      if (typeof toIndex !== 'number' || toIndex < 0 || toIndex > routeIds.length) {
+        routeIds.push(id);
+      } else {
+        routeIds.splice(toIndex, 0, id);
+      }
+      render();
+    }
+
+    function dropIndexFromEvent(e) {
+      var chips = Array.prototype.slice.call(routeEl.querySelectorAll('.builder__chip--in-route'));
+      for (var i = 0; i < chips.length; i++) {
+        var rect = chips[i].getBoundingClientRect();
+        var mid = rect.top + rect.height / 2;
+        if (e.clientY < mid) return i;
+      }
+      return chips.length;
+    }
+
+    poolEl.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-add]');
+      if (!btn) return;
+      var chip = btn.closest('.builder__chip');
+      if (chip && chip.dataset.id) addItem(chip.dataset.id);
+    });
+
+    routeEl.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-remove]');
+      if (!btn) return;
+      var chip = btn.closest('.builder__chip');
+      if (chip && chip.dataset.id) removeItem(chip.dataset.id);
+    });
+
+    root.addEventListener('dragstart', function (e) {
+      var chip = e.target.closest('.builder__chip');
+      if (!chip || !chip.getAttribute('draggable') || chip.getAttribute('draggable') === 'false') return;
+      dragId = chip.dataset.id;
+      dragFrom = chip.dataset.source;
+      chip.classList.add('builder__chip--dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', dragId);
+    });
+
+    root.addEventListener('dragend', function (e) {
+      var chip = e.target.closest('.builder__chip');
+      if (chip) chip.classList.remove('builder__chip--dragging');
+      routeEl.classList.remove('builder__route--over');
+      dragId = null;
+      dragFrom = null;
+    });
+
+    routeEl.addEventListener('dragover', function (e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      routeEl.classList.add('builder__route--over');
+    });
+
+    routeEl.addEventListener('dragleave', function (e) {
+      if (!routeEl.contains(e.relatedTarget)) {
+        routeEl.classList.remove('builder__route--over');
+      }
+    });
+
+    routeEl.addEventListener('drop', function (e) {
+      e.preventDefault();
+      routeEl.classList.remove('builder__route--over');
+      var id = dragId || e.dataTransfer.getData('text/plain');
+      if (!id) return;
+      var index = dropIndexFromEvent(e);
+      if (dragFrom === 'route') {
+        moveItem(id, index);
+      } else {
+        insertFromPool(id, index);
+      }
+    });
+
+    if (clearBtn) {
+      clearBtn.addEventListener('click', function () {
+        routeIds = [];
+        render();
+      });
+    }
+
+    if (submitBtn) {
+      submitBtn.addEventListener('click', function (e) {
+        if (routeIds.length === 0) {
+          e.preventDefault();
+          return;
+        }
+        var lines = routeIds.map(function (id, i) {
+          return (i + 1) + '. ' + labelOf(id);
+        });
+        sessionStorage.setItem('customTourBlocks', JSON.stringify({
+          ids: routeIds,
+          labels: routeIds.map(labelOf),
+          text: lines.join('\n')
+        }));
+      });
+    }
+
+    // Re-render labels on language change
+    document.addEventListener('langchange', render);
+
+    render();
+  }
+
+  function initCustomTourPrefill() {
+    var raw = sessionStorage.getItem('customTourBlocks');
+    if (!raw) return;
+    var tourInput = document.getElementById('contact-tour');
+    var message = document.getElementById('contact-message');
+    if (!tourInput && !message) return;
+
+    try {
+      var data = JSON.parse(raw);
+      if (tourInput) tourInput.value = t('tour.custom.title');
+      if (message && data.text) {
+        message.value = t('builder.requestPrefix') + '\n' + data.text;
+      }
+      sessionStorage.removeItem('customTourBlocks');
+    } catch (err) {
+      sessionStorage.removeItem('customTourBlocks');
+    }
+  }
+
   function initForms() {
     document.querySelectorAll('form[data-form]').forEach(function (form) {
       form.addEventListener('submit', function (e) {
@@ -522,6 +772,8 @@
     initSliders();
     initStickyCta();
     initForms();
+    initCustomTourPrefill();
+    initTourBuilder();
     initScrollHeader();
     initScrollReveal();
     initLightbox();
