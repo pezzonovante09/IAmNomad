@@ -377,7 +377,16 @@ h4 { font-size: 1.125rem; }
 .card__excerpt {
   font-size: 0.9375rem;
   color: var(--color-medium-gray);
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card__excerpt--tour {
+  line-height: 1.45;
+  min-height: 4.35em;
 }
 
 .card__date {
