@@ -96,10 +96,10 @@
             '<div>' +
               '<h4 class="footer__title" data-i18n="footer.contact">' + t('footer.contact') + '</h4>' +
               '<ul class="footer__contact">' +
-                '<li><a href="https://wa.me/996555123456"><span data-i18n="footer.whatsapp">' + t('footer.whatsapp') + '</span>: +996 555 123 456</a></li>' +
+                '<li><a href="https://wa.me/996706001517"><span data-i18n="footer.whatsapp">' + t('footer.whatsapp') + '</span>: +996 706 001 517</a></li>' +
                 '<li><a href="https://t.me/iamnomad_kg"><span data-i18n="footer.telegram">' + t('footer.telegram') + '</span>: @iamnomad_kg</a></li>' +
-                '<li><a href="mailto:info@iamnomad.kg"><span data-i18n="footer.email">' + t('footer.email') + '</span>: info@iamnomad.kg</a></li>' +
-                '<li><a href="tel:+996312456789"><span data-i18n="footer.phone">' + t('footer.phone') + '</span>: +996 312 456 789</a></li>' +
+                '<li><a href="mailto:Iamnomadkgz@gmail.com"><span data-i18n="footer.email">' + t('footer.email') + '</span>: Iamnomadkgz@gmail.com</a></li>' +
+                '<li><a href="tel:+996706001517"><span data-i18n="footer.phone">' + t('footer.phone') + '</span>: +996 706 001 517</a></li>' +
               '</ul>' +
               '<div class="footer__social">' +
                 '<p class="footer__title" data-i18n="footer.followUs">' + t('footer.followUs') + '</p>' +
