@@ -12,10 +12,10 @@ const { lang, layout = 'grid' } = Astro.props;
 const t = useTranslations(lang);
 
 const items = [
-  { icon: 'whatsapp', label: t('footer.whatsapp'), value: contacts.phone, href: contacts.whatsapp, tone: 'wa' },
-  { icon: 'telegram', label: t('footer.telegram'), value: contacts.telegramHandle, href: contacts.telegram, tone: 'tg' },
-  { icon: 'mail', label: t('footer.email'), value: contacts.email, href: `mailto:${contacts.email}`, tone: 'mail' },
-  { icon: 'phone', label: t('footer.phone'), value: contacts.phone, href: contacts.phoneHref, tone: 'phone' },
+  { icon: 'whatsapp', label: t('footer.whatsapp'), value: contacts.phone, href: contacts.whatsapp },
+  { icon: 'telegram', label: t('footer.telegram'), value: contacts.telegramHandle, href: contacts.telegram },
+  { icon: 'mail', label: t('footer.email'), value: contacts.email, href: `mailto:${contacts.email}` },
+  { icon: 'phone', label: t('footer.phone'), value: contacts.phone, href: contacts.phoneHref },
 ] as const;
 ---
 
@@ -26,18 +26,15 @@ const items = [
         <a
           class="cc__item"
           href={item.href}
-          data-tone={item.tone}
           target={item.href.startsWith('http') ? '_blank' : undefined}
           rel={item.href.startsWith('http') ? 'noopener' : undefined}
         >
-          <span class="cc__icon">
-            <Icon name={item.icon} />
-          </span>
+          <Icon name={item.icon} size={20} class="cc__icon" />
           <span class="cc__text">
-            <span class="cc__label">{item.label}</span>
+            <span class="label cc__label">{item.label}</span>
             <span class="cc__value">{item.value}</span>
           </span>
-          <Icon name="arrow-right" size={18} class="cc__arrow" />
+          <span class="cc__arrow" aria-hidden="true">→</span>
         </a>
       </li>
     ))
@@ -47,92 +44,69 @@ const items = [
 <style>
   .cc {
     display: grid;
-    gap: 12px;
     list-style: none;
+    border-top: 1px solid var(--line);
   }
 
   .cc--grid {
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    border-left: 1px solid var(--line);
+  }
+
+  .cc--grid li {
+    border-right: 1px solid var(--line);
+  }
+
+  .cc li {
+    border-bottom: 1px solid var(--line);
   }
 
   .cc__item {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 16px;
     height: 100%;
-    padding: 16px 18px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: var(--surface);
+    padding: 16px 4px;
     text-decoration: none;
     transition:
-      border-color 0.2s,
-      transform 0.3s var(--ease),
-      box-shadow 0.3s var(--ease);
+      background-color 0.5s,
+      color 0.5s,
+      padding 0.5s var(--ease);
+  }
+
+  .cc--grid .cc__item {
+    padding: 20px;
   }
 
   .cc__item:hover {
-    border-color: var(--ink-mute);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow);
-  }
-
-  .cc__icon {
-    display: grid;
-    place-items: center;
-    flex-shrink: 0;
-    width: 46px;
-    height: 46px;
-    border-radius: 14px;
-    background: var(--bg-alt);
-  }
-
-  [data-tone='wa'] .cc__icon {
-    background: #25d366;
-    color: #06351a;
-  }
-
-  [data-tone='tg'] .cc__icon {
-    background: #2aabee;
-    color: #fff;
-  }
-
-  [data-tone='mail'] .cc__icon {
-    background: var(--gold-soft);
-    color: var(--ink);
-  }
-
-  [data-tone='phone'] .cc__icon {
-    background: var(--accent-soft);
-    color: var(--accent);
+    background: var(--accent);
+    color: var(--on-accent);
+    padding-inline: 16px;
   }
 
   .cc__text {
     display: grid;
+    gap: 2px;
     min-width: 0;
   }
 
   .cc__label {
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--ink-mute);
+    font-size: 11px;
+    opacity: 0.7;
   }
 
   .cc__value {
-    font-weight: 700;
+    font-weight: 600;
     overflow-wrap: anywhere;
   }
 
-  .cc__item :global(.cc__arrow) {
+  .cc__arrow {
     margin-left: auto;
-    flex-shrink: 0;
-    color: var(--ink-mute);
-    transition: transform 0.3s var(--ease);
+    font-size: 18px;
+    transition: transform 0.4s var(--ease);
   }
 
-  .cc__item:hover :global(.cc__arrow) {
-    transform: translateX(3px);
-    color: var(--accent);
+  .cc__item:hover .cc__arrow {
+    transform: translateX(4px);
   }
 </style>

@@ -10,228 +10,137 @@ interface Props {
   active?: string;
   /** Путь текущей страницы без языкового префикса — для переключателя языка. */
   path: string;
-  /** Прозрачная шапка поверх героя (главная). */
-  overlay?: boolean;
 }
 
-const { lang, active, path, overlay = false } = Astro.props;
+const { lang, active, path } = Astro.props;
 const t = useTranslations(lang);
 const bookHref = active === 'home' ? '#contact-form' : localize(routes.contact, lang);
+const menuItems = [{ key: 'home', href: '/', label: 'nav.home' }, ...navItems];
+const pad = (n: number) => String(n).padStart(2, '0');
 ---
 
-<header class="header" data-header data-overlay={overlay ? '' : undefined}>
-  <div class="container header__inner">
-    <Logo lang={lang} />
-
-    <nav class="header__nav" aria-label="Main">
-      <ul>
-        {
-          navItems.map((item) => (
-            <li>
-              <a
-                href={localize(item.href, lang)}
-                class="header__link"
-                aria-current={active === item.key ? 'page' : undefined}
-              >
-                {t(item.label)}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
-
-    <div class="header__actions">
-      <div class="lang" role="group" aria-label={t('ui.language')}>
-        {
-          (Object.keys(languages) as Lang[]).map((code) => (
-            <a
-              href={localize(path, code)}
-              hreflang={code}
-              lang={code}
-              class="lang__item"
-              aria-current={code === lang ? 'true' : undefined}
-            >
-              {languages[code]}
-            </a>
-          ))
-        }
-      </div>
-      <button class="header__icon" type="button" data-theme-toggle aria-label={t('theme.toggle')}>
-        <Icon name="moon" class="theme-moon" size={20} />
-        <Icon name="sun" class="theme-sun" size={20} />
-      </button>
-      <a href={bookHref} class="btn btn--accent btn--sm header__cta">{t('btn.bookNow')}</a>
-      <button
-        class="header__icon header__burger"
-        type="button"
-        aria-expanded="false"
-        aria-controls="mobile-menu"
-        data-menu-toggle
-      >
-        <span class="sr-only">{t('ui.menu')}</span>
-        <span class="burger" aria-hidden="true"><span></span><span></span></span>
-      </button>
-    </div>
+<header class="hd" data-header>
+  <Logo lang={lang} class="hd__cell hd__logo" />
+  <div class="hd__cell hd__slogan label">{t('brand.slogan')}</div>
+  <div class="hd__cell hd__coords label num">42°52′N 74°36′E</div>
+  <div class="hd__cell hd__lang" role="group" aria-label={t('ui.language')}>
+    {
+      (Object.keys(languages) as Lang[]).map((code) => (
+        <a href={localize(path, code)} hreflang={code} lang={code} aria-current={code === lang ? 'true' : undefined}>
+          {languages[code]}
+        </a>
+      ))
+    }
   </div>
+  <button class="hd__cell hd__theme" type="button" data-theme-toggle aria-label={t('theme.toggle')}>
+    <Icon name="moon" class="theme-moon" size={18} />
+    <Icon name="sun" class="theme-sun" size={18} />
+  </button>
+  <a href={bookHref} class="hd__cell hd__book">{t('btn.bookNow')}</a>
+  <button class="hd__menu" type="button" aria-expanded="false" aria-controls="site-menu" data-menu-toggle>
+    <span class="hd__menu-label" data-open={t('ui.menu')} data-close={t('ui.close')}>{t('ui.menu')}</span>
+    <span class="hd__burger" aria-hidden="true"><span></span><span></span></span>
+  </button>
 </header>
 
-<div class="menu" id="mobile-menu" data-menu hidden>
-  <nav class="container menu__inner" aria-label="Mobile">
-    <ul class="menu__list">
-      <li style="--i:0">
-        <a href={localize('/', lang)} class="menu__link" aria-current={active === 'home' ? 'page' : undefined}>
-          {t('nav.home')}
-        </a>
-      </li>
+<div class="mn" id="site-menu" data-menu hidden>
+  <nav class="mn__nav" aria-label="Main">
+    <ol class="mn__list">
       {
-        navItems.map((item, i) => (
-          <li style={`--i:${i + 1}`}>
-            <a
-              href={localize(item.href, lang)}
-              class="menu__link"
-              aria-current={active === item.key ? 'page' : undefined}
-            >
-              {t(item.label)}
+        menuItems.map((item, i) => (
+          <li style={`--i:${i}`}>
+            <a href={localize(item.href, lang)} class="mn__link" aria-current={active === item.key ? 'page' : undefined}>
+              <span class="mn__num label num">({pad(i + 1)})</span>
+              <span class="mn__title">{t(item.label)}</span>
+              <span class="mn__arrow" aria-hidden="true">→</span>
             </a>
           </li>
         ))
       }
-    </ul>
-    <div class="menu__footer">
-      <a href={bookHref} class="btn btn--accent btn--block" data-menu-close>{t('btn.bookNow')}</a>
-      <a href={contacts.whatsapp} class="btn btn--outline btn--block" target="_blank" rel="noopener">
-        <Icon name="whatsapp" />
-        {contacts.phone}
-      </a>
-    </div>
+    </ol>
   </nav>
+  <div class="mn__side">
+    <p class="label">{t('footer.contact')}</p>
+    <ul class="mn__contacts">
+      <li><a href={contacts.whatsapp} target="_blank" rel="noopener">WhatsApp — {contacts.phone}</a></li>
+      <li><a href={contacts.telegram} target="_blank" rel="noopener">Telegram — {contacts.telegramHandle}</a></li>
+      <li><a href={`mailto:${contacts.email}`}>{contacts.email}</a></li>
+    </ul>
+    <a href={bookHref} class="btn btn--accent btn--block">
+      {t('btn.bookNow')}
+      <Icon name="arrow-right" />
+    </a>
+  </div>
 </div>
 
 <style>
-  .header {
+  .hd {
     position: sticky;
     top: 0;
     z-index: 50;
-    height: var(--header-h);
-    color: var(--ink);
-    background: color-mix(in srgb, var(--bg) 82%, transparent);
-    backdrop-filter: saturate(1.4) blur(14px);
-    -webkit-backdrop-filter: saturate(1.4) blur(14px);
-    border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
-    transition:
-      background-color 0.3s,
-      color 0.3s,
-      border-color 0.3s,
-      transform 0.35s var(--ease);
+    display: flex;
+    align-items: stretch;
+    min-height: var(--header-h);
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    transition: transform 0.4s var(--ease);
   }
 
-  .header[data-overlay] {
-    position: fixed;
-    inset: 0 0 auto;
-  }
-
-  .header[data-overlay]:not(.is-scrolled):not(.is-menu-open) {
-    background: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    border-color: transparent;
-    color: var(--hero-ink);
-  }
-
-  .header.is-hidden {
+  .hd.is-hidden {
     transform: translateY(-100%);
   }
 
-  .header__inner {
+  .hd__cell {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-    height: 100%;
+    padding: 0 24px;
+    border-right: 1px solid var(--line);
   }
 
-  .header__nav ul {
-    display: flex;
-    gap: 2px;
-    list-style: none;
+  .hd__slogan {
+    flex: 1 1 auto;
+    border-right: 0;
+    font-weight: 500;
+    letter-spacing: 0.16em;
   }
 
-  .header__link {
-    position: relative;
-    display: block;
-    padding: 8px 12px;
-    font-size: 0.93rem;
+  .hd__coords {
+    border-left: 1px solid var(--line);
+    white-space: nowrap;
+    letter-spacing: 0.08em;
+  }
+
+  .hd__lang {
+    gap: 4px;
+    padding: 0 16px;
+  }
+
+  .hd__lang a {
+    padding: 4px 6px;
+    font-size: 12px;
     font-weight: 600;
+    letter-spacing: 0.12em;
     text-decoration: none;
-    border-radius: 999px;
-    transition: background-color 0.2s;
+    opacity: 0.5;
   }
 
-  .header__link:hover {
-    background: color-mix(in srgb, currentColor 10%, transparent);
-  }
-
-  .header__link[aria-current='page']::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    bottom: 1px;
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--gold);
-    transform: translateX(-50%);
-  }
-
-  .header__actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .lang {
-    display: flex;
-    padding: 3px;
-    border: 1.5px solid color-mix(in srgb, currentColor 25%, transparent);
-    border-radius: 999px;
-  }
-
-  .lang__item {
-    padding: 4px 9px;
-    border-radius: 999px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    letter-spacing: 0.05em;
-    text-decoration: none;
-    opacity: 0.7;
-  }
-
-  .lang__item[aria-current] {
-    background: var(--ink);
-    color: var(--bg);
+  .hd__lang a[aria-current] {
     opacity: 1;
+    text-decoration: underline;
+    text-underline-offset: 4px;
   }
 
-  .header[data-overlay]:not(.is-scrolled):not(.is-menu-open) .lang__item[aria-current] {
-    background: var(--hero-ink);
-    color: #1f1a15;
-  }
-
-  .header__icon {
-    display: inline-grid;
-    place-items: center;
-    width: 42px;
-    height: 42px;
-    padding: 0;
-    border: 0;
-    border-radius: 50%;
+  .hd__theme {
+    justify-content: center;
+    padding: 0 16px;
+    border-top: 0;
+    border-bottom: 0;
+    border-left: 0;
     background: transparent;
-    transition: background-color 0.2s;
   }
 
-  .header__icon:hover {
-    background: color-mix(in srgb, currentColor 10%, transparent);
+  .hd__theme:hover {
+    background: var(--surface);
   }
 
   .theme-sun {
@@ -246,130 +155,218 @@ const bookHref = active === 'home' ? '#contact-form' : localize(routes.contact, 
     display: none;
   }
 
-  .burger {
-    display: grid;
-    gap: 6px;
-    width: 20px;
-  }
-
-  .burger span {
-    display: block;
-    height: 2px;
-    border-radius: 2px;
-    background: currentColor;
-    transition: transform 0.3s var(--ease);
-  }
-
-  .burger span:last-child {
-    width: 70%;
-    justify-self: end;
+  .hd__book {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
     transition:
-      transform 0.3s var(--ease),
-      width 0.3s var(--ease);
+      background-color 0.5s,
+      color 0.5s;
   }
 
-  [aria-expanded='true'] .burger span:first-child {
-    transform: translateY(4px) rotate(45deg);
+  .hd__book:hover {
+    background: var(--accent);
+    color: var(--on-accent);
   }
 
-  [aria-expanded='true'] .burger span:last-child {
-    width: 100%;
-    transform: translateY(-4px) rotate(-45deg);
+  .hd__menu {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 28px;
+    border: 0;
+    background: var(--ink);
+    color: var(--bg);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    transition: background-color 0.5s;
   }
 
-  .header__burger {
-    display: none;
+  .hd__menu:hover,
+  .hd__menu[aria-expanded='true'] {
+    background: var(--accent);
+    color: var(--on-accent);
   }
 
-  @media (max-width: 1180px) {
-    .header__nav {
+  .hd__burger {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .hd__burger span {
+    display: block;
+    width: 22px;
+    height: 1px;
+    background: currentColor;
+    transition: transform 0.4s var(--ease);
+  }
+
+  [aria-expanded='true'] .hd__burger span:first-child {
+    transform: translateY(3px) rotate(45deg);
+  }
+
+  [aria-expanded='true'] .hd__burger span:last-child {
+    transform: translateY(-3px) rotate(-45deg);
+  }
+
+  @media (max-width: 1100px) {
+    .hd__coords,
+    .hd__book {
+      display: none;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .hd__slogan {
       display: none;
     }
 
-    .header__burger {
-      display: inline-grid;
+    .hd :global(.hd__logo) {
+      flex: 1 1 auto;
+      padding: 0 16px;
     }
-  }
 
-  @media (max-width: 560px) {
-    .header__cta {
+    .hd__menu {
+      padding: 0 16px;
+    }
+
+    .hd__menu-label {
       display: none;
     }
-
-    .header__inner {
-      gap: 8px;
-    }
-
-    .header__actions {
-      gap: 0;
-    }
-
-    .lang__item {
-      padding: 4px 7px;
-    }
   }
 
-  /* ---------- мобильное меню ---------- */
-  .menu {
+  /* ---------- Меню ---------- */
+  .mn {
     position: fixed;
     inset: var(--header-h) 0 0;
     z-index: 49;
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
     overflow-y: auto;
     background: var(--bg);
-    animation: menu-in 0.35s var(--ease);
+    animation: mn-in 0.7s cubic-bezier(0.77, 0, 0.18, 1);
   }
 
-  .menu[hidden] {
+  .mn[hidden] {
     display: none;
   }
 
-  .menu__inner {
-    display: flex;
-    flex-direction: column;
-    min-height: 100%;
-    padding-block: 24px 32px;
-  }
-
-  .menu__list {
+  .mn__list {
     list-style: none;
   }
 
-  .menu__list li {
+  .mn__list li {
     border-bottom: 1px solid var(--line);
-    animation: menu-item 0.5s var(--ease) both;
-    animation-delay: calc(var(--i) * 35ms);
+    animation: mn-item 0.8s var(--ease) both;
+    animation-delay: calc(120ms + var(--i) * 45ms);
   }
 
-  .menu__link {
-    display: block;
-    padding: 14px 0;
+  .mn__link {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    padding: 14px var(--gutter);
+    text-decoration: none;
+    transition:
+      background-color 0.5s,
+      color 0.5s;
+  }
+
+  .mn__link:hover,
+  .mn__link[aria-current='page'] {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .mn__num {
+    width: 44px;
+    flex-shrink: 0;
+  }
+
+  .mn__title {
+    flex: 1;
     font-family: var(--font-display);
-    font-size: clamp(1.3rem, 5vw, 1.7rem);
-    font-weight: 600;
+    font-weight: 700;
+    font-size: clamp(28px, 4.4vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  .mn__arrow {
+    font-size: 24px;
+    opacity: 0;
+    transform: translateX(-12px);
+    transition:
+      opacity 0.4s,
+      transform 0.4s var(--ease);
+  }
+
+  .mn__link:hover .mn__arrow {
+    opacity: 1;
+    transform: none;
+  }
+
+  .mn__side {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 24px var(--gutter);
+    border-left: 1px solid var(--line);
+    background: var(--surface);
+  }
+
+  .mn__contacts {
+    display: grid;
+    gap: 10px;
+    list-style: none;
+  }
+
+  .mn__contacts a {
     text-decoration: none;
   }
 
-  .menu__link[aria-current='page'] {
-    color: var(--accent);
+  .mn__contacts a:hover {
+    text-decoration: underline;
   }
 
-  .menu__footer {
-    display: grid;
-    gap: 12px;
+  .mn__side .btn {
     margin-top: auto;
-    padding-top: 32px;
   }
 
-  @keyframes menu-in {
-    from {
-      opacity: 0;
+  @media (max-width: 760px) {
+    .mn {
+      grid-template-columns: 1fr;
+    }
+
+    .mn__side {
+      border-left: 0;
+    }
+
+    .mn__num {
+      width: 36px;
     }
   }
 
-  @keyframes menu-item {
+  @keyframes mn-in {
+    from {
+      clip-path: inset(0 0 100% 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @keyframes mn-item {
     from {
       opacity: 0;
-      transform: translateY(12px);
+      transform: translateY(24px);
     }
   }
 </style>
@@ -378,13 +375,15 @@ const bookHref = active === 'home' ? '#contact-form' : localize(routes.contact, 
   const header = document.querySelector<HTMLElement>('[data-header]');
   const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
   const menu = document.querySelector<HTMLElement>('[data-menu]');
+  const label = toggle?.querySelector<HTMLElement>('.hd__menu-label');
 
   function setMenu(open: boolean) {
-    if (!toggle || !menu || !header) return;
+    if (!toggle || !menu) return;
     toggle.setAttribute('aria-expanded', String(open));
     menu.hidden = !open;
-    header.classList.toggle('is-menu-open', open);
+    if (label) label.textContent = (open ? label.dataset.close : label.dataset.open) ?? '';
     document.body.classList.toggle('is-locked', open);
+    header?.classList.remove('is-hidden');
   }
 
   toggle?.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
@@ -394,22 +393,20 @@ const bookHref = active === 'home' ? '#contact-form' : localize(routes.contact, 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') setMenu(false);
   });
-  window.matchMedia('(min-width: 1181px)').addEventListener('change', (e) => e.matches && setMenu(false));
 
-  // Шапка: фон после прокрутки, прячется при скролле вниз.
-  let lastY = window.scrollY;
-  function onScroll() {
-    if (!header) return;
-    const y = window.scrollY;
-    header.classList.toggle('is-scrolled', y > 24);
-    const menuOpen = toggle?.getAttribute('aria-expanded') === 'true';
-    header.classList.toggle('is-hidden', !menuOpen && y > 320 && y > lastY);
-    lastY = y;
-  }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  // Шапка прячется при прокрутке вниз и возвращается при прокрутке вверх.
+  let lastY = scrollY;
+  addEventListener(
+    'scroll',
+    () => {
+      const y = scrollY;
+      const open = toggle?.getAttribute('aria-expanded') === 'true';
+      header?.classList.toggle('is-hidden', !open && y > 400 && y > lastY);
+      lastY = y;
+    },
+    { passive: true },
+  );
 
-  // Тема
   document.querySelectorAll('[data-theme-toggle]').forEach((btn) =>
     btn.addEventListener('click', () => {
       const dark = document.documentElement.dataset.theme !== 'dark';

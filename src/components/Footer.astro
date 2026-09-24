@@ -1,7 +1,6 @@
 ---
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
-import Ornament from './Ornament.astro';
 import { contacts } from '../data/site';
 import { tours } from '../data/tours';
 import { localize, useTranslations, type Lang } from '../i18n/utils';
@@ -15,11 +14,11 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 
 const contactLinks = [
-  { icon: 'whatsapp', label: t('footer.whatsapp'), value: contacts.phone, href: contacts.whatsapp },
-  { icon: 'telegram', label: t('footer.telegram'), value: contacts.telegramHandle, href: contacts.telegram },
-  { icon: 'mail', label: t('footer.email'), value: contacts.email, href: `mailto:${contacts.email}` },
-  { icon: 'phone', label: t('footer.phone'), value: contacts.phone, href: contacts.phoneHref },
-] as const;
+  { label: t('footer.whatsapp'), value: contacts.phone, href: contacts.whatsapp },
+  { label: t('footer.telegram'), value: contacts.telegramHandle, href: contacts.telegram },
+  { label: t('footer.email'), value: contacts.email, href: `mailto:${contacts.email}` },
+  { label: t('footer.phone'), value: contacts.phone, href: contacts.phoneHref },
+];
 
 const socials = [
   { icon: 'instagram', label: 'Instagram', href: contacts.instagram },
@@ -28,219 +27,202 @@ const socials = [
 ] as const;
 ---
 
-<footer class="footer">
-  <div class="ornament-band footer__band" aria-hidden="true"></div>
-  <Ornament variant="rosette" class="footer__rosette" />
-  <div class="container footer__grid">
-    <div class="footer__brand">
+<footer class="ft">
+  <div class="ornament-band ft__band" aria-hidden="true"></div>
+  <div class="ft__grid">
+    <div class="ft__cell ft__brand">
       <Logo lang={lang} />
-      <p class="footer__slogan">{t('brand.slogan')}</p>
-      <p class="footer__mission">{t('about.mission.text')}</p>
-      <div class="footer__social">
+      <p class="ft__mission">{t('about.mission.text')}</p>
+      <div class="ft__social">
         {
           socials.map((s) => (
             <a href={s.href} aria-label={s.label} target="_blank" rel="noopener">
-              <Icon name={s.icon} size={20} />
+              <Icon name={s.icon} size={18} />
             </a>
           ))
         }
       </div>
     </div>
 
-    <div>
-      <h2 class="footer__title">{t('footer.quickLinks')}</h2>
-      <ul class="footer__links">
+    <div class="ft__cell">
+      <h2 class="label ft__title">{t('footer.quickLinks')}</h2>
+      <ul class="ft__links">
         <li><a href={localize('/', lang)}>{t('nav.home')}</a></li>
         {navItems.map((item) => <li><a href={localize(item.href, lang)}>{t(item.label)}</a></li>)}
       </ul>
     </div>
 
-    <div>
-      <h2 class="footer__title">{t('nav.tours')}</h2>
-      <ul class="footer__links">
+    <div class="ft__cell">
+      <h2 class="label ft__title">{t('nav.tours')}</h2>
+      <ul class="ft__links">
         {tours.map((tour) => <li><a href={localize(routes.tour(tour.slug), lang)}>{t(`${tour.card}.title`)}</a></li>)}
       </ul>
     </div>
 
-    <div>
-      <h2 class="footer__title">{t('footer.contact')}</h2>
-      <ul class="footer__contacts">
+    <div class="ft__cell">
+      <h2 class="label ft__title">{t('footer.contact')}</h2>
+      <dl class="ft__contacts">
         {
           contactLinks.map((c) => (
-            <li>
-              <a href={c.href} target={c.href.startsWith('http') ? '_blank' : undefined} rel="noopener">
-                <Icon name={c.icon} size={18} />
-                <span>
-                  <small>{c.label}</small>
+            <div>
+              <dt class="label">{c.label}</dt>
+              <dd>
+                <a href={c.href} target={c.href.startsWith('http') ? '_blank' : undefined} rel="noopener">
                   {c.value}
-                </span>
-              </a>
-            </li>
+                </a>
+              </dd>
+            </div>
           ))
         }
-      </ul>
+      </dl>
     </div>
   </div>
-  <div class="container footer__bottom">
-    <p>{t('footer.copyright')}</p>
+  <div class="ft__bottom label">
+    <span>I AM NOMAD — Bishkek</span>
+    <span>{t('brand.slogan')}</span>
+    <span>{t('footer.copyright')}</span>
   </div>
 </footer>
 
 <style>
-  .footer {
-    position: relative;
-    overflow: hidden;
-    padding-bottom: 24px;
-    background: #17120e;
-    color: #e9e0d2;
+  .ft {
+    border-top: 1px solid var(--line);
   }
 
-  .footer__band {
-    color: var(--gold);
-    opacity: 0.8;
+  .ft__band {
+    margin-top: 28px;
   }
 
-  .footer__rosette {
-    position: absolute;
-    right: -120px;
-    bottom: -120px;
-    width: 420px;
-    height: 420px;
-    color: #f4eee4;
-    opacity: 0.04;
-    pointer-events: none;
-  }
-
-  .footer__grid {
-    position: relative;
+  .ft__grid {
     display: grid;
-    grid-template-columns: 1.4fr 1fr 1fr 1.3fr;
-    gap: 40px;
-    padding-block: clamp(56px, 7vw, 88px) 48px;
+    grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+    margin-top: 28px;
+    border-top: 1px solid var(--line);
   }
 
-  .footer__brand :global(.logo) {
-    color: #fffaf2;
+  .ft__cell {
+    padding: 28px var(--gutter);
+    border-right: 1px solid var(--line);
   }
 
-  .footer__slogan {
-    margin-top: 24px;
-    font-family: var(--font-display);
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #fffaf2;
+  .ft__cell:last-child {
+    border-right: 0;
   }
 
-  .footer__mission {
-    margin-top: 10px;
-    max-width: 34ch;
-    font-size: 0.95rem;
-    color: #b3a894;
+  .ft__mission {
+    max-width: 38ch;
+    margin-top: 20px;
+    color: var(--ink-soft);
   }
 
-  .footer__social {
+  .ft__social {
     display: flex;
-    gap: 10px;
     margin-top: 24px;
+    border: 1px solid var(--line);
+    width: max-content;
   }
 
-  .footer__social a {
+  .ft__social a {
     display: grid;
     place-items: center;
-    width: 42px;
-    height: 42px;
-    border: 1px solid #3d342b;
-    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    border-right: 1px solid var(--line);
     transition:
-      background-color 0.2s,
-      border-color 0.2s,
-      color 0.2s;
+      background-color 0.5s,
+      color 0.5s;
   }
 
-  .footer__social a:hover {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: #2a1c04;
+  .ft__social a:last-child {
+    border-right: 0;
   }
 
-  .footer__title {
-    margin-bottom: 18px;
-    font-family: var(--font-body);
-    font-size: 0.78rem;
-    font-weight: 800;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--gold);
+  .ft__social a:hover {
+    background: var(--accent);
+    color: var(--on-accent);
   }
 
-  .footer__links {
+  .ft__title {
+    margin-bottom: 16px;
+    color: var(--ink-mute);
+  }
+
+  .ft__links {
     display: grid;
-    gap: 10px;
+    gap: 6px;
     list-style: none;
   }
 
-  .footer__links a {
-    color: #d8cebf;
+  .ft__links a,
+  .ft__contacts a {
     text-decoration: none;
-    transition: color 0.2s;
   }
 
-  .footer__links a:hover {
-    color: #fff;
-  }
-
-  .footer__contacts {
-    display: grid;
-    gap: 14px;
-    list-style: none;
-  }
-
-  .footer__contacts a {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    color: #f1e9dc;
-    text-decoration: none;
-    word-break: break-word;
-  }
-
-  .footer__contacts a :global(svg) {
-    margin-top: 3px;
-    color: var(--gold);
-    flex-shrink: 0;
-  }
-
-  .footer__contacts small {
-    display: block;
-    font-size: 0.75rem;
-    color: #9d917e;
-  }
-
-  .footer__contacts a:hover span {
+  .ft__links a:hover,
+  .ft__contacts a:hover {
+    color: var(--accent);
     text-decoration: underline;
   }
 
-  .footer__bottom {
-    position: relative;
-    padding-top: 24px;
-    border-top: 1px solid #2e2620;
-    font-size: 0.85rem;
-    color: #8f846f;
+  .ft__contacts {
+    display: grid;
+    gap: 12px;
+    margin: 0;
   }
 
-  @media (max-width: 960px) {
-    .footer__grid {
+  .ft__contacts dt {
+    font-size: 11px;
+    color: var(--ink-mute);
+  }
+
+  .ft__contacts dd {
+    margin: 2px 0 0;
+    overflow-wrap: anywhere;
+  }
+
+  .ft__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 24px var(--gutter);
+    border-top: 1px solid var(--line);
+  }
+
+  @media (max-width: 1000px) {
+    .ft__grid {
       grid-template-columns: 1fr 1fr;
     }
 
-    .footer__brand {
+    .ft__brand {
       grid-column: 1 / -1;
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .ft__cell:nth-child(3) {
+      border-right: 0;
+    }
+
+    .ft__cell:last-child {
+      grid-column: 1 / -1;
+      border-top: 1px solid var(--line);
     }
   }
 
-  @media (max-width: 520px) {
-    .footer__grid {
+  @media (max-width: 560px) {
+    .ft__grid {
       grid-template-columns: 1fr;
+    }
+
+    .ft__cell {
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .ft__cell:last-child {
+      border-top: 0;
+      border-bottom: 0;
     }
   }
 </style>

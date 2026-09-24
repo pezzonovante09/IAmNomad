@@ -11,17 +11,15 @@ const { lang, class: className } = Astro.props;
 const t = useTranslations(lang);
 ---
 
-<a href={localize('/', lang)} class:list={['logo', className]} aria-label={`${t('brand.name')} — ${t('nav.home')}`}>
-  <span class="logo__mark"><Ornament variant="tunduk" size={30} /></span>
-  <span class="logo__text">
-    <span class="logo__name">I AM NOMAD</span>
-    <span class="logo__tagline">{t('brand.tagline')}</span>
-  </span>
+<a href={localize('/', lang)} class:list={['logo', className]} aria-label={`I AM NOMAD — ${t('nav.home')}`}>
+  <Ornament variant="horn" size={14} class="logo__mark" />
+  <span class="logo__name">I AM NOMAD</span>
+  <span class="logo__tagline">{t('brand.tagline')}</span>
 </a>
 
 <style>
   .logo {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 10px;
     color: inherit;
@@ -29,44 +27,28 @@ const t = useTranslations(lang);
   }
 
   .logo__mark {
-    display: grid;
-    place-items: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--gold);
-    color: #3b1f06;
-    transition: transform 0.6s var(--ease);
-  }
-
-  .logo:hover .logo__mark {
-    transform: rotate(90deg);
-  }
-
-  .logo__text {
-    display: grid;
-    line-height: 1;
+    color: var(--accent);
+    flex-shrink: 0;
   }
 
   .logo__name {
-    white-space: nowrap;
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: 1.05rem;
-    letter-spacing: 0.02em;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    white-space: nowrap;
   }
 
   .logo__tagline {
-    margin-top: 4px;
-    font-size: 0.68rem;
-    font-weight: 700;
+    font-size: 11px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    opacity: 0.7;
+    line-height: 1;
     white-space: nowrap;
   }
 
-  @media (max-width: 560px) {
+  @media (max-width: 640px) {
     .logo__tagline {
       display: none;
     }

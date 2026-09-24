@@ -13,39 +13,34 @@ const { name, text, avatar, index = 0 } = Astro.props;
 ---
 
 <figure class="rc" data-reveal style={`--i:${index % 3}`}>
-  <div class="rc__stars" aria-label="5/5">
-    {[0, 1, 2, 3, 4].map(() => <Icon name="star" size={18} />)}
+  <div class="rc__top">
+    <span class="label num">({String(index + 1).padStart(2, '0')})</span>
+    <span class="rc__stars" aria-label="5/5">
+      {[0, 1, 2, 3, 4].map(() => <Icon name="star" size={14} />)}
+    </span>
   </div>
   <blockquote class="rc__text">{text}</blockquote>
   <figcaption class="rc__author">
-    <img src={unsplash(avatar, 112, 112)} alt="" width="56" height="56" loading="lazy" decoding="async" />
-    <span>{name}</span>
+    <img src={unsplash(avatar, 96, 96)} alt="" width="40" height="40" loading="lazy" decoding="async" />
+    <span class="label">{name}</span>
   </figcaption>
 </figure>
 
 <style>
   .rc {
-    position: relative;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 24px;
     height: 100%;
     margin: 0;
-    padding: 28px;
-    border-radius: var(--radius-lg);
-    background: var(--surface);
-    border: 1px solid var(--line);
+    padding: 28px var(--gutter);
+    background: var(--bg);
   }
 
-  .rc::before {
-    content: '“';
-    position: absolute;
-    top: 6px;
-    right: 22px;
-    font-family: var(--font-display);
-    font-size: 5rem;
-    line-height: 1;
-    color: var(--accent-soft);
+  .rc__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .rc__stars {
@@ -56,8 +51,11 @@ const { name, text, avatar, index = 0 } = Astro.props;
 
   .rc__text {
     margin: 0;
-    font-size: 1.02rem;
-    line-height: 1.65;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(18px, 1.5vw, 22px);
+    line-height: 1.35;
+    letter-spacing: -0.01em;
   }
 
   .rc__author {
@@ -65,15 +63,14 @@ const { name, text, avatar, index = 0 } = Astro.props;
     align-items: center;
     gap: 12px;
     margin-top: auto;
-    font-weight: 700;
+    padding-top: 16px;
+    border-top: 1px solid var(--line-soft);
   }
 
   .rc__author img {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
+    width: 40px;
+    height: 40px;
     object-fit: cover;
-    outline: 2px solid var(--gold-soft);
-    outline-offset: 2px;
+    filter: grayscale(1);
   }
 </style>

@@ -1,0 +1,507 @@
+---
+// Каталог туров «таблицей»: строка раскрывается в кадр с характеристиками.
+// Над кадром за курсором едет вращающийся тюндюк («Смотреть»).
+import Icon from './Icon.astro';
+import Ornament from './Ornament.astro';
+import type { Tour } from '../data/tours';
+import { localize, useTranslations, type Lang } from '../i18n/utils';
+import { srcset, unsplash } from '../lib/img';
+import { routes } from '../lib/routes';
+
+interface Props {
+  lang: Lang;
+  tours: Tour[];
+  /** Номер раскрытой строки по умолчанию (−1 — все свёрнуты). */
+  open?: number;
+}
+
+const { lang, tours, open = 0 } = Astro.props;
+const t = useTranslations(lang);
+const pad = (n: number) => String(n).padStart(2, '0');
+
+const rows = tours.map((tour, i) => {
+  const k = (f: string) => t(`${tour.card}.${f}`);
+  const pageHref = localize(routes.tour(tour.slug), lang);
+  const cta =
+    tour.status === 'open'
+      ? { href: `${localize(routes.contact, lang)}?tour=${tour.slug}`, label: t('home.index.reserve') }
+      : tour.status === 'request'
+        ? { href: pageHref, label: t('tour.custom.cta.button') }
+        : { href: pageHref, label: t('btn.viewDetails') };
+  return {
+    tour,
+    num: pad(i + 1),
+    title: k('title'),
+    route: k('location'),
+    duration: k('duration'),
+    days: tour.days ? pad(tour.days) : '—',
+    price: k('price'),
+    desc: tour.slug === 'custom' ? t('tour.custom.intro.p2') : t(`tour.${tour.slug}.subtitle`),
+    excerpt: k('excerpt'),
+    nextDate: tour.dates ? t(`tour.${tour.slug}.dates.date1`) : null,
+    category: t(`tours.tab.${tour.category}`),
+    pageHref,
+    cta,
+  };
+});
+---
+
+<div class="ti" data-tour-index>
+  <div class="ti__head label" aria-hidden="true">
+    <span class="ti__c-num">{t('home.index.no')}</span>
+    <span class="ti__c-title">{t('home.index.titleCol')}</span>
+    <span class="ti__c-route">{t('home.index.route')}</span>
+    <span class="ti__c-days">{t('home.index.days')}</span>
+    <span class="ti__c-price">{t('home.index.from')}</span>
+  </div>
+
+  {
+    rows.map((row, i) => (
+      <article class:list={['ti__row', { 'is-open': i === open }]} data-row data-category={row.tour.category} data-reveal>
+        <h3 class="ti__summary-h">
+          <button type="button" class="ti__summary" aria-expanded={i === open ? 'true' : 'false'} aria-controls={`ti-${row.tour.slug}`} data-row-toggle>
+            <span class="ti__c-num num">{row.num}</span>
+            <span class="ti__c-title ti__title">{row.title}</span>
+            <span class="ti__c-route">{row.route}</span>
+            <span class="ti__c-days num">{row.days}</span>
+            <span class="ti__c-price num">{row.price}</span>
+          </button>
+        </h3>
+        <div class="ti__body" id={`ti-${row.tour.slug}`}>
+          <div class="ti__inner">
+            <div class="ti__card">
+              <a href={row.pageHref} class="ti__media" data-disc-area aria-label={`${t('home.index.explore')}: ${row.title}`}>
+                <img
+                  src={unsplash(row.tour.cover.id, 1400, 900)}
+                  srcset={srcset(row.tour.cover.id, [700, 1000, 1400, 1900], 0.64)}
+                  sizes="(max-width: 900px) 100vw, 66vw"
+                  alt={row.tour.cover.alt}
+                  width="1400"
+                  height="900"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span class="ti__badges">
+                  <span class="badge badge--gold">{row.category}</span>
+                  {row.tour.status === 'soon' && <span class="badge">{t('btn.comingSoon')}</span>}
+                  <span class="badge">{row.duration}</span>
+                </span>
+                <span class="ti__disc" data-disc aria-hidden="true">
+                  <span class="ti__disc-ring">
+                    <Ornament variant="tunduk" stroke="#C5A059" class="ti__tunduk" />
+                  </span>
+                  <span class="ti__disc-label">{t('home.index.explore')}</span>
+                </span>
+              </a>
+              <div class="ti__info">
+                <div>
+                  <p class="label">{row.tour.status === 'open' ? t('home.index.perGuest') : t('tour.facts.price')}</p>
+                  <p class="ti__price num">{row.price}</p>
+                </div>
+                <p class="ti__desc">{row.desc}</p>
+                <dl class="ti__specs">
+                  <dt>{t('tour.facts.duration')}</dt>
+                  <dd>{row.duration}</dd>
+                  <dt>{t('tour.facts.route')}</dt>
+                  <dd>{row.route}</dd>
+                  <dt>{t('tour.facts.group')}</dt>
+                  <dd>{t('tour.facts.groupValue')}</dd>
+                  {row.nextDate && (
+                    <>
+                      <dt>{t('home.index.nextDate')}</dt>
+                      <dd>{row.nextDate}</dd>
+                    </>
+                  )}
+                </dl>
+                <div class="ti__actions">
+                  {row.tour.status === 'open' && (
+                    <a href={row.pageHref} class="link-arrow">
+                      {t('home.index.program')}
+                      <Icon name="arrow-right" />
+                    </a>
+                  )}
+                  <a href={row.cta.href} class="btn btn--accent btn--block">
+                    {row.cta.label}
+                    <span aria-hidden="true">→</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    ))
+  }
+</div>
+
+<style>
+  .ti {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .ti__head,
+  .ti__summary {
+    display: flex;
+    align-items: baseline;
+    gap: 8px 24px;
+    padding-inline: var(--gutter);
+  }
+
+  .ti__head {
+    padding-block: 10px;
+    border-top: 1px solid var(--line);
+    font-size: 11px;
+  }
+
+  .ti__c-num {
+    width: 44px;
+    flex-shrink: 0;
+  }
+
+  .ti__c-title {
+    flex: 1 1 320px;
+    min-width: 0;
+  }
+
+  .ti__c-route {
+    width: 220px;
+  }
+
+  .ti__c-days {
+    width: 60px;
+  }
+
+  .ti__c-price {
+    width: 110px;
+    text-align: right;
+  }
+
+  .ti__row {
+    border-top: 1px solid var(--line);
+    background: var(--bg);
+    transition: background-color 0.5s;
+  }
+
+  .ti__row.is-open {
+    background: var(--surface);
+  }
+
+  .ti__row.is-hidden {
+    display: none;
+  }
+
+  .ti__summary-h {
+    font: inherit;
+    letter-spacing: normal;
+  }
+
+  .ti__summary {
+    width: 100%;
+    padding-block: 20px;
+    border: 0;
+    background: none;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .ti__summary .ti__c-num {
+    font-size: 13px;
+  }
+
+  .ti__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(28px, 4.4vw, 72px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    transition: color 0.5s;
+  }
+
+  .ti__row.is-open .ti__title,
+  .ti__summary:hover .ti__title {
+    color: var(--accent);
+  }
+
+  .ti__c-price {
+    font-weight: 600;
+  }
+
+  /* Раскрытие */
+  .ti__body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.8s var(--ease-io);
+  }
+
+  .ti__row.is-open .ti__body {
+    grid-template-rows: 1fr;
+  }
+
+  .ti__inner {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .ti__card {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 var(--gutter) 32px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.7s ease,
+      transform 0.9s var(--ease);
+  }
+
+  .ti__row.is-open .ti__card {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0.25s;
+  }
+
+  .ti__media {
+    position: relative;
+    display: block;
+    flex: 4 1 520px;
+    min-height: clamp(320px, 40vw, 620px);
+    overflow: hidden;
+    background: var(--accent);
+    color: #f5f5f3;
+  }
+
+  .ti__media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.1);
+    transition: transform 1.4s var(--ease);
+  }
+
+  .ti__row.is-open .ti__media img {
+    transform: scale(1);
+  }
+
+  .ti__badges {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    color: #f5f5f3;
+  }
+
+  /* Диск-тюндюк */
+  .ti__disc {
+    position: absolute;
+    left: 78%;
+    top: 66%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transform: translate(-50%, -50%);
+    transition:
+      left 0.6s var(--ease),
+      top 0.6s var(--ease);
+    pointer-events: none;
+  }
+
+  .ti__disc.is-following {
+    transition: none;
+  }
+
+  .ti__disc-ring {
+    position: relative;
+    width: 112px;
+    height: 112px;
+    border-radius: 50%;
+    background: rgb(17 17 17 / 0.28);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .ti__disc-ring :global(.ti__tunduk) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    animation: spin 24s linear infinite;
+  }
+
+  .ti__disc-label {
+    padding: 6px 12px;
+    background: var(--gold);
+    color: #111;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .ti__media {
+      cursor: none;
+    }
+  }
+
+  .ti__info {
+    display: flex;
+    flex: 1 1 300px;
+    flex-direction: column;
+    gap: 24px;
+    padding: 28px;
+    border-left: 1px solid var(--line);
+  }
+
+  .ti__price {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(36px, 3.4vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+  }
+
+  .ti__desc {
+    font-size: 15px;
+  }
+
+  .ti__specs {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    margin: 0;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+  }
+
+  .ti__specs dt,
+  .ti__specs dd {
+    margin: 0;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .ti__specs dt {
+    padding-right: 16px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .ti__specs dd {
+    text-align: right;
+  }
+
+  .ti__actions {
+    display: grid;
+    gap: 16px;
+    margin-top: auto;
+  }
+
+  .ti__actions .link-arrow {
+    justify-self: start;
+  }
+
+  @media (max-width: 900px) {
+    .ti__c-route,
+    .ti__c-days {
+      display: none;
+    }
+
+    .ti__info {
+      border-left: 0;
+      border-top: 1px solid var(--line);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .ti__head {
+      display: none;
+    }
+
+    .ti__summary {
+      flex-wrap: wrap;
+    }
+
+    .ti__c-num {
+      width: auto;
+    }
+
+    .ti__c-title {
+      order: 3;
+      flex-basis: 100%;
+    }
+
+    .ti__c-price {
+      width: auto;
+      margin-left: auto;
+    }
+
+    .ti__card {
+      margin-inline: 0;
+      border-inline: 0;
+    }
+
+    .ti__media {
+      min-height: 280px;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-tour-index]').forEach((index) => {
+    const rows = Array.from(index.querySelectorAll<HTMLElement>('[data-row]'));
+    const canHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
+    let timer: number | undefined;
+
+    function openRow(row: HTMLElement) {
+      rows.forEach((r) => {
+        const on = r === row;
+        r.classList.toggle('is-open', on);
+        r.querySelector('[data-row-toggle]')?.setAttribute('aria-expanded', String(on));
+      });
+    }
+
+    rows.forEach((row) => {
+      const toggle = row.querySelector<HTMLButtonElement>('[data-row-toggle]')!;
+      toggle.addEventListener('click', () => {
+        clearTimeout(timer);
+        if (row.classList.contains('is-open') && !canHover) {
+          row.classList.remove('is-open');
+          toggle.setAttribute('aria-expanded', 'false');
+        } else openRow(row);
+      });
+      if (canHover) {
+        row.addEventListener('mouseenter', () => {
+          clearTimeout(timer);
+          if (!row.classList.contains('is-open')) timer = window.setTimeout(() => openRow(row), 160);
+        });
+        row.addEventListener('mouseleave', () => clearTimeout(timer));
+      }
+
+      // Диск следует за курсором
+      const area = row.querySelector<HTMLElement>('[data-disc-area]');
+      const disc = row.querySelector<HTMLElement>('[data-disc]');
+      if (area && disc && canHover) {
+        area.addEventListener('mousemove', (e) => {
+          const b = area.getBoundingClientRect();
+          disc.classList.add('is-following');
+          disc.style.left = `${e.clientX - b.left}px`;
+          disc.style.top = `${e.clientY - b.top}px`;
+        });
+        area.addEventListener('mouseleave', () => {
+          disc.classList.remove('is-following');
+          disc.style.left = '';
+          disc.style.top = '';
+        });
+      }
+    });
+  });
+</script>

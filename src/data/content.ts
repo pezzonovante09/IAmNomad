@@ -51,3 +51,10 @@ export const instagramPhotos: Photo[] = [
 export const heroPhoto: Photo = { id: '1689788648053-cd482d1acd9c', alt: 'Issyk-Kul lake and mountains, Kyrgyzstan' };
 export const aboutPhoto: Photo = { id: '1506905925346-21bda4d32df4', alt: 'Kyrgyzstan mountain landscape' };
 export const micePhoto: Photo = { id: '1528605248644-14dd04022da1', alt: 'Corporate meeting in mountain resort' };
+
+// Регионы для слайдшоу на главной (названия и описания — region.<key>.*).
+export const heroRegions = [
+  { key: 'sonkul', alt: 3016, coords: '41.83°N 75.13°E', photo: '1760630149964-200517d8d437' },
+  { key: 'issykkul', alt: 1607, coords: '42.43°N 77.25°E', photo: '1689788648053-cd482d1acd9c' },
+  { key: 'karakol', alt: 3040, coords: '42.49°N 78.39°E', photo: '1519834785169-98be25ec3f84' },
+];
