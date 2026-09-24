@@ -13,4 +13,6 @@ export default defineConfig({
   site,
   trailingSlash: 'ignore',
   build: { format: 'directory' },
+  // Стили родителя применяются к class, переданному в дочерний компонент (орнаменты, иконки).
+  scopedStyleStrategy: 'class',
 });
