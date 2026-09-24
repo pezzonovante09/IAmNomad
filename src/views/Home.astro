@@ -25,102 +25,57 @@ const t = useTranslations(lang);
 const L = (p: string) => localize(p, lang);
 const pad = (n: number) => String(n).padStart(2, '0');
 
-const regions = heroRegions.map((r, i) => ({
-  ...r,
-  num: pad(i + 1),
-  name: t(`region.${r.key}.name`),
-  oblast: t(`region.${r.key}.oblast`),
-  line: t(`region.${r.key}.line`),
-  altLabel: `${r.alt} ${t('unit.m')}`,
-}));
+const heroPhoto = heroRegions[0];
+const facts = [1, 2, 3, 4].map((n) => ({ value: t(`home.fact${n}.value`), label: t(`home.fact${n}.label`) }));
 
 const features = ['feature1', 'feature2', 'feature3', 'feature4'];
 ---
 
-<BaseLayout lang={lang} page="home" path="/" image={unsplash(regions[0].photo, 1200, 630)}>
-  <!-- (01) Манифест -->
+<BaseLayout lang={lang} page="home" path="/" image={unsplash(heroPhoto.photo, 1200, 630)}>
+  <!-- (01) Первый экран: фото во весь экран, заголовок, факты -->
   <section class="hero" id="top">
-    <div class="hero__meta label" data-reveal="fade" data-delay="150">
-      <span>{t('home.hero.kicker')}</span>
-      <span>{t('home.hero.regionsLine')}</span>
-      <span>{t('home.hero.season')}</span>
-    </div>
-    <h1 class="hero__title">
-      <span class="hero__row">
-        <span data-reveal="up" data-delay="250">{t('home.hero.line1')}</span>
-        <span class="hero__text" data-reveal="fade" data-delay="850">{t('home.hero.text')}</span>
-      </span>
-      <span class="hero__accent" data-reveal="up" data-delay="420">{t('home.hero.line2')}</span>
-    </h1>
+    <img
+      class="hero__bg"
+      src={unsplash(heroPhoto.photo, 1920, 1200)}
+      srcset={srcset(heroPhoto.photo, [800, 1200, 1600, 2200, 2800], 0.62)}
+      sizes="100vw"
+      alt={t('region.sonkul.name')}
+      width="1920"
+      height="1200"
+      fetchpriority="high"
+      loading="eager"
+    />
+    <div class="hero__shade" aria-hidden="true"></div>
 
-    <div class="hero__stage" data-slideshow>
-      <div class="hero__screen" data-reveal="curtain" data-delay="550">
-        {
-          regions.map((r, i) => (
-            <img
-              class:list={['hero__slide', { 'is-active': i === 0 }]}
-              data-slide
-              src={unsplash(r.photo, 1600, 1000)}
-              srcset={srcset(r.photo, [800, 1200, 1600, 2200], 0.62)}
-              sizes="(max-width: 900px) 100vw, 66vw"
-              alt={r.name}
-              width="1600"
-              height="1000"
-              fetchpriority={i === 0 ? 'high' : undefined}
-              loading={i === 0 ? 'eager' : 'lazy'}
-            />
-          ))
-        }
-        <div class="hero__shade" aria-hidden="true"></div>
-        <div class="hero__screen-top label" data-reveal="fade" data-delay="1300">
-          <span>
-            {t('home.hero.nowShowing')} — <span data-cur-num>{regions[0].num}</span> / {pad(regions.length)}
-          </span>
-          <span class="num" data-cur-coords>{regions[0].coords}</span>
+    <div class="hero__top label" data-reveal="fade" data-delay="150">
+      <span>I AM NOMAD · {t('home.hero.season')}</span>
+      <span class="num">{t('region.sonkul.name')}, {t('region.sonkul.oblast')} · {heroPhoto.alt} {t('unit.m')}</span>
+    </div>
+
+    <div class="hero__main">
+      <h1 class="hero__title">
+        <span class="hero__l1" data-reveal="up" data-delay="250">{t('home.hero.line1')}</span>
+        <span class="hero__l2" data-reveal="up" data-delay="420">{t('home.hero.line2')}</span>
+      </h1>
+      <div class="hero__side" data-reveal="up" data-delay="650">
+        <p class="hero__text">{t('home.hero.text')}</p>
+        <div class="hero__ctas">
+          <a href="#studio" class="hero__btn hero__btn--solid">{t('home.hero.ctaCustom')} <span aria-hidden="true">↗</span></a>
+          <a href="#index" class="hero__btn hero__btn--ghost">{t('home.hero.cta')}</a>
         </div>
-        <div class="hero__screen-bottom" data-reveal="up" data-delay="1400">
-          <div class="hero__bars" aria-hidden="true">
-            {regions.map((_, i) => <span class:list={{ 'is-active': i === 0 }} data-bar />)}
+      </div>
+    </div>
+
+    <dl class="hero__facts" data-reveal="fade" data-delay="900">
+      {
+        facts.map((f) => (
+          <div class="hero__fact">
+            <dt class="hero__fact-value num">{f.value}</dt>
+            <dd class="hero__fact-label label">{f.label}</dd>
           </div>
-          <p class="hero__name" data-cur-name>{regions[0].name}</p>
-          <p class="hero__line" data-cur-line>{regions[0].line}</p>
-        </div>
-      </div>
-
-      <div class="hero__list">
-        <div class="hero__list-head label" data-reveal="fade" data-delay="750">
-          <span>{t('home.hero.regionsTitle')}</span>
-          <span class="hero__hint">{t('home.hero.hoverHint')}</span>
-        </div>
-        {
-          regions.map((r, i) => (
-            <button
-              type="button"
-              class:list={['hero__region', { 'is-active': i === 0 }]}
-              data-region={i}
-              data-name={r.name}
-              data-line={r.line}
-              data-coords={r.coords}
-              data-num={r.num}
-              data-reveal="up"
-              data-delay={850 + i * 120}
-            >
-              <span class="hero__region-meta label num">
-                <span>
-                  {r.num} · {r.oblast}
-                </span>
-                <span>{r.altLabel}</span>
-              </span>
-              <span class="hero__region-name">{r.name}</span>
-            </button>
-          ))
-        }
-        <a href="#index" class="hero__browse label" data-reveal="fade" data-delay="1300">
-          <span>{t('home.hero.browse')}</span>
-          <span aria-hidden="true">↓</span>
-        </a>
-      </div>
-    </div>
+        ))
+      }
+    </dl>
   </section>
 
   <div class="band" data-reveal="fade"><div class="ornament-band"></div></div>
@@ -235,248 +190,222 @@ const features = ['feature1', 'feature2', 'feature3', 'feature4'];
 </BaseLayout>
 
 <style>
-  /* ---------- (01) Герой ---------- */
+  /* ---------- (01) Первый экран ---------- */
   .hero {
+    position: relative;
     display: flex;
     flex-direction: column;
     min-height: calc(100svh - var(--header-h));
-    border-bottom: 1px solid var(--line);
-  }
-
-  .hero__meta {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 20px var(--gutter) 0;
-  }
-
-  .hero__title {
-    padding: 8px var(--gutter) 28px;
-    font-size: clamp(44px, min(12.4vw, 13vh), 250px);
-    line-height: 1.05;
-    text-transform: uppercase;
-  }
-
-  .hero__row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 12px 32px;
-  }
-
-  .hero__text {
-    max-width: 340px;
-    padding-bottom: 0.9em;
-    font-family: var(--font-body);
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 1.6;
-    letter-spacing: 0;
-    text-transform: none;
-  }
-
-  .hero__accent {
-    display: block;
-    color: var(--accent);
-  }
-
-  .hero__stage {
-    display: flex;
-    flex: 1 1 auto;
-    flex-wrap: wrap;
-    border-top: 1px solid var(--line);
-  }
-
-  .hero__screen {
-    position: relative;
-    flex: 3 1 560px;
-    min-height: 300px;
     overflow: hidden;
     background: #111;
     color: #f5f5f3;
   }
 
-  .hero__slide {
+  .hero__bg {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0;
-    transform: scale(1.08);
-    transition:
-      opacity 0.9s ease,
-      transform 2.4s var(--ease);
+    animation: hero-zoom 24s var(--ease) both;
   }
 
-  .hero__slide.is-active {
-    opacity: 1;
-    transform: scale(1);
+  @keyframes hero-zoom {
+    from {
+      transform: scale(1.1);
+    }
+    to {
+      transform: scale(1);
+    }
   }
 
   .hero__shade {
     position: absolute;
     inset: 0;
-    background: var(--overlay);
+    background:
+      linear-gradient(180deg, rgb(17 17 17 / 0.45) 0%, rgb(17 17 17 / 0) 22%),
+      linear-gradient(0deg, rgb(17 17 17 / 0.75) 0%, rgb(17 17 17 / 0.35) 38%, rgb(17 17 17 / 0) 62%);
     pointer-events: none;
   }
 
-  .hero__screen-top {
-    position: absolute;
-    inset: 0 0 auto;
+  .hero__top {
+    position: relative;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
-    gap: 16px;
-    padding: 20px 24px;
+    gap: 8px 24px;
+    padding: 22px var(--gutter) 0;
+    letter-spacing: 0.18em;
   }
 
-  .hero__screen-bottom {
-    position: absolute;
-    left: 24px;
-    right: 24px;
-    bottom: 24px;
-  }
-
-  .hero__bars {
+  .hero__main {
+    position: relative;
     display: flex;
-    gap: 6px;
-    max-width: 240px;
-    margin-bottom: 18px;
+    flex: 1 1 auto;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px 48px;
+    padding: 48px var(--gutter) 40px;
   }
 
-  .hero__bars span {
-    flex: 1;
-    height: 2px;
-    background: rgb(245 245 243 / 0.35);
-    transition: background-color 0.5s;
+  .hero__title {
+    min-width: 0;
+    font-size: clamp(44px, min(7vw, 11vh), 132px);
+    line-height: 1;
+    letter-spacing: -0.03em;
   }
 
-  .hero__bars span.is-active {
-    background: var(--gold);
-  }
-
-  .hero__name {
-    font-family: var(--font-display);
+  .hero__l1 {
+    display: block;
     font-weight: 700;
-    font-size: clamp(36px, min(6.4vw, 10vh), 108px);
-    line-height: 1.05;
+  }
+
+  .hero__l2 {
+    display: block;
+    margin-top: 0.06em;
+    color: var(--gold);
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.12em;
     letter-spacing: -0.02em;
+  }
+
+  .hero__side {
+    flex: 0 1 470px;
+    min-width: 0;
+    padding-bottom: 0.6em;
+  }
+
+  .hero__text {
+    font-size: clamp(16px, 1.35vw, 20px);
+    line-height: 1.55;
+  }
+
+  .hero__ctas {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    margin-top: 28px;
+  }
+
+  .hero__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 26px;
+    border: 1px solid rgb(245 245 243 / 0.85);
+    color: #f5f5f3;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-  }
-
-  .hero__line {
-    max-width: 460px;
-    margin-top: 8px;
-    font-size: 15px;
-  }
-
-  .hero__list {
-    display: flex;
-    flex: 1 1 320px;
-    flex-direction: column;
-    border-left: 1px solid var(--line);
-    background: var(--surface);
-  }
-
-  .hero__list-head {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 14px 24px;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .hero__region {
-    display: flex;
-    flex: 1 1 0;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 8px;
-    padding: 14px 24px;
-    border: 0;
-    border-bottom: 1px solid var(--line);
-    background: var(--surface);
-    color: var(--ink);
-    text-align: left;
+    text-decoration: none;
     transition:
-      background-color 0.5s,
-      color 0.5s;
+      background-color 0.4s,
+      color 0.4s,
+      border-color 0.4s;
   }
 
-  .hero__region.is-active {
+  .hero__btn--solid {
+    border-color: var(--accent);
     background: var(--accent);
-    color: var(--on-accent);
   }
 
-  .hero__region-meta {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
+  .hero__btn--solid:hover {
+    border-color: var(--gold);
+    background: var(--gold);
+    color: #111;
   }
 
-  .hero__region-name {
+  .hero__btn--ghost:hover {
+    background: #f5f5f3;
+    color: #111;
+  }
+
+  .hero__facts {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-top: 1px solid rgb(245 245 243 / 0.25);
+    background: rgb(17 17 17 / 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .hero__fact {
+    min-width: 0;
+    padding: 22px var(--gutter) 24px;
+  }
+
+  .hero__fact + .hero__fact {
+    border-left: 1px solid rgb(245 245 243 / 0.25);
+  }
+
+  .hero__fact-value {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(26px, min(3vw, 4.4vh), 46px);
-    line-height: 1.05;
+    font-size: clamp(30px, 3.2vw, 48px);
+    line-height: 1.1;
     letter-spacing: -0.02em;
+    white-space: nowrap;
   }
 
-  .hero__browse {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 24px;
-    background: var(--accent);
-    color: var(--on-accent);
-    font-weight: 600;
+  .hero__fact-label {
+    margin: 8px 0 0;
+    color: rgb(245 245 243 / 0.85);
     letter-spacing: 0.16em;
-    text-decoration: none;
-    transition: background-color 0.5s;
+    line-height: 1.5;
   }
 
-  .hero__browse:hover {
-    background: var(--ink);
-    color: var(--bg);
-  }
-
-  @media (max-width: 700px) {
-    .hero__meta span:nth-child(2),
-    .hero__screen-top .num {
-      display: none;
-    }
-
-    .hero__title {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .hero__row {
-      display: contents;
-    }
-
-    .hero__text {
-      order: 3;
-      padding: 16px 0 0;
-    }
-  }
-
-  @media (hover: none) {
-    .hero__hint {
-      display: none;
+  @media (prefers-reduced-motion: reduce) {
+    .hero__bg {
+      animation: none;
     }
   }
 
   @media (max-width: 900px) {
-    .hero__list {
-      border-left: 0;
-      border-top: 1px solid var(--line);
+    .hero__main {
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding-top: 120px;
     }
 
-    .hero__region {
-      flex: 0 0 auto;
+    .hero__side {
+      flex: none;
+      max-width: 520px;
+    }
+
+    .hero__facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .hero__fact:nth-child(3) {
+      border-left: 0;
+    }
+
+    .hero__fact:nth-child(n + 3) {
+      border-top: 1px solid rgb(245 245 243 / 0.25);
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero__top span:last-child {
+      display: none;
+    }
+
+    .hero__ctas {
+      align-items: stretch;
+    }
+
+    .hero__btn {
+      justify-content: space-between;
+    }
+
+    .hero__fact {
+      padding: 16px 16px 18px;
     }
   }
 
@@ -755,52 +684,3 @@ const features = ['feature1', 'feature2', 'feature3', 'feature4'];
   }
 </style>
 
-<script>
-  // Слайдшоу регионов: автосмена каждые 5 с, пауза при наведении, выбор наведением/кликом.
-  const stage = document.querySelector<HTMLElement>('[data-slideshow]');
-  if (stage) {
-    const slides = stage.querySelectorAll<HTMLElement>('[data-slide]');
-    const bars = stage.querySelectorAll<HTMLElement>('[data-bar]');
-    const items = stage.querySelectorAll<HTMLButtonElement>('[data-region]');
-    const num = stage.querySelector('[data-cur-num]')!;
-    const coords = stage.querySelector('[data-cur-coords]')!;
-    const name = stage.querySelector('[data-cur-name]')!;
-    const line = stage.querySelector('[data-cur-line]')!;
-    let current = 0;
-    let paused = false;
-    let stopped = false; // пользователь сам выбрал регион — больше не переключаем
-
-    function show(i: number) {
-      current = i;
-      const item = items[i];
-      slides.forEach((s, j) => s.classList.toggle('is-active', j === i));
-      bars.forEach((b, j) => b.classList.toggle('is-active', j === i));
-      items.forEach((it, j) => it.classList.toggle('is-active', j === i));
-      num.textContent = item.dataset.num ?? '';
-      coords.textContent = item.dataset.coords ?? '';
-      name.textContent = item.dataset.name ?? '';
-      line.textContent = item.dataset.line ?? '';
-    }
-
-    items.forEach((item, i) => {
-      item.addEventListener('mouseenter', () => i !== current && show(i));
-      item.addEventListener('click', () => {
-        stopped = true;
-        show(i);
-      });
-    });
-    const list = stage.querySelector('.hero__list');
-    list?.addEventListener('mouseenter', () => (paused = true));
-    list?.addEventListener('mouseleave', () => (paused = false));
-    stage.addEventListener('focusin', () => (paused = true));
-    stage.addEventListener('focusout', (e) => {
-      if (!stage.contains(e.relatedTarget as Node)) paused = false;
-    });
-
-    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setInterval(() => {
-        if (!paused && !stopped && !document.hidden) show((current + 1) % items.length);
-      }, 5000);
-    }
-  }
-</script>
