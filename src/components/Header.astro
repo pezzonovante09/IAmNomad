@@ -21,8 +21,14 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
 <header class="hd" data-header>
   <Logo lang={lang} class="hd__cell hd__logo" />
-  <div class="hd__cell hd__slogan label">{t('brand.slogan')}</div>
-  <div class="hd__cell hd__coords label num">42°52′N 74°36′E</div>
+  <a href={localize(routes.show, lang)} class="hd__cell hd__show" aria-current={active === 'show' ? 'page' : undefined}>
+    <span class="hd__show-dot" aria-hidden="true"></span>I AM NOMAD SHOW
+  </a>
+  <a href={bookHref} class="hd__cell hd__book">{t('btn.bookNow')}</a>
+  <button class="hd__menu" type="button" aria-expanded="false" aria-controls="site-menu" data-menu-toggle>
+    <span class="hd__menu-label" data-open={t('ui.menu')} data-close={t('ui.close')}>{t('ui.menu')}</span>
+    <span class="hd__burger" aria-hidden="true"><span></span><span></span></span>
+  </button>
   <div class="hd__cell hd__lang" role="group" aria-label={t('ui.language')}>
     {
       (Object.keys(languages) as Lang[]).map((code) => (
@@ -35,14 +41,6 @@ const pad = (n: number) => String(n).padStart(2, '0');
   <button class="hd__cell hd__theme" type="button" data-theme-toggle aria-label={t('theme.toggle')}>
     <Icon name="moon" class="theme-moon" size={18} />
     <Icon name="sun" class="theme-sun" size={18} />
-  </button>
-  <a href={localize(routes.show, lang)} class="hd__cell hd__show" aria-current={active === 'show' ? 'page' : undefined}>
-    <span class="hd__show-dot" aria-hidden="true"></span>I AM NOMAD SHOW
-  </a>
-  <a href={bookHref} class="hd__cell hd__book">{t('btn.bookNow')}</a>
-  <button class="hd__menu" type="button" aria-expanded="false" aria-controls="site-menu" data-menu-toggle>
-    <span class="hd__menu-label" data-open={t('ui.menu')} data-close={t('ui.close')}>{t('ui.menu')}</span>
-    <span class="hd__burger" aria-hidden="true"><span></span><span></span></span>
   </button>
 </header>
 
@@ -105,31 +103,20 @@ const pad = (n: number) => String(n).padStart(2, '0');
     border-right: 1px solid var(--line);
   }
 
-  /* Слоган сжимается с многоточием, а не распирает шапку */
-  .hd__slogan {
-    flex: 1 1 0;
-    min-width: 0;
-    overflow: hidden;
-    border-right: 0;
-    font-weight: 500;
-    letter-spacing: 0.16em;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
+  /* Логотип занимает всё свободное место — остальные ячейки прижаты вправо */
   .hd :global(.hd__logo) {
-    flex-shrink: 0;
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
-  .hd__coords {
-    border-left: 1px solid var(--line);
-    white-space: nowrap;
-    letter-spacing: 0.08em;
-  }
-
+  /* Язык и тема — у самого правого края */
   .hd__lang {
     gap: 4px;
     padding: 0 16px;
+  }
+
+  .hd__theme {
+    border-right: 0;
   }
 
   .hd__lang a {
@@ -271,23 +258,6 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
   [aria-expanded='true'] .hd__burger span:last-child {
     transform: translateY(-3px) rotate(-45deg);
-  }
-
-  @media (max-width: 1360px) {
-    .hd__coords {
-      display: none;
-    }
-  }
-
-  /* Без слогана растягиваем ячейку логотипа, чтобы остальное прижалось вправо */
-  @media (max-width: 1200px) {
-    .hd__slogan {
-      display: none;
-    }
-
-    .hd :global(.hd__logo) {
-      flex: 1 1 auto;
-    }
   }
 
   @media (max-width: 1100px) {
