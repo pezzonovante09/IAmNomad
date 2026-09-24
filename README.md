@@ -45,7 +45,26 @@
 
 ### Заявки с сайта
 
-Все формы (заявка, контакты, корпоративная, SHOW, конструктор) отправляют данные через сервис [Web3Forms](https://web3forms.com/). Он пересылает каждую заявку письмом на почту, к которой привязан ключ. В базе заявки не хранятся.
+Каждая заявка из любой формы (заявка, контакты, корпоративная, SHOW, конструктор) уходит сразу в два места:
+
+1. **Письмо на почту** через [Web3Forms](https://web3forms.com/), на адрес, к которому привязан ключ.
+2. **База данных** [Supabase](https://supabase.com/): проект `iamnomad`, таблица `leads`.
+
+Если одно из двух не сработало, заявка всё равно принимается. Ошибку посетитель видит, только когда не сработали оба.
+
+**Где смотреть заявки.** Войдите на [supabase.com](https://supabase.com/dashboard), откройте проект **iamnomad** → **Table Editor** → **leads**. Новые заявки видно сразу, их можно фильтровать и сортировать.
+
+| Колонка | Что это |
+| --- | --- |
+| `created_at` | когда пришла |
+| `form` | откуда: `lead` — главная, `contact` — контакты и туры, `corporate` — MICE, `show` — I AM NOMAD SHOW |
+| `name`, `email`, `phone`, `tour`, `message` | данные клиента |
+| `data` | остальные поля: компания, даты, число гостей, WhatsApp, тип события |
+| `page`, `lang` | страница и язык сайта |
+| `status` | **меняйте сами**: `new` — новая, `in_progress` — в работе, `done` — закрыта, `cancelled` — отказ, `spam` — спам |
+| `notes` | заметки менеджера |
+
+**Безопасность.** Сайт использует публичный ключ, которому можно только добавлять заявки. Прочитать, изменить или удалить заявки через сайт нельзя: это закрыто правилами доступа (RLS). Смотреть заявки можно только в панели Supabase.
 
 ### Аналитика
 
@@ -80,6 +99,7 @@ src/
     tours.json        ← структура туров
     show.json         ← медиа и цифры I AM NOMAD SHOW
     studio.json       ← конструктор: регионы, комфорт, цены, моменты
+  components/LeadForm.astro ← все формы: отправка в Web3Forms + Supabase
   data/*.ts           ← типизированные обёртки над content/*.json
   i18n/utils.ts       ← загрузка текстов, t(key), localize()
   views/*.astro       ← страницы (маршруты — src/pages/[...path].astro)
@@ -106,11 +126,16 @@ scripts/
 Задаются в настройках Vercel, см. `.env.example`:
 
 - `PUBLIC_WEB3FORMS_KEY` — ключ Web3Forms (без него используется ключ по умолчанию из `src/data/site.ts`);
+- `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_KEY` — проект Supabase и его публичный ключ для записи заявок (по умолчанию проект `iamnomad`, см. `src/data/site.ts`);
 - `SITE_URL` — адрес сайта для canonical, hreflang, sitemap и превью в соцсетях (по умолчанию `https://www.iamnomadkg.com`).
 
 ### Публикация
 
 Каждый push в `main` Vercel сам собирает и публикует на www.iamnomadkg.com; iamnomadkg.com перенаправляет на www. Для других веток Vercel делает preview-сборки. Старые адреса (`tour-classic.html` и т.п.) перенаправляются на новые через `vercel.json` (и `public/_redirects` для Netlify).
+
+### База заявок (Supabase)
+
+Таблица `public.leads` в проекте `iamnomad` (регион eu-central-1). Роли `anon`/`authenticated` могут только вставлять строки и только в колонки `form, name, email, phone, tour, message, data, page, lang`. Колонки `status` и `notes` сайт заполнить не может. Длины полей ограничены проверками в таблице. Форма шлёт `POST /rest/v1/leads` с заголовком `Prefer: return=minimal`, поэтому ответ не содержит данных.
 
 ### SEO
 
