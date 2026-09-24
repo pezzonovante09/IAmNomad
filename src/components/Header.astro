@@ -36,6 +36,9 @@ const pad = (n: number) => String(n).padStart(2, '0');
     <Icon name="moon" class="theme-moon" size={18} />
     <Icon name="sun" class="theme-sun" size={18} />
   </button>
+  <a href={localize(routes.show, lang)} class="hd__cell hd__show" aria-current={active === 'show' ? 'page' : undefined}>
+    <span class="hd__show-dot" aria-hidden="true"></span>I AM NOMAD SHOW
+  </a>
   <a href={bookHref} class="hd__cell hd__book">{t('btn.bookNow')}</a>
   <button class="hd__menu" type="button" aria-expanded="false" aria-controls="site-menu" data-menu-toggle>
     <span class="hd__menu-label" data-open={t('ui.menu')} data-close={t('ui.close')}>{t('ui.menu')}</span>
@@ -167,6 +170,47 @@ const pad = (n: number) => String(n).padStart(2, '0');
       color 0.5s;
   }
 
+  /* Отдельное направление — золотая ячейка */
+  .hd__show {
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      background-color 0.5s,
+      color 0.5s;
+  }
+
+  .hd__show-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: show-dot 2s ease-out infinite;
+  }
+
+  .hd__show:hover,
+  .hd__show[aria-current='page'] {
+    background: var(--gold);
+    color: #111;
+  }
+
+  .hd__show:hover .hd__show-dot,
+  .hd__show[aria-current='page'] .hd__show-dot {
+    background: #111;
+  }
+
+  @keyframes show-dot {
+    0% {
+      box-shadow: 0 0 0 0 rgb(197 160 89 / 0.7);
+    }
+    100% {
+      box-shadow: 0 0 0 8px rgb(197 160 89 / 0);
+    }
+  }
+
   .hd__book:hover {
     background: var(--accent);
     color: var(--on-accent);
@@ -215,9 +259,20 @@ const pad = (n: number) => String(n).padStart(2, '0');
     transform: translateY(-3px) rotate(-45deg);
   }
 
+  @media (max-width: 1300px) {
+    .hd__coords {
+      display: none;
+    }
+  }
+
   @media (max-width: 1100px) {
-    .hd__coords,
     .hd__book {
+      display: none;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .hd__show {
       display: none;
     }
   }
@@ -276,6 +331,17 @@ const pad = (n: number) => String(n).padStart(2, '0');
     transition:
       background-color 0.5s,
       color 0.5s;
+  }
+
+  .mn__list li:has([href$='/show/']) .mn__title::after {
+    content: '';
+    display: inline-block;
+    width: 0.28em;
+    height: 0.28em;
+    margin-left: 0.3em;
+    border-radius: 50%;
+    background: var(--gold);
+    vertical-align: 0.5em;
   }
 
   .mn__link:hover,

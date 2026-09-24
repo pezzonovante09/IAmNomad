@@ -1,0 +1,126 @@
+---
+// Всплывающий видеоплеер. Любая ссылка/кнопка с data-video="src" открывает его:
+// src — YouTube embed (https://www.youtube.com/embed/ID) или файл mp4.
+// Если data-video пустой, ссылка работает как обычная (например, ведёт на YouTube-канал).
+import { useTranslations, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const t = useTranslations(Astro.props.lang);
+---
+
+<dialog class="vm" data-vm aria-label="Video">
+  <button class="vm__close" type="button" data-vm-close aria-label={t('ui.close')}>×</button>
+  <div class="vm__frame" data-vm-frame></div>
+</dialog>
+
+<style>
+  .vm {
+    width: 100vw;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgb(10 10 10 / 0.96);
+  }
+
+  .vm::backdrop {
+    background: transparent;
+  }
+
+  .vm[open] {
+    display: grid;
+    place-items: center;
+    animation: vm-in 0.4s var(--ease);
+  }
+
+  .vm__frame {
+    width: min(1280px, 92vw);
+    aspect-ratio: 16 / 9;
+    max-height: 84dvh;
+    border: 1px solid #f5f5f3;
+    background: #000;
+  }
+
+  .vm__frame :global(iframe),
+  .vm__frame :global(video) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .vm__close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 52px;
+    height: 52px;
+    border: 1px solid #f5f5f3;
+    background: transparent;
+    color: #f5f5f3;
+    font-size: 28px;
+    line-height: 1;
+    transition:
+      background-color 0.4s,
+      color 0.4s;
+  }
+
+  .vm__close:hover {
+    background: #f5f5f3;
+    color: #111;
+  }
+
+  @keyframes vm-in {
+    from {
+      opacity: 0;
+    }
+  }
+</style>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-vm]');
+  const frame = dialog?.querySelector<HTMLElement>('[data-vm-frame]');
+
+  function open(src: string) {
+    if (!dialog || !frame) return;
+    if (/youtube\.com|youtu\.be|vimeo\.com/.test(src)) {
+      const iframe = document.createElement('iframe');
+      iframe.src = src + (src.includes('?') ? '&' : '?') + 'autoplay=1';
+      iframe.allow = 'autoplay; encrypted-media; fullscreen; picture-in-picture';
+      iframe.allowFullscreen = true;
+      iframe.title = 'Video';
+      frame.replaceChildren(iframe);
+    } else {
+      const video = document.createElement('video');
+      video.src = src;
+      video.controls = true;
+      video.autoplay = true;
+      video.playsInline = true;
+      frame.replaceChildren(video);
+    }
+    dialog.showModal();
+    document.body.classList.add('is-locked');
+  }
+
+  document.addEventListener('click', (e) => {
+    const trigger = (e.target as HTMLElement).closest<HTMLElement>('[data-video]');
+    const src = trigger?.dataset.video;
+    if (!trigger || !src) return; // без видео — обычная ссылка
+    e.preventDefault();
+    open(src);
+  });
+
+  dialog?.addEventListener('close', () => {
+    frame?.replaceChildren(); // останавливаем воспроизведение
+    document.body.classList.remove('is-locked');
+  });
+  dialog?.querySelector('[data-vm-close]')?.addEventListener('click', () => dialog.close());
+  dialog?.addEventListener('click', (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+</script>

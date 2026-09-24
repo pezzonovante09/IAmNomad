@@ -1,5 +1,6 @@
 import { translations } from './translations';
 import { ui } from './ui';
+import { show } from './show';
 
 export const languages = { ru: 'RU', en: 'EN' } as const;
 export type Lang = keyof typeof languages;
@@ -7,8 +8,8 @@ export const defaultLang: Lang = 'ru';
 
 type Dict = Record<string, string>;
 const dicts: Record<Lang, Dict> = {
-  ru: { ...translations.ru, ...ui.ru },
-  en: { ...translations.en, ...ui.en },
+  ru: { ...translations.ru, ...ui.ru, ...show.ru },
+  en: { ...translations.en, ...ui.en, ...show.en },
 };
 
 export function useTranslations(lang: Lang) {

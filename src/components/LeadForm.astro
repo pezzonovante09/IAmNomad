@@ -7,18 +7,24 @@ import { useTranslations, type Lang } from '../i18n/utils';
 
 interface Props {
   lang: Lang;
-  variant?: 'lead' | 'contact' | 'corporate';
+  variant?: 'lead' | 'contact' | 'corporate' | 'show';
   id?: string;
+  /** Своё сообщение после успешной отправки. */
+  success?: string;
+  /** Своя подпись кнопки. */
+  submitLabel?: string;
 }
 
-const { lang, variant = 'lead', id = 'form' } = Astro.props;
+const { lang, variant = 'lead', id = 'form', success, submitLabel } = Astro.props;
 const t = useTranslations(lang);
 
 const subjects = {
   lead: 'Tour inquiry — I AM NOMAD',
   contact: 'Contact form — I AM NOMAD',
   corporate: 'Corporate inquiry — I AM NOMAD',
+  show: 'Show booking — I AM NOMAD SHOW',
 };
+const eventTypes = ['group', 'vip', 'corporate', 'private', 'other'];
 const f = (name: string) => `${id}-${name}`;
 ---
 
@@ -26,7 +32,7 @@ const f = (name: string) => `${id}-${name}`;
   class="form"
   data-form
   data-endpoint={web3forms.endpoint}
-  data-success={t('misc.formSuccess')}
+  data-success={success ?? t('misc.formSuccess')}
   data-error={t('misc.formError')}
   data-sending={t('form.sending')}
   data-builder-prefix={t('builder.requestPrefix')}
@@ -37,7 +43,46 @@ const f = (name: string) => `${id}-${name}`;
   <input type="checkbox" name="botcheck" class="sr-only" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
   {
-    variant === 'corporate' ? (
+    variant === 'show' ? (
+      <>
+        <div class="form__row">
+          <div class="field">
+            <label class="field__label" for={f('name')}>{t('form.name')}</label>
+            <input class="field__input" type="text" id={f('name')} name="name" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label class="field__label" for={f('email')}>{t('form.email')}</label>
+            <input class="field__input" type="email" id={f('email')} name="email" autocomplete="email" required />
+          </div>
+        </div>
+        <div class="form__row">
+          <div class="field">
+            <label class="field__label" for={f('phone')}>{t('form.phone')}</label>
+            <input class="field__input" type="tel" id={f('phone')} name="phone" autocomplete="tel" placeholder="+996 …" />
+          </div>
+          <div class="field">
+            <label class="field__label" for={f('whatsapp')}>{t('show.form.whatsapp')}</label>
+            <input class="field__input" type="tel" id={f('whatsapp')} name="whatsapp" placeholder="+" />
+          </div>
+        </div>
+        <div class="form__row">
+          <div class="field">
+            <label class="field__label" for={f('date')}>{t('show.form.date')}</label>
+            <input class="field__input" type="date" id={f('date')} name="date" />
+          </div>
+          <div class="field">
+            <label class="field__label" for={f('guests')}>{t('show.form.guests')}</label>
+            <input class="field__input" type="number" min="1" inputmode="numeric" id={f('guests')} name="guests" />
+          </div>
+        </div>
+        <div class="field">
+          <label class="field__label" for={f('type')}>{t('show.form.type')}</label>
+          <select class="field__input" id={f('type')} name="event_type">
+            {eventTypes.map((k) => <option value={t(`show.form.type.${k}`)}>{t(`show.form.type.${k}`)}</option>)}
+          </select>
+        </div>
+      </>
+    ) : variant === 'corporate' ? (
       <>
         <div class="field">
           <label class="field__label" for={f('company')}>{t('form.company')}</label>
@@ -94,12 +139,12 @@ const f = (name: string) => `${id}-${name}`;
   }
 
   <div class="field">
-    <label class="field__label" for={f('message')}>{t('form.message')}</label>
+    <label class="field__label" for={f('message')}>{variant === 'show' ? t('show.form.comment') : t('form.message')}</label>
     <textarea class="field__input" id={f('message')} name="message" rows="5" data-field-message></textarea>
   </div>
 
   <button type="submit" class="btn btn--accent form__submit">
-    <span data-label>{variant === 'corporate' ? t('btn.requestQuote') : t('btn.send')}</span>
+    <span data-label>{submitLabel ?? (variant === 'corporate' ? t('btn.requestQuote') : t('btn.send'))}</span>
     <Icon name="arrow-right" />
   </button>
   <p class="form__status" role="status" aria-live="polite" data-status></p>

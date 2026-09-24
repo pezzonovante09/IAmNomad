@@ -19,13 +19,15 @@ interface Props {
   title?: string;
   description?: string;
   image?: string;
+  /** Полный <title> без суффикса « — I AM NOMAD». */
+  fullTitle?: string;
 }
 
-const { lang, page, path, section, title, description, image } = Astro.props;
+const { lang, page, path, section, title, description, image, fullTitle: fullTitleProp } = Astro.props;
 const t = useTranslations(lang);
 
 const pageTitle = title ?? t(`page.title.${page}`);
-const fullTitle = page === 'home' ? `I AM NOMAD — ${pageTitle}` : `${pageTitle} — I AM NOMAD`;
+const fullTitle = fullTitleProp ?? (page === 'home' ? `I AM NOMAD — ${pageTitle}` : `${pageTitle} — I AM NOMAD`);
 const desc = description ?? t(`page.desc.${page}`);
 const ogImage = image ?? unsplash('1689788648053-cd482d1acd9c', 1200, 630);
 const site = Astro.site;

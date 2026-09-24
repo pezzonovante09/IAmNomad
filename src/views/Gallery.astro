@@ -8,6 +8,7 @@ import { videos } from '../data/site';
 import { useTranslations, type Lang } from '../i18n/utils';
 import { srcset, unsplash } from '../lib/img';
 import { routes } from '../lib/routes';
+import { bigTiles } from '../lib/tiles';
 
 interface Props {
   lang: Lang;
@@ -15,8 +16,8 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-// Крупные фото подобраны так, чтобы сетка 4×N закрывалась без дыр (12 фото → 6 рядов).
-const bigIndexes = [0, 5, 7, 9];
+// Крупные фото подбираются автоматически так, чтобы сетка закрывалась без дыр.
+const bigIndexes = bigTiles(galleryPhotos.length);
 const big = (i: number) => bigIndexes.includes(i);
 ---
 

@@ -1,0 +1,1518 @@
+---
+// I AM NOMAD SHOW — отдельное направление компании: продающий лендинг /show.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactCards from '../components/ContactCards.astro';
+import Faq from '../components/Faq.astro';
+import Icon from '../components/Icon.astro';
+import LeadForm from '../components/LeadForm.astro';
+import Ornament from '../components/Ornament.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import VideoModal from '../components/VideoModal.astro';
+import { contacts } from '../data/site';
+import { showGallery, showMoments, showPosters, showReviews, showStats, showTimeline, showVideos } from '../data/show';
+import { useTranslations, type Lang } from '../i18n/utils';
+import { srcset, unsplash } from '../lib/img';
+import { routes } from '../lib/routes';
+import { bigTiles } from '../lib/tiles';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const pad = (n: number) => String(n).padStart(2, '0');
+const isVideoFile = (src: string) => src && !/youtube|youtu\.be|vimeo/.test(src);
+
+const why = [
+  { icon: 'users', n: 1 },
+  { icon: 'sparkles', n: 2 },
+  { icon: 'compass', n: 3 },
+  { icon: 'route', n: 4 },
+  { icon: 'sofa', n: 5 },
+  { icon: 'star', n: 6 },
+] as const;
+
+const moments = showMoments.map((photo, i) => {
+  const n = i + 1;
+  const items = t(`show.what.${n}.items`);
+  return {
+    n,
+    photo,
+    title: t(`show.what.${n}.title`),
+    text: t(`show.what.${n}.text`),
+    items: items === `show.what.${n}.items` ? [] : items.split('|'),
+  };
+});
+
+const bigs = bigTiles(showGallery.length);
+const hasGalleryVideos = showGallery.some((g) => g.video);
+const faq = [1, 2, 3, 4, 5, 6].map((n) => ({ q: t(`show.faq.q${n}`), a: t(`show.faq.a${n}`) }));
+const avgRating = (showReviews.reduce((a, r) => a + r.rating, 0) / showReviews.length).toFixed(1);
+
+const seoTitle = 'I AM NOMAD SHOW | Authentic Nomad Experience in Kyrgyzstan';
+const seoDesc =
+  lang === 'en'
+    ? 'Exclusive cultural show in Kyrgyzstan featuring horse performances, eagle hunting, traditional music, national cuisine and interactive experiences.'
+    : t('page.desc.show');
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TouristAttraction',
+  name: 'I AM NOMAD SHOW',
+  description:
+    'Exclusive cultural show in Kyrgyzstan featuring horse performances, eagle hunting, traditional music, national cuisine and interactive experiences.',
+  image: unsplash(showPosters.hero.id, 1200, 630),
+  touristType: ['Tour groups', 'VIP', 'Corporate events'],
+  provider: { '@type': 'TravelAgency', name: 'I AM NOMAD', telephone: contacts.phone, email: contacts.email },
+};
+---
+
+<BaseLayout lang={lang} page="show" path={routes.show} fullTitle={seoTitle} description={seoDesc} image={unsplash(showPosters.hero.id, 1200, 630)}>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)} />
+
+  <!-- HERO -->
+  <section class="hero" data-hero>
+    <div class="hero__media" data-parallax>
+      {
+        isVideoFile(showVideos.hero) ? (
+          <video
+            class="hero__video"
+            src={showVideos.hero}
+            poster={unsplash(showPosters.hero.id, 1920, 1080)}
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+          />
+        ) : (
+          <img
+            class="hero__video"
+            src={unsplash(showPosters.hero.id, 1920, 1080)}
+            srcset={srcset(showPosters.hero.id, [800, 1200, 1920, 2560], 0.5625)}
+            sizes="100vw"
+            alt={showPosters.hero.alt}
+            width="1920"
+            height="1080"
+            fetchpriority="high"
+          />
+        )
+      }
+    </div>
+    <div class="hero__shade" aria-hidden="true"></div>
+
+    <div class="hero__top label">
+      <span data-reveal="fade" data-delay="200">{t('show.hero.kicker')}</span>
+      <span class="num" data-reveal="fade" data-delay="300">11:00 — 14:00 · 110+</span>
+    </div>
+
+    <div class="hero__content">
+      <h1 class="hero__title" data-reveal="up" data-delay="300">
+        I AM NOMAD <span>SHOW</span>
+      </h1>
+      <div class="hero__row">
+        <div class="hero__text">
+          <p class="hero__subtitle" data-reveal="up" data-delay="550">{t('show.hero.subtitle')}</p>
+          <p class="hero__lead" data-reveal="fade" data-delay="800">{t('show.hero.text')}</p>
+        </div>
+        <div class="hero__actions" data-reveal="up" data-delay="900">
+          <a href="#show-booking" class="btn btn--gold btn--lg">{t('show.cta')} <span aria-hidden="true">→</span></a>
+          <a href={contacts.youtube} class="btn btn--glass btn--lg" data-video={showVideos.main} target="_blank" rel="noopener">
+            <Icon name="play" size={16} />
+            {t('show.watch')}
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="ornament-band hero__band" aria-hidden="true"></div>
+  </section>
+
+  <!-- (01) Почему выбирают нас -->
+  <section class="block">
+    <SectionHeader kicker={t('show.why.kicker')} title={t('show.why.title')} />
+    <ol class="why">
+      {
+        why.map((w, i) => (
+          <li class="why__card" data-reveal style={`--i:${i % 3}`}>
+            <div class="why__top">
+              <span class="label num">({pad(w.n)})</span>
+              <Icon name={w.icon} size={26} />
+            </div>
+            <h3 class="why__title">{t(`show.why.${w.n}.title`)}</h3>
+            <p class="why__text">{t(`show.why.${w.n}.text`)}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- (02) Что вас ждёт -->
+  <section class="block">
+    <SectionHeader kicker={t('show.what.kicker')} title={t('show.what.title')} />
+    <div class="what">
+      {
+        moments.map((m, i) => (
+          <article class:list={['what__row', { 'what__row--flip': i % 2 === 1 }]}>
+            <div class="what__media" data-reveal="curtain">
+              <img
+                src={unsplash(m.photo.id, 1400, 1000)}
+                srcset={srcset(m.photo.id, [700, 1000, 1400, 1900], 0.71)}
+                sizes="(max-width: 900px) 100vw, 60vw"
+                alt={m.photo.alt}
+                width="1400"
+                height="1000"
+                loading="lazy"
+                decoding="async"
+              />
+              <span class="what__num num">{pad(m.n)}</span>
+            </div>
+            <div class="what__body">
+              <p class="label num" data-reveal="fade">
+                {pad(m.n)} / {pad(moments.length)}
+              </p>
+              <h3 class="what__title" data-reveal>
+                {m.title}
+              </h3>
+              <p class="what__text" data-reveal>
+                {m.text}
+              </p>
+              {m.items.length > 0 && (
+                <ul class="what__tags" data-reveal>
+                  {m.items.map((it) => (
+                    <li>{it}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <a href="#show-booking" class="cta-bar" data-reveal="fade">
+    <span class="label">I AM NOMAD SHOW</span>
+    <span class="cta-bar__text">{t('show.cta')}</span>
+    <span class="cta-bar__arrow" aria-hidden="true">→</span>
+  </a>
+
+  <!-- (03) Как проходит день -->
+  <section class="block">
+    <SectionHeader kicker={t('show.day.kicker')} title={t('show.day.title')} meta="11:00 — 14:00" />
+    <ol class="day">
+      {
+        showTimeline.map((time, i) => (
+          <li class="day__step" data-reveal style={`--i:${i}`}>
+            <span class="day__time num">{time}</span>
+            <span class="day__dot" aria-hidden="true" />
+            <span class="label num">{pad(i + 1)}</span>
+            <span class="day__label">{t(`show.day.${i + 1}`)}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- (04) Шоу в цифрах -->
+  <section class="stats">
+    <div class="stats__head" data-reveal>
+      <p class="label">{t('show.stats.kicker')}</p>
+      <h2 class="h2">{t('show.stats.title')}</h2>
+    </div>
+    <dl class="stats__grid">
+      {
+        showStats.map((s, i) => (
+          <div class="stats__cell" data-reveal style={`--i:${i % 3}`}>
+            <dt class="stats__value num">
+              <span data-count={s.value}>{s.value}</span>
+              {s.suffix}
+            </dt>
+            <dd class="label">{t(`show.stats.${s.key}`)}</dd>
+          </div>
+        ))
+      }
+    </dl>
+    <div class="stats__disc" aria-hidden="true">
+      <Ornament variant="tunduk" stroke="#C5A059" />
+    </div>
+  </section>
+
+  <a href="#show-booking" class="cta-bar" data-reveal="fade">
+    <span class="label">I AM NOMAD SHOW</span>
+    <span class="cta-bar__text">{t('show.cta')}</span>
+    <span class="cta-bar__arrow" aria-hidden="true">→</span>
+  </a>
+
+  <!-- (05) Галерея -->
+  <section class="block">
+    <SectionHeader kicker={t('show.gallery.kicker')} title={t('show.gallery.title')} meta={`${pad(showGallery.length)}`}>
+      {
+        hasGalleryVideos && (
+          <div class="gal-tabs" role="group" aria-label={t('show.gallery.title')}>
+            <button type="button" data-gal-filter="all" aria-pressed="true">
+              {t('show.gallery.all')}
+            </button>
+            <button type="button" data-gal-filter="photo" aria-pressed="false">
+              {t('show.gallery.photo')}
+            </button>
+            <button type="button" data-gal-filter="video" aria-pressed="false">
+              {t('show.gallery.video')}
+            </button>
+          </div>
+        )
+      }
+    </SectionHeader>
+    <div class="gal">
+      {
+        showGallery.map((g, i) =>
+          g.video ? (
+            <a
+              href={g.video}
+              class:list={['gal__item', { 'gal__item--big': bigs.includes(i) }]}
+              data-video={g.video}
+              data-kind="video"
+              data-reveal="fade"
+              style={`--i:${i % 4}`}
+              aria-label={`${t('show.gallery.video')}: ${g.alt}`}
+            >
+              <img src={unsplash(g.id, 900, 900)} srcset={srcset(g.id, [400, 700, 1000, 1400], 1)} sizes="(max-width: 700px) 50vw, 25vw" alt={g.alt} width="900" height="900" loading="lazy" decoding="async" />
+              <span class="gal__play" aria-hidden="true">
+                <Icon name="play" size={22} />
+              </span>
+            </a>
+          ) : (
+            <button
+              type="button"
+              class:list={['gal__item', { 'gal__item--big': bigs.includes(i) }]}
+              data-lightbox="show"
+              data-full={unsplash(g.id, 1800)}
+              data-kind="photo"
+              aria-label={g.alt}
+              data-reveal="fade"
+              style={`--i:${i % 4}`}
+            >
+              <img src={unsplash(g.id, 900, 900)} srcset={srcset(g.id, [400, 700, 1000, 1400], 1)} sizes="(max-width: 700px) 50vw, 25vw" alt={g.alt} width="900" height="900" loading="lazy" decoding="async" />
+              <span class="gal__zoom" aria-hidden="true">
+                <Icon name="expand" size={18} />
+              </span>
+            </button>
+          ),
+        )
+      }
+    </div>
+  </section>
+
+  <!-- (06) Видео -->
+  <section class="block">
+    <SectionHeader kicker={t('show.video.kicker')} title={t('show.video.title')} />
+    <a
+      href={contacts.youtube}
+      class="vid"
+      data-video={showVideos.main}
+      target="_blank"
+      rel="noopener"
+      aria-label={t('show.video.play')}
+      data-reveal="curtain"
+    >
+      <img
+        src={unsplash(showPosters.video.id, 1920, 1000)}
+        srcset={srcset(showPosters.video.id, [800, 1200, 1920, 2560], 0.52)}
+        sizes="100vw"
+        alt={showPosters.video.alt}
+        width="1920"
+        height="1000"
+        loading="lazy"
+      />
+      <span class="vid__shade" aria-hidden="true"></span>
+      <span class="vid__play" aria-hidden="true">
+        <Icon name="play" size={44} />
+      </span>
+      <span class="vid__label label">{showVideos.main ? t('show.video.play') : t('show.video.soon')}</span>
+    </a>
+  </section>
+
+  <a href="#show-booking" class="cta-bar" data-reveal="fade">
+    <span class="label">I AM NOMAD SHOW</span>
+    <span class="cta-bar__text">{t('show.cta')}</span>
+    <span class="cta-bar__arrow" aria-hidden="true">→</span>
+  </a>
+
+  <!-- (07) Отзывы -->
+  <section class="block">
+    <SectionHeader kicker={t('show.reviews.kicker')} title={t('show.reviews.title')}>
+      <div class="rev-head">
+        <p class="rev-rating">
+          <span class="rev-rating__num num">{avgRating}</span>
+          <span class="rev-rating__stars" aria-label={`${avgRating}/5`}>
+            {[0, 1, 2, 3, 4].map(() => <Icon name="star" size={16} />)}
+          </span>
+        </p>
+        <p class="label">{t('show.reviews.rating')}</p>
+        <div class="rev-nav">
+          <button type="button" data-rev-prev aria-label={t('btn.prev')}>←</button>
+          <button type="button" data-rev-next aria-label={t('btn.next')}>→</button>
+        </div>
+      </div>
+    </SectionHeader>
+    <ul class="rev" data-rev-track>
+      {
+        showReviews.map((r, i) => (
+          <li class="rev__card" data-reveal="fade" style={`--i:${i % 3}`}>
+            {r.video ? (
+              <a href={r.video} class="rev__media" data-video={r.video} aria-label={t('show.reviews.video')}>
+                <img src={unsplash(r.photo, 800, 600)} alt="" width="800" height="600" loading="lazy" decoding="async" />
+                <span class="rev__play">
+                  <Icon name="play" size={20} />
+                  <span class="label">{t('show.reviews.video')}</span>
+                </span>
+              </a>
+            ) : (
+              <div class="rev__media">
+                <img src={unsplash(r.photo, 800, 600)} alt="" width="800" height="600" loading="lazy" decoding="async" />
+              </div>
+            )}
+            <div class="rev__body">
+              <div class="rev__stars" aria-label={`${r.rating}/5`}>
+                {Array.from({ length: r.rating }).map(() => (
+                  <Icon name="star" size={14} />
+                ))}
+              </div>
+              <blockquote class="rev__text">{t(`${r.key}.text`)}</blockquote>
+              <p class="rev__author">
+                <img src={unsplash(r.avatar, 96, 96)} alt="" width="36" height="36" loading="lazy" />
+                <span class="label">{t(`${r.key}.name`)}</span>
+              </p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- (08) FAQ -->
+  <section class="block">
+    <SectionHeader kicker={t('show.faq.kicker')} title={t('show.faq.title')} />
+    <Faq items={faq} openFirst />
+  </section>
+
+  <a href="#show-booking" class="cta-bar" data-reveal="fade">
+    <span class="label">I AM NOMAD SHOW</span>
+    <span class="cta-bar__text">{t('show.cta')}</span>
+    <span class="cta-bar__arrow" aria-hidden="true">→</span>
+  </a>
+
+  <!-- (09) Бронирование -->
+  <section class="book" id="show-booking">
+    <div class="book__side">
+      <p class="label">{t('show.book.kicker')}</p>
+      <h2 class="book__title">{t('show.book.title')}</h2>
+      <p class="book__lead">{t('show.book.subtitle')}</p>
+      <ol class="book__day">
+        {
+          showTimeline.map((time, i) => (
+            <li>
+              <span class="num">{time}</span>
+              <span>{t(`show.day.${i + 1}`)}</span>
+            </li>
+          ))
+        }
+      </ol>
+      <a href={contacts.whatsapp} class="btn btn--glass btn--block" target="_blank" rel="noopener">
+        WhatsApp {contacts.phone}
+        <Icon name="whatsapp" />
+      </a>
+    </div>
+    <div class="book__form" data-reveal>
+      <LeadForm lang={lang} variant="show" id="show" success={t('show.book.success')} submitLabel={t('show.cta')} />
+    </div>
+  </section>
+
+  <section class="contacts">
+    <ContactCards lang={lang} layout="grid" />
+  </section>
+
+  <!-- Липкая кнопка брони на телефоне -->
+  <a href="#show-booking" class="mbook" data-mbook aria-hidden="true" tabindex="-1">
+    <span>{t('show.cta')}</span><span aria-hidden="true">→</span>
+  </a>
+
+  <VideoModal lang={lang} />
+</BaseLayout>
+
+<style>
+  /* ---------- HERO ---------- */
+  .hero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: calc(100svh - var(--header-h));
+    overflow: hidden;
+    background: #111;
+    color: #f5f5f3;
+  }
+
+  .hero__media {
+    position: absolute;
+    inset: -8% 0 0;
+    will-change: transform;
+  }
+
+  .hero__video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero__shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgb(10 10 10 / 0.55) 0%, rgb(10 10 10 / 0) 28%),
+      linear-gradient(0deg, rgb(10 10 10 / 0.92) 0%, rgb(10 10 10 / 0.5) 40%, rgb(10 10 10 / 0) 70%);
+  }
+
+  .hero__top {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 20px var(--gutter);
+    color: var(--gold);
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 1;
+    padding: 0 var(--gutter) clamp(48px, 8vh, 88px);
+  }
+
+  .hero__title {
+    font-size: clamp(48px, min(11vw, 17vh), 220px);
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+
+  .hero__title span {
+    color: var(--gold);
+  }
+
+  .hero__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px 48px;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid rgb(245 245 243 / 0.35);
+  }
+
+  .hero__text {
+    display: grid;
+    gap: 12px;
+    max-width: 640px;
+  }
+
+  .hero__subtitle {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(22px, 2.4vw, 36px);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .hero__lead {
+    color: rgb(245 245 243 / 0.82);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .hero__band {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 18px;
+    opacity: 0.8;
+  }
+
+  @media (max-width: 600px) {
+    .hero__actions,
+    .hero__actions .btn {
+      width: 100%;
+    }
+  }
+
+  /* ---------- Блоки ---------- */
+  .block {
+    border-top: 1px solid var(--line);
+  }
+
+  /* ---------- (01) Почему ---------- */
+  .why {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .why__card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 280px;
+    padding: 28px var(--gutter);
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    transition:
+      background-color 0.5s,
+      color 0.5s;
+  }
+
+  .why__card:nth-child(3n) {
+    border-right: 0;
+  }
+
+  .why__card:nth-last-child(-n + 3) {
+    border-bottom: 0;
+  }
+
+  .why__card:hover {
+    background: #111;
+    color: #f5f5f3;
+  }
+
+  .why__card:hover .why__top :global(svg) {
+    color: var(--gold);
+    transform: rotate(-8deg) scale(1.1);
+  }
+
+  .why__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .why__top :global(svg) {
+    transition:
+      transform 0.5s var(--ease),
+      color 0.5s;
+  }
+
+  .why__title {
+    margin-top: auto;
+    font-size: clamp(22px, 2.2vw, 34px);
+    font-weight: 600;
+  }
+
+  .why__text {
+    max-width: 36ch;
+    opacity: 0.8;
+  }
+
+  @media (max-width: 900px) {
+    .why {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .why__card:nth-child(3n) {
+      border-right: 1px solid var(--line);
+    }
+
+    .why__card:nth-child(2n) {
+      border-right: 0;
+    }
+
+    .why__card:nth-last-child(-n + 3) {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .why__card:nth-last-child(-n + 2) {
+      border-bottom: 0;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .why {
+      grid-template-columns: 1fr;
+    }
+
+    .why__card {
+      min-height: 0;
+      border-right: 0 !important;
+    }
+
+    .why__card:nth-last-child(2) {
+      border-bottom: 1px solid var(--line);
+    }
+  }
+
+  /* ---------- (02) Что вас ждёт ---------- */
+  .what__row {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    border-top: 1px solid var(--line);
+  }
+
+  .what__row--flip .what__media {
+    order: 2;
+    border-left: 1px solid var(--line);
+  }
+
+  .what__row:not(.what__row--flip) .what__media {
+    border-right: 1px solid var(--line);
+  }
+
+  .what__media {
+    position: relative;
+    min-height: clamp(360px, 42vw, 640px);
+    overflow: hidden;
+    background: var(--accent);
+  }
+
+  .what__media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.6s var(--ease);
+  }
+
+  .what__row:hover .what__media img {
+    transform: scale(1.04);
+  }
+
+  .what__num {
+    position: absolute;
+    left: 20px;
+    bottom: 12px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(64px, 9vw, 160px);
+    line-height: 1;
+    color: #f5f5f3;
+    mix-blend-mode: overlay;
+  }
+
+  .what__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 16px;
+    padding: 32px var(--gutter);
+  }
+
+  .what__title {
+    font-size: clamp(32px, 3.6vw, 64px);
+    text-transform: uppercase;
+  }
+
+  .what__text {
+    max-width: 44ch;
+    font-size: 17px;
+    color: var(--ink-soft);
+  }
+
+  .what__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    list-style: none;
+  }
+
+  .what__tags li {
+    padding: 6px 12px;
+    border: 1px solid var(--line);
+    font-size: 13px;
+    font-weight: 500;
+    transition:
+      background-color 0.4s,
+      color 0.4s;
+  }
+
+  .what__tags li:hover {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #111;
+  }
+
+  @media (max-width: 900px) {
+    .what__row {
+      grid-template-columns: 1fr;
+    }
+
+    .what__row--flip .what__media {
+      order: 0;
+      border-left: 0;
+    }
+
+    .what__row .what__media {
+      border-right: 0 !important;
+      border-bottom: 1px solid var(--line);
+      min-height: 300px;
+    }
+  }
+
+  /* ---------- CTA-полоса ---------- */
+  .cta-bar {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 22px var(--gutter);
+    border-top: 1px solid var(--line);
+    background: #111;
+    color: #f5f5f3;
+    text-decoration: none;
+    transition:
+      background-color 0.5s,
+      color 0.5s;
+  }
+
+  .cta-bar .label {
+    color: var(--gold);
+    transition: color 0.5s;
+  }
+
+  .cta-bar__text {
+    flex: 1;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(22px, 3vw, 44px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  .cta-bar__arrow {
+    font-size: clamp(24px, 3vw, 44px);
+    transition: transform 0.5s var(--ease);
+  }
+
+  .cta-bar:hover {
+    background: var(--gold);
+    color: #111;
+  }
+
+  .cta-bar:hover .label {
+    color: #111;
+  }
+
+  .cta-bar:hover .cta-bar__arrow {
+    transform: translateX(8px);
+  }
+
+  @media (max-width: 560px) {
+    .cta-bar .label {
+      display: none;
+    }
+  }
+
+  /* ---------- (03) День ---------- */
+  .day {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(200px, 1fr));
+    overflow-x: auto;
+    list-style: none;
+    border-top: 1px solid var(--line);
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .day::-webkit-scrollbar {
+    display: none;
+  }
+
+  .day__step {
+    position: relative;
+    display: grid;
+    gap: 10px;
+    padding: 28px var(--gutter) 36px;
+    border-right: 1px solid var(--line);
+    scroll-snap-align: start;
+  }
+
+  .day__step:last-child {
+    border-right: 0;
+  }
+
+  /* сквозная линия таймлайна */
+  .day__step::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(28px + clamp(40px, 4.4vw, 72px) + 17px);
+    height: 1px;
+    background: var(--line);
+  }
+
+  .day__time {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(40px, 4.4vw, 72px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .day__dot {
+    position: relative;
+    z-index: 1;
+    width: 14px;
+    height: 14px;
+    margin: 10px 0;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--gold);
+    transition: transform 0.4s var(--ease);
+  }
+
+  .day__step:hover .day__dot {
+    transform: scale(1.5);
+  }
+
+  .day__label {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(18px, 1.6vw, 24px);
+    line-height: 1.15;
+  }
+
+  /* ---------- (04) Цифры ---------- */
+  .stats {
+    position: relative;
+    overflow: hidden;
+    padding: 48px var(--gutter) 56px;
+    border-top: 1px solid var(--line);
+    background: #111;
+    color: #f5f5f3;
+  }
+
+  .stats__head {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+
+  .stats__head .label {
+    color: var(--gold);
+  }
+
+  .stats__grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    margin: 0;
+    border-top: 1px solid rgb(245 245 243 / 0.35);
+  }
+
+  .stats__cell {
+    display: grid;
+    gap: 8px;
+    padding: 28px 20px 8px 0;
+  }
+
+  .stats__cell + .stats__cell {
+    padding-left: 20px;
+    border-left: 1px solid rgb(245 245 243 / 0.35);
+  }
+
+  .stats__value {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(56px, 7vw, 132px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--gold);
+  }
+
+  .stats dd {
+    margin: 0;
+  }
+
+  .stats__disc {
+    position: absolute;
+    right: -120px;
+    top: -120px;
+    width: 460px;
+    opacity: 0.25;
+  }
+
+  .stats__disc :global(svg) {
+    width: 100%;
+    height: auto;
+    animation: spin 80s linear infinite;
+  }
+
+  @media (max-width: 1000px) {
+    .stats__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .stats__cell:nth-child(4) {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .stats__cell:nth-child(n + 4) {
+      border-top: 1px solid rgb(245 245 243 / 0.35);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .stats__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .stats__cell:nth-child(n) {
+      padding-left: 16px;
+      border-left: 1px solid rgb(245 245 243 / 0.35);
+    }
+
+    .stats__cell:nth-child(odd) {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .stats__cell:nth-child(n + 3) {
+      border-top: 1px solid rgb(245 245 243 / 0.35);
+    }
+  }
+
+  /* ---------- (05) Галерея ---------- */
+  .gal-tabs {
+    display: flex;
+    border: 1px solid var(--line);
+  }
+
+  .gal-tabs button {
+    padding: 10px 16px;
+    border: 0;
+    border-right: 1px solid var(--line);
+    background: transparent;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .gal-tabs button:last-child {
+    border-right: 0;
+  }
+
+  .gal-tabs button[aria-pressed='true'] {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .gal {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-flow: dense;
+    gap: 1px;
+    border-top: 1px solid var(--line);
+    background: var(--line);
+  }
+
+  .gal__item {
+    position: relative;
+    display: block;
+    aspect-ratio: 1;
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+    background: var(--accent);
+    cursor: zoom-in;
+  }
+
+  .gal__item[data-kind='video'] {
+    cursor: pointer;
+  }
+
+  .gal__item--big {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .gal__item.is-hidden {
+    display: none;
+  }
+
+  .gal__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.4s var(--ease);
+  }
+
+  .gal__item:hover img {
+    transform: scale(1.06);
+  }
+
+  .gal__zoom,
+  .gal__play {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    color: #111;
+    background: var(--gold);
+  }
+
+  .gal__zoom {
+    right: 12px;
+    bottom: 12px;
+    width: 40px;
+    height: 40px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 0.4s,
+      transform 0.5s var(--ease);
+  }
+
+  .gal__item:hover .gal__zoom,
+  .gal__item:focus-visible .gal__zoom {
+    opacity: 1;
+    transform: none;
+  }
+
+  .gal__play {
+    left: 50%;
+    top: 50%;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  @media (max-width: 700px) {
+    .gal {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* ---------- (06) Видео ---------- */
+  .vid {
+    position: relative;
+    display: grid;
+    place-items: center;
+    height: clamp(360px, 70vh, 780px);
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+    background: #111;
+    color: #f5f5f3;
+    text-decoration: none;
+  }
+
+  .vid img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.6s var(--ease);
+  }
+
+  .vid:hover img {
+    transform: scale(1.04);
+  }
+
+  .vid__shade {
+    position: absolute;
+    inset: 0;
+    background: rgb(10 10 10 / 0.35);
+  }
+
+  .vid__play {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: clamp(110px, 12vw, 168px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--gold);
+    color: #111;
+    transition: transform 0.5s var(--ease);
+  }
+
+  .vid__play::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    animation: ring 2s ease-out infinite;
+  }
+
+  .vid:hover .vid__play {
+    transform: scale(1.08);
+  }
+
+  .vid__label {
+    position: absolute;
+    left: var(--gutter);
+    bottom: 20px;
+  }
+
+  @keyframes ring {
+    0% {
+      box-shadow: 0 0 0 0 rgb(197 160 89 / 0.7);
+    }
+    100% {
+      box-shadow: 0 0 0 36px rgb(197 160 89 / 0);
+    }
+  }
+
+  /* ---------- (07) Отзывы ---------- */
+  .rev-head {
+    display: grid;
+    justify-items: end;
+    gap: 6px;
+  }
+
+  .rev-rating {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .rev-rating__num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 44px;
+    line-height: 1;
+  }
+
+  .rev-rating__stars {
+    display: flex;
+    color: var(--gold);
+  }
+
+  .rev-nav {
+    display: flex;
+    margin-top: 8px;
+    border: 1px solid var(--line);
+  }
+
+  .rev-nav button {
+    width: 48px;
+    height: 44px;
+    border: 0;
+    background: transparent;
+    font-size: 18px;
+    transition:
+      background-color 0.4s,
+      color 0.4s;
+  }
+
+  .rev-nav button + button {
+    border-left: 1px solid var(--line);
+  }
+
+  .rev-nav button:hover {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .rev {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(300px, calc((100% - 2px) / 3));
+    overflow-x: auto;
+    list-style: none;
+    border-top: 1px solid var(--line);
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+
+  .rev::-webkit-scrollbar {
+    display: none;
+  }
+
+  .rev__card {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--line);
+    scroll-snap-align: start;
+  }
+
+  .rev__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+    background: var(--accent);
+  }
+
+  .rev__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.4s var(--ease);
+  }
+
+  .rev__card:hover .rev__media img {
+    transform: scale(1.05);
+  }
+
+  .rev__play {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--gold);
+    color: #111;
+  }
+
+  .rev__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px var(--gutter);
+  }
+
+  .rev__stars {
+    display: flex;
+    gap: 2px;
+    color: var(--gold);
+  }
+
+  .rev__text {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(17px, 1.4vw, 21px);
+    line-height: 1.35;
+  }
+
+  .rev__author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: auto;
+  }
+
+  .rev__author img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 900px) {
+    .rev {
+      grid-auto-columns: 82%;
+    }
+
+    .rev-head {
+      justify-items: start;
+    }
+  }
+
+  /* ---------- (09) Бронирование ---------- */
+  .book {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+    border-top: 1px solid var(--line);
+    scroll-margin-top: var(--header-h);
+  }
+
+  .book__side {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 48px var(--gutter);
+    background: #111;
+    color: #f5f5f3;
+  }
+
+  .book__side .label {
+    color: var(--gold);
+  }
+
+  .book__title {
+    font-size: clamp(32px, 3.6vw, 64px);
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+  }
+
+  .book__lead {
+    color: rgb(245 245 243 / 0.82);
+  }
+
+  .book__day {
+    list-style: none;
+    border-top: 1px solid rgb(245 245 243 / 0.35);
+  }
+
+  .book__day li {
+    display: flex;
+    gap: 20px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgb(245 245 243 / 0.2);
+  }
+
+  .book__day .num {
+    width: 52px;
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  .book__side .btn {
+    margin-top: auto;
+  }
+
+  .book__form {
+    padding: 48px var(--gutter);
+    background: var(--surface);
+  }
+
+  .contacts {
+    border-top: 1px solid var(--line);
+  }
+
+  @media (max-width: 900px) {
+    .book {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------- Липкая кнопка брони (телефон) ---------- */
+  .mbook {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 45;
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px var(--gutter);
+    background: var(--gold);
+    color: #111;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transform: translateY(100%);
+    transition: transform 0.5s var(--ease);
+  }
+
+  .mbook.is-visible {
+    transform: none;
+  }
+
+  @media (max-width: 900px) {
+    .mbook {
+      display: flex;
+    }
+  }
+</style>
+
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Лёгкий параллакс на первом экране
+  const hero = document.querySelector<HTMLElement>('[data-hero]');
+  const media = document.querySelector<HTMLElement>('[data-parallax]');
+  if (hero && media && !reduce) {
+    let ticking = false;
+    addEventListener(
+      'scroll',
+      () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          const y = Math.min(scrollY, hero.offsetHeight);
+          media.style.transform = `translate3d(0, ${y * 0.25}px, 0) scale(${1 + y / hero.offsetHeight / 12})`;
+          ticking = false;
+        });
+      },
+      { passive: true },
+    );
+  }
+
+  // Счётчики «Шоу в цифрах»
+  const counters = document.querySelectorAll<HTMLElement>('[data-count]');
+  const animate = (el: HTMLElement) => {
+    const target = Number(el.dataset.count);
+    if (reduce) return;
+    const start = performance.now();
+    const dur = 1600;
+    const step = (now: number) => {
+      const p = Math.min(1, (now - start) / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = String(Math.round(target * eased));
+      if (p < 1) requestAnimationFrame(step);
+    };
+    el.textContent = '0';
+    requestAnimationFrame(step);
+  };
+  const io = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          animate(e.target as HTMLElement);
+          io.unobserve(e.target);
+        }
+      }),
+    { threshold: 0.4 },
+  );
+  counters.forEach((c) => io.observe(c));
+
+  // Слайдер отзывов
+  const track = document.querySelector<HTMLElement>('[data-rev-track]');
+  const move = (dir: number) => {
+    if (!track) return;
+    const card = track.querySelector<HTMLElement>('li');
+    track.scrollBy({ left: dir * (card?.offsetWidth ?? 320), behavior: 'smooth' });
+  };
+  document.querySelector('[data-rev-prev]')?.addEventListener('click', () => move(-1));
+  document.querySelector('[data-rev-next]')?.addEventListener('click', () => move(1));
+
+  // Фильтр галереи (если есть видео)
+  const galBtns = document.querySelectorAll<HTMLButtonElement>('[data-gal-filter]');
+  galBtns.forEach((btn) =>
+    btn.addEventListener('click', () => {
+      const f = btn.dataset.galFilter;
+      galBtns.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      document.querySelectorAll<HTMLElement>('.gal__item').forEach((it) => {
+        it.classList.toggle('is-hidden', f !== 'all' && it.dataset.kind !== f);
+        it.classList.add('is-visible');
+      });
+    }),
+  );
+
+  // Липкая кнопка брони на телефоне: видна после первого экрана и до формы
+  const mbook = document.querySelector<HTMLElement>('[data-mbook]');
+  const booking = document.getElementById('show-booking');
+  if (mbook && hero && booking) {
+    let pastHero = false;
+    let atForm = false;
+    const sync = () => {
+      const on = pastHero && !atForm;
+      mbook.classList.toggle('is-visible', on);
+      mbook.setAttribute('aria-hidden', String(!on));
+      mbook.tabIndex = on ? 0 : -1;
+      document.body.classList.toggle('has-bookbar', on);
+    };
+    new IntersectionObserver(([e]) => ((pastHero = !e.isIntersecting), sync())).observe(hero);
+    new IntersectionObserver(([e]) => ((atForm = e.isIntersecting), sync())).observe(booking);
+  }
+</script>
