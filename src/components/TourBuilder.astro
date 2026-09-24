@@ -49,7 +49,7 @@ const t = useTranslations(lang);
     </ul>
   </div>
 
-  <div class="builder__route-wrap">
+  <div class="builder__route-wrap" id="builder-route">
     <div class="route" data-route-zone>
       <div class="route__head">
         <div>
@@ -74,6 +74,12 @@ const t = useTranslations(lang);
         </a>
       </div>
     </div>
+  </div>
+
+  <!-- Панель на телефоне: видно, сколько блоков выбрано, и можно сразу перейти к маршруту -->
+  <div class="mbar" data-mbar hidden>
+    <span class="mbar__count"><strong data-mbar-count>0</strong> {t('builder.blocks')}</span>
+    <a href="#builder-route" class="mbar__link">{t('builder.routeTitle')} ↓</a>
   </div>
 
   <template data-item-template>
@@ -240,6 +246,7 @@ const t = useTranslations(lang);
   }
 
   .route__count {
+    white-space: nowrap;
     flex-shrink: 0;
     padding: 6px 12px;
     border: 1px solid var(--line);
@@ -375,6 +382,10 @@ const t = useTranslations(lang);
     }
   }
 
+  .mbar {
+    display: none;
+  }
+
   @media (max-width: 900px) {
     .builder {
       grid-template-columns: 1fr;
@@ -382,6 +393,85 @@ const t = useTranslations(lang);
 
     .builder__route-wrap {
       position: static;
+      scroll-margin-top: calc(var(--header-h) + 8px);
+    }
+
+    .mbar:not([hidden]) {
+      position: sticky;
+      bottom: 0;
+      z-index: 41;
+      display: flex;
+      align-items: stretch;
+      margin-inline: calc(var(--gutter) * -1);
+      border-top: 1px solid var(--line);
+      background: var(--bg);
+    }
+
+    .mbar__count {
+      flex: 1;
+      padding: 14px var(--gutter);
+      font-size: 14px;
+    }
+
+    .mbar__link {
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      background: var(--accent);
+      color: var(--on-accent);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .builder__pool {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .bchip {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 12px;
+      font-size: 0.85rem;
+    }
+
+    .bchip__icon {
+      width: 34px;
+      height: 34px;
+      font-size: 1.05rem;
+    }
+
+    .bchip__state {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 26px;
+      height: 26px;
+    }
+
+    .bchip {
+      position: relative;
+    }
+
+    .route {
+      padding: 16px;
+    }
+
+    .route__head {
+      flex-wrap: wrap;
+    }
+
+    .ritem__grip {
+      display: none;
+    }
+
+    .route__actions [data-submit] {
+      flex: 1;
     }
   }
 </style>
@@ -396,9 +486,12 @@ const t = useTranslations(lang);
     const count = root.querySelector<HTMLElement>('[data-count]')!;
     const submit = root.querySelector<HTMLAnchorElement>('[data-submit]')!;
     const template = root.querySelector<HTMLTemplateElement>('[data-item-template]')!;
+    const mbar = root.querySelector<HTMLElement>('[data-mbar]')!;
+    const mbarCount = root.querySelector<HTMLElement>('[data-mbar-count]')!;
 
     const meta = new Map(pool.map((b) => [b.dataset.add!, { icon: b.dataset.icon!, label: b.dataset.label! }]));
     let route: string[] = [];
+    let routeInView = false;
     let drag: { id: string; from: 'pool' | 'route' } | null = null;
 
     function render() {
@@ -418,6 +511,10 @@ const t = useTranslations(lang);
       pool.forEach((b) => b.setAttribute('aria-pressed', String(route.includes(b.dataset.add!))));
       empty.hidden = route.length > 0;
       count.textContent = String(route.length);
+      mbarCount.textContent = String(route.length);
+      mbar.hidden = route.length === 0 || routeInView;
+      // Кнопка WhatsApp поднимается над панелью.
+      document.body.classList.toggle('has-bookbar', route.length > 0);
       submit.setAttribute('aria-disabled', String(route.length === 0));
     }
 
@@ -533,6 +630,12 @@ const t = useTranslations(lang);
       }
       insert(drag.id, index);
     });
+
+    // Панель не нужна, когда маршрут уже на экране.
+    new IntersectionObserver(([entry]) => {
+      routeInView = entry.isIntersecting;
+      mbar.hidden = route.length === 0 || routeInView;
+    }, { threshold: 0.35 }).observe(zone);
 
     render();
   }
