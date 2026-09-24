@@ -1,16 +1,18 @@
-import { translations } from './translations';
-import { ui } from './ui';
-import { show } from './show';
+// Все тексты сайта лежат в src/content/texts/*.json (по разделам) и редактируются в админке (/admin).
+// В файле ключи хранятся с «__» вместо точек: home__hero__line1 → home.hero.line1.
 
 export const languages = { ru: 'RU', en: 'EN' } as const;
 export type Lang = keyof typeof languages;
 export const defaultLang: Lang = 'ru';
 
 type Dict = Record<string, string>;
-const dicts: Record<Lang, Dict> = {
-  ru: { ...translations.ru, ...ui.ru, ...show.ru },
-  en: { ...translations.en, ...ui.en, ...show.en },
-};
+const files = import.meta.glob<Record<Lang, Dict>>('../content/texts/*.json', { eager: true, import: 'default' });
+const dicts: Record<Lang, Dict> = { ru: {}, en: {} };
+for (const file of Object.values(files)) {
+  for (const lang of Object.keys(dicts) as Lang[]) {
+    for (const [name, value] of Object.entries(file[lang] ?? {})) dicts[lang][name.replaceAll('__', '.')] = value;
+  }
+}
 
 export function useTranslations(lang: Lang) {
   const dict = dicts[lang];

@@ -26,7 +26,8 @@ const base = `http://127.0.0.1:${server.address().port}`;
 const pages = [];
 (function walk(dir) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (e.isDirectory()) walk(path.join(dir, e.name));
+    // /admin — сторонний редактор (Sveltia CMS), его вёрстку не проверяем
+    if (e.isDirectory()) { if (e.name !== 'admin') walk(path.join(dir, e.name)); }
     else if (e.name === 'index.html') pages.push('/' + path.relative(DIST, dir).split(path.sep).join('/') + (dir === DIST ? '' : '/'));
   }
 })(DIST);

@@ -1,0 +1,30 @@
+{
+  "ru": {
+    "mice__title": "MICE и корпоративные туры",
+    "mice__subtitle": "Индивидуальные решения для бизнес-путешествий в Кыргызстане",
+    "mice__description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Мы специализируемся на организации корпоративных мероприятий, конференций, тимбилдингов и incentive-туров в уникальной обстановке Кыргызстана.",
+    "mice__services__title": "Наши услуги",
+    "mice__services__conferences": "Конференции и мероприятия",
+    "mice__services__conferencesText": "Площадки, трансферы, проживание и культурная программа для деловых мероприятий любого масштаба.",
+    "mice__services__teambuilding": "Тимбилдинг",
+    "mice__services__teambuildingText": "Командные игры, конные прогулки, кочевые традиции и активности на природе.",
+    "mice__services__incentive": "Incentive-туры",
+    "mice__services__incentiveText": "Мотивационные поездки для сотрудников и партнёров — от юрточных лагерей до премиальных отелей.",
+    "mice__form__title": "Корпоративный запрос",
+    "mice__form__subtitle": "Расскажите о мероприятии — подготовим программу и смету."
+  },
+  "en": {
+    "mice__title": "MICE & Corporate Tours",
+    "mice__subtitle": "Tailored business travel solutions in Kyrgyzstan",
+    "mice__description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. We specialize in organizing corporate events, conferences, team building activities, and incentive tours in the unique setting of Kyrgyzstan.",
+    "mice__services__title": "Our Services",
+    "mice__services__conferences": "Conferences & Events",
+    "mice__services__conferencesText": "Venues, transfers, accommodation and a cultural program for business events of any scale.",
+    "mice__services__teambuilding": "Team Building",
+    "mice__services__teambuildingText": "Team games, horseback rides, nomadic traditions and outdoor activities.",
+    "mice__services__incentive": "Incentive Tours",
+    "mice__services__incentiveText": "Incentive trips for employees and partners — from yurt camps to premium hotels.",
+    "mice__form__title": "Corporate Inquiry",
+    "mice__form__subtitle": "Tell us about your event — we’ll prepare a program and a quote."
+  }
+}

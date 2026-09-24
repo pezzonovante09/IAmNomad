@@ -8,7 +8,7 @@ import SectionHeader from '../components/SectionHeader.astro';
 import TourIndex from '../components/TourIndex.astro';
 import TourStudio from '../components/TourStudio.astro';
 import VideoEmbed from '../components/VideoEmbed.astro';
-import { heroRegions, instagramPhotos, reviewAvatars } from '../data/content';
+import { homeHero, instagramPhotos, reviewAvatars } from '../data/content';
 import { contacts, videos } from '../data/site';
 import { showPosters } from '../data/show';
 import { tours } from '../data/tours';
@@ -25,19 +25,18 @@ const t = useTranslations(lang);
 const L = (p: string) => localize(p, lang);
 const pad = (n: number) => String(n).padStart(2, '0');
 
-const heroPhoto = heroRegions[0];
 const facts = [1, 2, 3, 4].map((n) => ({ value: t(`home.fact${n}.value`), label: t(`home.fact${n}.label`) }));
 
 const features = ['feature1', 'feature2', 'feature3', 'feature4'];
 ---
 
-<BaseLayout lang={lang} page="home" path="/" image={unsplash(heroPhoto.photo, 1200, 630)}>
+<BaseLayout lang={lang} page="home" path="/" image={unsplash(homeHero.id, 1200, 630)}>
   <!-- (01) Первый экран: фото во весь экран, заголовок, факты -->
   <section class="hero" id="top">
     <img
       class="hero__bg"
-      src={unsplash(heroPhoto.photo, 1920, 1200)}
-      srcset={srcset(heroPhoto.photo, [800, 1200, 1600, 2200, 2800], 0.62)}
+      src={unsplash(homeHero.id, 1920, 1200)}
+      srcset={srcset(homeHero.id, [800, 1200, 1600, 2200, 2800], 0.62)}
       sizes="100vw"
       alt={t('region.sonkul.name')}
       width="1920"
@@ -49,7 +48,7 @@ const features = ['feature1', 'feature2', 'feature3', 'feature4'];
 
     <div class="hero__top label" data-reveal="fade" data-delay="150">
       <span>I AM NOMAD · {t('home.hero.season')}</span>
-      <span class="num">{t('region.sonkul.name')}, {t('region.sonkul.oblast')} · {heroPhoto.alt} {t('unit.m')}</span>
+      <span class="num">{t('region.sonkul.name')}, {t('region.sonkul.oblast')} · {homeHero.height} {t('unit.m')}</span>
     </div>
 
     <div class="hero__main">

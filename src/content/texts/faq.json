@@ -1,0 +1,42 @@
+{
+  "ru": {
+    "faq__title": "FAQ",
+    "faq__subtitle": "Частые вопросы о путешествии в Кыргызстан",
+    "faq__q1": "Нужна ли виза для посещения Кыргызстана?",
+    "faq__a1": "Lorem ipsum dolor sit amet. Граждане многих стран могут въехать без визы до 60 дней. Уточните в посольстве.",
+    "faq__q2": "Какой сезон лучше для визита?",
+    "faq__a2": "Sed do eiusmod tempor incididunt. Июнь–сентябрь идеален для треккинга. Зима (декабрь–март) — для лыж и зимних туров.",
+    "faq__q3": "Какое снаряжение нужно?",
+    "faq__a3": "Ut enim ad minim veniam. Мы предоставим список при бронировании. Нужна базовая экипировка и удобная обувь.",
+    "faq__q4": "Как оплатить тур?",
+    "faq__a4": "Duis aute irure dolor in reprehenderit. Банковский перевод, карты, PayPal. Депозит 30% для подтверждения.",
+    "faq__q5": "Политика отмены?",
+    "faq__a5": "Consectetur adipiscing elit. Бесплатная отмена за 30 дней. 50% возврат за 15–30 дней. Без возврата за 14 дней.",
+    "faq__q6": "Безопасен ли Кыргызстан для туристов?",
+    "faq__a6": "Reprehenderit in voluptate velit. Кыргызстан в целом безопасен. Наши гиды обучены первой помощи.",
+    "faq__q7": "Какой транспорт используется?",
+    "faq__a7": "Excepteur sint occaecat cupidatat. Комфортабельные внедорожники и минивэны для групп.",
+    "faq__cta__title": "Не нашли ответ?",
+    "faq__cta__text": "Напишите нам — ответим на любой вопрос о поездке."
+  },
+  "en": {
+    "faq__title": "FAQ",
+    "faq__subtitle": "Frequently asked questions about traveling to Kyrgyzstan",
+    "faq__q1": "Do I need a visa to visit Kyrgyzstan?",
+    "faq__a1": "Lorem ipsum dolor sit amet. Citizens of many countries can enter visa-free for up to 60 days. Check with your embassy for specific requirements.",
+    "faq__q2": "What is the best season to visit?",
+    "faq__a2": "Sed do eiusmod tempor incididunt. June to September is ideal for trekking and lake tours. Winter (December–March) is perfect for skiing and winter nomad experiences.",
+    "faq__q3": "What equipment should I bring?",
+    "faq__a3": "Ut enim ad minim veniam. We provide a detailed packing list upon booking. Basic hiking gear, layers, and sturdy shoes are essential.",
+    "faq__q4": "How do I pay for the tour?",
+    "faq__a4": "Duis aute irure dolor in reprehenderit. We accept bank transfer, credit cards, and PayPal. A 30% deposit is required to confirm booking.",
+    "faq__q5": "What is the cancellation policy?",
+    "faq__a5": "Consectetur adipiscing elit. Free cancellation up to 30 days before departure. 50% refund within 15-30 days. No refund within 14 days.",
+    "faq__q6": "Is Kyrgyzstan safe for tourists?",
+    "faq__a6": "Reprehenderit in voluptate velit. Kyrgyzstan is generally safe. Our guides are trained in first aid and we maintain constant communication during tours.",
+    "faq__q7": "What type of transport is used?",
+    "faq__a7": "Excepteur sint occaecat cupidatat. We use comfortable 4WD vehicles for mountain roads and minivans for group transfers.",
+    "faq__cta__title": "Didn’t find your answer?",
+    "faq__cta__text": "Write to us — we’ll answer any question about your trip."
+  }
+}

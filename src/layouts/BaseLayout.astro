@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import WhatsAppFab from '../components/WhatsAppFab.astro';
 import Lightbox from '../components/Lightbox.astro';
 import ScrollProgress from '../components/ScrollProgress.astro';
+import Analytics from '@vercel/analytics/astro';
 import { languages, localize, useTranslations, type Lang } from '../i18n/utils';
 import { unsplash } from '../lib/img';
 
@@ -91,6 +92,7 @@ const abs = (p: string) => (site ? new URL(p, site).href : p);
     </main>
     <Footer lang={lang} />
     <WhatsAppFab lang={lang} />
+    <Analytics />
     <Lightbox lang={lang} />
 
     <script>

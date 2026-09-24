@@ -1,0 +1,24 @@
+{
+  "contacts": {
+    "phone": "+996 706 001 517",
+    "phoneHref": "tel:+996706001517",
+    "whatsapp": "https://wa.me/996706001517",
+    "telegram": "https://t.me/iamnomad_kg",
+    "telegramHandle": "@iamnomad_kg",
+    "email": "Iamnomadkgz@gmail.com",
+    "instagram": "https://www.instagram.com/iamnomad_kg/",
+    "instagramHandle": "@iamnomad_kg",
+    "facebook": "https://www.facebook.com/iamnomadkg/",
+    "youtube": "https://www.youtube.com/@iamnomad_kg"
+  },
+  "videos": {
+    "home": "",
+    "tours": {
+      "classic": "",
+      "adventure": "",
+      "winter": "",
+      "custom": ""
+    },
+    "gallery": []
+  }
+}
