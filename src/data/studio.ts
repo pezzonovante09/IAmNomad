@@ -21,8 +21,9 @@ export const studioRegions: { key: string; name: L; alt: number; photo: string }
   { key: 'khantengri', name: { ru: 'Хан-Тенгри', en: 'Khan-Tengri' }, alt: 7010, photo: '1506905925346-21bda4d32df4' },
 ];
 
-export const studioDays = [5, 7, 10, 14];
-export const studioGuests = [1, 2, 4, 6, 8];
+/** Ползунки: диапазон и метки под шкалой. */
+export const studioDays = { min: 3, max: 21, ticks: [3, 7, 14, 21] };
+export const studioGuests = { min: 1, max: 12, ticks: [1, 4, 8, 12] };
 
 export const studioComfort: { name: L; desc: L; rate: number; vip?: boolean }[] = [
   {

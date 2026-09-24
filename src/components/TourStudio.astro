@@ -156,27 +156,51 @@ const config = {
 
       <fieldset class="st__group">
         <legend class="st__head label"><span>{t('studio.duration')}</span><span>{t('studio.durationHint')}</span></legend>
-        <div class="st__tokens">
-          {
-            studioDays.map((d) => (
-              <button type="button" class="st__token num" data-days={d} aria-pressed="false">
-                {d}
-              </button>
-            ))
-          }
+        <div class="st__slider">
+          <p class="st__readout" aria-hidden="true">
+            <span class="st__readout-num num" data-days-num></span>
+            <span class="st__readout-unit label" data-days-unit></span>
+          </p>
+          <input
+            type="range"
+            class="st__range"
+            data-days-range
+            min={studioDays.min}
+            max={studioDays.max}
+            step="1"
+            value={studioDefaults.days}
+            aria-label={t('studio.duration').replace(/^\d+ — /, '')}
+          />
+          <div class="st__ticks label num" aria-hidden="true">
+            {studioDays.ticks.map((v) => (
+              <span style={`left:${(((v - studioDays.min) / (studioDays.max - studioDays.min)) * 100).toFixed(2)}%`}>{v}</span>
+            ))}
+          </div>
         </div>
       </fieldset>
 
       <fieldset class="st__group">
         <legend class="st__head label"><span>{t('studio.guests')}</span><span>{t('studio.guestsHint')}</span></legend>
-        <div class="st__tokens">
-          {
-            studioGuests.map((g) => (
-              <button type="button" class="st__token num" data-guests={g} aria-pressed="false">
-                {g}
-              </button>
-            ))
-          }
+        <div class="st__slider">
+          <p class="st__readout" aria-hidden="true">
+            <span class="st__readout-num num" data-guests-num></span>
+            <span class="st__readout-unit label" data-guests-unit></span>
+          </p>
+          <input
+            type="range"
+            class="st__range"
+            data-guests-range
+            min={studioGuests.min}
+            max={studioGuests.max}
+            step="1"
+            value={studioDefaults.guests}
+            aria-label={t('studio.guests').replace(/^\d+ — /, '')}
+          />
+          <div class="st__ticks label num" aria-hidden="true">
+            {studioGuests.ticks.map((v) => (
+              <span style={`left:${(((v - studioGuests.min) / (studioGuests.max - studioGuests.min)) * 100).toFixed(2)}%`}>{v}</span>
+            ))}
+          </div>
         </div>
       </fieldset>
 
@@ -617,38 +641,129 @@ const config = {
     letter-spacing: -0.02em;
   }
 
-  .st__tokens {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+  /* ---------- Ползунки ---------- */
+  .st__slider {
     margin-top: 14px;
   }
 
-  .st__token {
-    width: 60px;
-    height: 60px;
-    border: 1px solid var(--line);
-    border-radius: 50%;
-    background: var(--surface);
-    color: var(--ink);
+  .st__readout {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .st__readout-num {
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: 20px;
+    font-size: clamp(40px, 3.6vw, 56px);
+    line-height: 1;
     letter-spacing: -0.02em;
-    transition:
-      background-color 0.4s,
-      color 0.4s,
-      transform 0.2s;
+    color: var(--accent);
   }
 
-  .st__token:active {
-    transform: scale(0.92);
+  .st__readout-unit {
+    font-size: 11px;
   }
 
-  .st__token[aria-pressed='true'] {
-    border-color: #0d3e26;
-    background: #0d3e26;
-    color: #f5f5f3;
+  .st__range {
+    --p: 0%;
+    display: block;
+    width: 100%;
+    height: 36px;
+    margin: 8px 0 0;
+    background: transparent;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .st__range:focus {
+    outline: none;
+  }
+
+  /* дорожка: тонкая линия, пройденная часть — зелёная и толще */
+  .st__range::-webkit-slider-runnable-track {
+    height: 3px;
+    background:
+      linear-gradient(var(--accent), var(--accent)) 0 0 / var(--p) 100% no-repeat,
+      linear-gradient(var(--line), var(--line)) 0 1px / 100% 1px no-repeat;
+  }
+
+  .st__range::-moz-range-track {
+    height: 1px;
+    background: var(--line);
+  }
+
+  .st__range::-moz-range-progress {
+    height: 3px;
+    background: var(--accent);
+  }
+
+  .st__range::-webkit-slider-thumb {
+    width: 28px;
+    height: 28px;
+    margin-top: -12.5px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: inset 0 0 0 5px var(--surface);
+    -webkit-appearance: none;
+    appearance: none;
+    transition: transform 0.2s var(--ease);
+  }
+
+  .st__range::-moz-range-thumb {
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: inset 0 0 0 5px var(--surface);
+    transition: transform 0.2s var(--ease);
+  }
+
+  .st__range:active::-webkit-slider-thumb {
+    transform: scale(1.15);
+  }
+
+  .st__range:active::-moz-range-thumb {
+    transform: scale(1.15);
+  }
+
+  .st__range:focus-visible::-webkit-slider-thumb {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+
+  .st__range:focus-visible::-moz-range-thumb {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+
+  /* метки: насечки на линии и подписи; крайние прижаты к краям бегунка */
+  .st__ticks {
+    position: relative;
+    height: 26px;
+    margin: 0 14px;
+    font-size: 11px;
+  }
+
+  .st__ticks span {
+    position: absolute;
+    top: 0;
+    padding-top: 8px;
+    transform: translateX(-50%);
+    color: var(--ink-mute);
+  }
+
+  .st__ticks span::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 1px;
+    height: 5px;
+    background: var(--line);
   }
 
   .st__comforts {
@@ -874,12 +989,6 @@ const config = {
       padding-inline: var(--gutter);
     }
 
-    .st__token {
-      width: 52px;
-      height: 52px;
-      font-size: 18px;
-    }
-
     .st__totals > div,
     .st__summary,
     .st__book {
@@ -936,8 +1045,12 @@ const config = {
 
     const frames = $$('[data-frame]');
     const regionBtns = $$<HTMLButtonElement>('[data-region]');
-    const dayBtns = $$<HTMLButtonElement>('[data-days]');
-    const guestBtns = $$<HTMLButtonElement>('[data-guests]');
+    const dayRange = $<HTMLInputElement>('[data-days-range]');
+    const guestRange = $<HTMLInputElement>('[data-guests-range]');
+    const fill = (r: HTMLInputElement) => {
+      const p = ((Number(r.value) - Number(r.min)) / (Number(r.max) - Number(r.min))) * 100;
+      r.style.setProperty('--p', `${p}%`);
+    };
     const comfortBtns = $$<HTMLButtonElement>('[data-comfort]');
     const spots = $$<HTMLButtonElement>('[data-spot]');
     const pop = $('[data-pop]');
@@ -981,8 +1094,16 @@ const config = {
         b.setAttribute('aria-pressed', String(idx > -1));
         b.querySelector('[data-order]')!.textContent = idx > -1 ? String(idx + 1) : '+';
       });
-      dayBtns.forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.days) === state.days)));
-      guestBtns.forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.guests) === state.guests)));
+      dayRange.value = String(state.days);
+      guestRange.value = String(state.guests);
+      fill(dayRange);
+      fill(guestRange);
+      $('[data-days-num]').textContent = pad(state.days);
+      $('[data-days-unit]').textContent = plural(state.days, cfg.forms.day);
+      $('[data-guests-num]').textContent = pad(state.guests);
+      $('[data-guests-unit]').textContent = plural(state.guests, cfg.forms.guest);
+      dayRange.setAttribute('aria-valuetext', `${state.days} ${plural(state.days, cfg.forms.day)}`);
+      guestRange.setAttribute('aria-valuetext', `${state.guests} ${plural(state.guests, cfg.forms.guest)}`);
       comfortBtns.forEach((b, i) => b.setAttribute('aria-pressed', String(i === state.comfort)));
 
       $('[data-route-line]').replaceChildren(
@@ -1036,8 +1157,8 @@ const config = {
         render();
       }),
     );
-    dayBtns.forEach((b) => b.addEventListener('click', () => ((state.days = Number(b.dataset.days)), render())));
-    guestBtns.forEach((b) => b.addEventListener('click', () => ((state.guests = Number(b.dataset.guests)), render())));
+    dayRange.addEventListener('input', () => ((state.days = Number(dayRange.value)), render()));
+    guestRange.addEventListener('input', () => ((state.guests = Number(guestRange.value)), render()));
     comfortBtns.forEach((b, i) => b.addEventListener('click', () => ((state.comfort = i), render())));
     spots.forEach((s, i) =>
       s.addEventListener('click', () => {
