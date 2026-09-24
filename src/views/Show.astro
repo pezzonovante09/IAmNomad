@@ -619,7 +619,7 @@ const jsonLd = {
 
   @media (max-width: 900px) {
     .why {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .why__card:nth-child(3n) {
@@ -641,7 +641,7 @@ const jsonLd = {
 
   @media (max-width: 560px) {
     .why {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .why__card {
@@ -746,7 +746,7 @@ const jsonLd = {
 
   @media (max-width: 900px) {
     .what__row {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .what__row--flip .what__media {
@@ -1097,7 +1097,7 @@ const jsonLd = {
 
   @media (max-width: 700px) {
     .gal {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
@@ -1348,7 +1348,6 @@ const jsonLd = {
   .book__title {
     font-size: clamp(32px, 3.6vw, 64px);
     text-transform: uppercase;
-    overflow-wrap: anywhere;
   }
 
   .book__lead {
@@ -1388,7 +1387,7 @@ const jsonLd = {
 
   @media (max-width: 900px) {
     .book {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 

@@ -37,7 +37,8 @@ const days = range(tour.days).map((n) => {
 });
 const highlights = range(tour.highlights).map((n) => splitEmoji(k(`highlights.item${n}`)));
 const extras = range(tour.extras).map((n) => splitEmoji(k(`extras.item${n}`)));
-const dates = range(tour.dates).map((n) => k(`dates.date${n}`));
+// \u2060 — «склейка», чтобы диапазон «20–26» не переносился по тире.
+const dates = range(tour.dates).map((n) => k(`dates.date${n}`).replace(/(\d)[–-](\d)/g, '$1\u2060–\u2060$2'));
 const included = range(5).map((n) => t(`tour.included.item${n}`));
 const notIncluded = range(4).map((n) => t(`tour.notIncluded.item${n}`));
 const features = range(3).map((n) => t(`tour.pricing.standardFeature${n}`));
@@ -441,8 +442,6 @@ const jsonLd = {
   .th__title {
     max-width: 14ch;
     font-size: clamp(40px, min(9vw, 12vh), 170px);
-    overflow-wrap: anywhere;
-    hyphens: auto;
   }
 
   .th__subtitle {
@@ -478,7 +477,7 @@ const jsonLd = {
 
   @media (max-width: 800px) {
     .th__facts {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .th__fact:nth-child(2) {
@@ -539,7 +538,7 @@ const jsonLd = {
 
   @media (max-width: 800px) {
     .gm {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       grid-template-rows: auto;
       aspect-ratio: auto;
     }
@@ -689,7 +688,7 @@ const jsonLd = {
 
   @media (max-width: 700px) {
     .hl {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .hl__item:nth-child(odd) {
@@ -809,7 +808,7 @@ const jsonLd = {
   /* ---------- Включено ---------- */
   .incl {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     border-top: 1px solid var(--line);
   }
 
@@ -851,7 +850,7 @@ const jsonLd = {
 
   @media (max-width: 700px) {
     .incl {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .incl__col:first-child {
@@ -964,7 +963,7 @@ const jsonLd = {
 
   @media (max-width: 1024px) {
     .tl {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .tl__main {
@@ -999,7 +998,7 @@ const jsonLd = {
 
   @media (max-width: 900px) {
     .rev__grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .rev__grid > :global(*) {

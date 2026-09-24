@@ -1146,6 +1146,7 @@ const config = {
       if (cfg.showPrice) parts.push(`${money(Math.round(sum / state.guests))} ${cfg.text.perGuest}`);
       $('[data-summary]').textContent = parts.join(' · ');
       renderPop();
+      (window as any).__fit?.(root);
     }
 
     regionBtns.forEach((b, i) =>

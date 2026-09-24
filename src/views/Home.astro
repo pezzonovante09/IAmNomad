@@ -555,7 +555,7 @@ const features = ['feature1', 'feature2', 'feature3', 'feature4'];
 
   @media (max-width: 900px) {
     .show-teaser {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .show-teaser__media {
@@ -598,7 +598,7 @@ const features = ['feature1', 'feature2', 'feature3', 'feature4'];
 
   @media (max-width: 900px) {
     .why__grid {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .why__cell:nth-child(2) {
@@ -612,7 +612,7 @@ const features = ['feature1', 'feature2', 'feature3', 'feature4'];
 
   @media (max-width: 520px) {
     .why__grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .why__cell {
@@ -653,7 +653,7 @@ const features = ['feature1', 'feature2', 'feature3', 'feature4'];
 
   @media (max-width: 900px) {
     .reviews__grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .reviews__grid > :global(*) {
@@ -745,7 +745,7 @@ const features = ['feature1', 'feature2', 'feature3', 'feature4'];
 
   @media (max-width: 900px) {
     .request__grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .request__side {

@@ -47,7 +47,7 @@ const reviews = reviewAvatars.map((avatar, i) => ({ avatar, n: i + 1 }));
 
   @media (max-width: 900px) {
     .grid-rev {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .grid-rev > :global(*) {

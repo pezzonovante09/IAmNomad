@@ -74,7 +74,7 @@ const paragraphs = [1, 2, 3, 4].map((n) => t(`blogSingle.content.p${n}`));
 
   @media (max-width: 800px) {
     .art {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .art__side {

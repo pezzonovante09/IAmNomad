@@ -69,6 +69,11 @@ const pad = (n: number) => String(n).padStart(2, '0');
       <li><a href={contacts.telegram} target="_blank" rel="noopener">Telegram — {contacts.telegramHandle}</a></li>
       <li><a href={`mailto:${contacts.email}`}>{contacts.email}</a></li>
     </ul>
+    <button class="mn__theme label" type="button" data-theme-toggle>
+      <Icon name="moon" class="theme-moon" size={16} />
+      <Icon name="sun" class="theme-sun" size={16} />
+      {t('theme.toggle')}
+    </button>
     <a href={bookHref} class="btn btn--accent btn--block">
       {t('btn.bookNow')}
       <Icon name="arrow-right" />
@@ -100,11 +105,20 @@ const pad = (n: number) => String(n).padStart(2, '0');
     border-right: 1px solid var(--line);
   }
 
+  /* Слоган сжимается с многоточием, а не распирает шапку */
   .hd__slogan {
-    flex: 1 1 auto;
+    flex: 1 1 0;
+    min-width: 0;
+    overflow: hidden;
     border-right: 0;
     font-weight: 500;
     letter-spacing: 0.16em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .hd :global(.hd__logo) {
+    flex-shrink: 0;
   }
 
   .hd__coords {
@@ -259,14 +273,29 @@ const pad = (n: number) => String(n).padStart(2, '0');
     transform: translateY(-3px) rotate(-45deg);
   }
 
-  @media (max-width: 1300px) {
+  @media (max-width: 1360px) {
     .hd__coords {
       display: none;
     }
   }
 
+  /* Без слогана растягиваем ячейку логотипа, чтобы остальное прижалось вправо */
+  @media (max-width: 1200px) {
+    .hd__slogan {
+      display: none;
+    }
+
+    .hd :global(.hd__logo) {
+      flex: 1 1 auto;
+    }
+  }
+
   @media (max-width: 1100px) {
     .hd__book {
+      display: none;
+    }
+
+    .hd :global(.logo__tagline) {
       display: none;
     }
   }
@@ -278,12 +307,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
   }
 
   @media (max-width: 760px) {
-    .hd__slogan {
-      display: none;
-    }
-
     .hd :global(.hd__logo) {
-      flex: 1 1 auto;
       padding: 0 16px;
     }
 
@@ -293,6 +317,26 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
     .hd__menu-label {
       display: none;
+    }
+  }
+
+  /* Узкие телефоны: тема переезжает в меню, отступы плотнее */
+  @media (max-width: 480px) {
+    .hd__theme {
+      display: none;
+    }
+
+    .hd :global(.hd__logo) {
+      min-width: 0;
+      padding: 0 12px;
+    }
+
+    .hd__lang {
+      padding: 0 8px;
+    }
+
+    .hd__lang a {
+      padding: 4px;
     }
   }
 
@@ -402,13 +446,23 @@ const pad = (n: number) => String(n).padStart(2, '0');
     text-decoration: underline;
   }
 
+  .mn__theme {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    align-self: flex-start;
+    padding: 10px 14px;
+    border: 1px solid var(--line);
+    background: transparent;
+  }
+
   .mn__side .btn {
     margin-top: auto;
   }
 
   @media (max-width: 760px) {
     .mn {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .mn__side {
@@ -450,6 +504,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
     if (label) label.textContent = (open ? label.dataset.close : label.dataset.open) ?? '';
     document.body.classList.toggle('is-locked', open);
     header?.classList.remove('is-hidden');
+    if (open) (window as any).__fit?.(menu);
   }
 
   toggle?.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));

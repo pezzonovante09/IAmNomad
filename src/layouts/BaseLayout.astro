@@ -83,6 +83,44 @@ const abs = (p: string) => (site ? new URL(p, site).href : p);
     <Lightbox lang={lang} />
 
     <script>
+      // Крупные заголовки никогда не рвут слова: если самое длинное слово не влезает
+      // в ширину блока, шрифт уменьшается ровно настолько, чтобы влезло.
+      const FIT = [
+        'h1', 'h2', '.h1', '.h2', '[data-fit]',
+        '.hero__title', '.hero__name', '.hero__region-name', '.ti__title', '.ti__price',
+        '.what__title', '.why__title', '.book__title', '.cta-bar__text', '.st__focus', '.st__total',
+        '.mn__title', '.blk__title', '.story__title', '.intro__title', '.svc__title', '.steps__title',
+        '.day__label', '.day__time', '.stats__value', '.th__fact dd', '.dates__value', '.rev__text',
+        '.faq__text', '.pg__title', '.tc__title', '.show-teaser__stat', '.what__num',
+      ].join(',');
+
+      function fitEl(el: HTMLElement) {
+        el.style.fontSize = '';
+        if (!el.clientWidth) return;
+        let size = parseFloat(getComputedStyle(el).fontSize);
+        const min = size * 0.45;
+        const vw = document.documentElement.clientWidth;
+        // не влезает в свой блок или вылезает за край экрана
+        const overflows = () => el.scrollWidth > el.clientWidth + 1 || el.getBoundingClientRect().left + el.scrollWidth > vw + 0.5;
+        for (let i = 0; i < 40 && overflows() && size > min; i++) {
+          size *= 0.95;
+          el.style.fontSize = `${size}px`;
+        }
+      }
+
+      function fitAll(root: ParentNode = document) {
+        root.querySelectorAll<HTMLElement>(FIT).forEach(fitEl);
+      }
+      (window as any).__fit = fitAll;
+
+      fitAll();
+      document.fonts?.ready.then(() => fitAll());
+      let t: number | undefined;
+      addEventListener('resize', () => {
+        clearTimeout(t);
+        t = window.setTimeout(() => fitAll(), 120);
+      });
+
       // Плавное появление блоков с [data-reveal].
       const items = document.querySelectorAll<HTMLElement>('[data-reveal]');
       items.forEach((el) => el.dataset.delay && el.style.setProperty('--delay', `${el.dataset.delay}ms`));
