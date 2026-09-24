@@ -1,0 +1,24 @@
+{
+  "ru": {
+    "about__title": "О компании",
+    "about__subtitle": "Ваш надёжный партнёр в открытии Кыргызстана",
+    "about__history__title": "Наша история",
+    "about__history__p1": "I AM NOMAD — команда, которая с 2012 года знакомит гостей со всего мира с культурой, традициями и природой Кыргызстана.",
+    "about__history__p2": "Мы стояли у истоков крупнейших проектов, посвященных кочевому наследию, включая Всемирные игры кочевников. Этот опыт позволил нам глубоко понять культуру нашей страны и научиться рассказывать о ней так, чтобы она оставалась в памяти.",
+    "about__history__p3": "Сегодня мы создаем путешествия, в которых Кыргызстан раскрывается через живые впечатления. Национальные игры, конные шоу, охота с беркутом, музыка, ремесла, традиции и настоящее кыргызское гостеприимство становятся частью каждого маршрута. Мы организуем индивидуальные и групповые туры, культурные программы и специальные мероприятия, помогая гостям увидеть не только самые красивые места Кыргызстана, но и почувствовать его настоящий дух.",
+    "about__mission__title": "Наша миссия",
+    "about__mission__text": "I AM NOMAD — это команда, которая знает Кыргызстан не по путеводителям и с удовольствием открывает его миру.",
+    "about__cta__title": "Готовы увидеть настоящий Кыргызстан?"
+  },
+  "en": {
+    "about__title": "About Us",
+    "about__subtitle": "Your trusted partner for discovering Kyrgyzstan",
+    "about__history__title": "Our Story",
+    "about__history__p1": "I AM NOMAD is a team that since 2012 has been introducing guests from around the world to the culture, traditions and nature of Kyrgyzstan.",
+    "about__history__p2": "We stood at the origins of major projects dedicated to nomadic heritage, including the World Nomad Games. That experience helped us deeply understand our country’s culture and learn how to tell its story in a way that stays in the memory.",
+    "about__history__p3": "Today we create journeys in which Kyrgyzstan unfolds through living experiences. National games, horse shows, eagle hunting, music, crafts, traditions and genuine Kyrgyz hospitality become part of every itinerary. We organize individual and group tours, cultural programs and special events, helping guests see not only the most beautiful places in Kyrgyzstan, but also feel its true spirit.",
+    "about__mission__title": "Our Mission",
+    "about__mission__text": "I AM NOMAD is a team that knows Kyrgyzstan beyond guidebooks and gladly opens it to the world.",
+    "about__cta__title": "Ready to see the real Kyrgyzstan?"
+  }
+}

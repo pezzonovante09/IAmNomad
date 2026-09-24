@@ -1,0 +1,18 @@
+{
+  "ru": {
+    "contact__title": "Контакты",
+    "contact__subtitle": "Свяжитесь с нами — мы поможем спланировать ваше приключение",
+    "contact__form__title": "Написать сообщение",
+    "contact__form__subtitle": "Ответим в WhatsApp, Telegram или на почту — как вам удобнее.",
+    "contact__social__title": "Соцсети",
+    "contact__eyebrow": "Связаться с нами"
+  },
+  "en": {
+    "contact__title": "Contact Us",
+    "contact__subtitle": "Get in touch — we're here to help plan your adventure",
+    "contact__form__title": "Send a Message",
+    "contact__form__subtitle": "We reply on WhatsApp, Telegram or email — whichever suits you.",
+    "contact__social__title": "Social Media",
+    "contact__eyebrow": "Get in touch"
+  }
+}

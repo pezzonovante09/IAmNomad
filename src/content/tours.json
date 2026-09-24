@@ -1,0 +1,142 @@
+{
+  "tours": [
+    {
+      "slug": "classic",
+      "card": "tours.card1",
+      "category": "classic",
+      "status": "open",
+      "cover": {
+        "id": "1689788648053-cd482d1acd9c",
+        "alt": "Issyk-Kul lake and mountains, Kyrgyzstan"
+      },
+      "gallery": [
+        {
+          "id": "1760630149964-200517d8d437",
+          "alt": "Song-Kul pasture landscape"
+        },
+        {
+          "id": "1758016860798-0b96354664b9",
+          "alt": "Yurts at Song-Kul"
+        },
+        {
+          "id": "1761873177867-499c27dc4cd7",
+          "alt": "Horse trekking near Song-Kul"
+        },
+        {
+          "id": "1689788648053-cd482d1acd9c",
+          "alt": "Alpine lake in Kyrgyzstan"
+        },
+        {
+          "id": "1506905925346-21bda4d32df4",
+          "alt": "Mountain peaks above clouds"
+        },
+        {
+          "id": "1761872936161-9c2075a7ca11",
+          "alt": "Nomad culture on the trail"
+        }
+      ],
+      "mapQuery": "Song-Kul+Lake+Kyrgyzstan",
+      "days": 7,
+      "highlights": 10,
+      "extras": 0,
+      "dates": 5
+    },
+    {
+      "slug": "adventure",
+      "card": "tours.card2",
+      "category": "adventure",
+      "status": "open",
+      "cover": {
+        "id": "1758016860798-0b96354664b9",
+        "alt": "Adventure Kyrgyzstan"
+      },
+      "gallery": [
+        {
+          "id": "1689788648053-cd482d1acd9c",
+          "alt": "Issyk-Kul lake shore"
+        },
+        {
+          "id": "1464822759023-fed622ff2c3b",
+          "alt": "Mountain trails in Kyrgyzstan"
+        },
+        {
+          "id": "1761873177867-499c27dc4cd7",
+          "alt": "Horse riding in the mountains"
+        },
+        {
+          "id": "1506905925346-21bda4d32df4",
+          "alt": "Mountain peaks"
+        },
+        {
+          "id": "1758016860798-0b96354664b9",
+          "alt": "Adventure landscape"
+        },
+        {
+          "id": "1551632811-561732d1e306",
+          "alt": "Hiking adventure"
+        }
+      ],
+      "mapQuery": "Issyk-Kul+Lake+Kyrgyzstan",
+      "days": 7,
+      "highlights": 9,
+      "extras": 0,
+      "dates": 5
+    },
+    {
+      "slug": "winter",
+      "card": "tours.card3",
+      "category": "winter",
+      "status": "soon",
+      "cover": {
+        "id": "1519834785169-98be25ec3f84",
+        "alt": "White Peaks of Kyrgyzstan"
+      },
+      "gallery": [
+        {
+          "id": "1519834785169-98be25ec3f84",
+          "alt": "Snow peaks in Tian Shan"
+        },
+        {
+          "id": "1551524559-8af4e6624178",
+          "alt": "Ski resort slopes"
+        },
+        {
+          "id": "1605540436563-5bca919ae766",
+          "alt": "Skiing in the mountains"
+        },
+        {
+          "id": "1483664852095-d6cc467e59a0",
+          "alt": "Snowy mountain landscape"
+        },
+        {
+          "id": "1506905925346-21bda4d32df4",
+          "alt": "Mountain peaks above clouds"
+        },
+        {
+          "id": "1418985991508-e47343d2c7a4",
+          "alt": "Winter mountain cabin"
+        }
+      ],
+      "mapQuery": "Karakol+Ski+Base+Kyrgyzstan",
+      "days": 7,
+      "highlights": 8,
+      "extras": 6,
+      "dates": 5
+    },
+    {
+      "slug": "custom",
+      "card": "tours.card4",
+      "category": "individual",
+      "status": "request",
+      "cover": {
+        "id": "1760630149964-200517d8d437",
+        "alt": "Individual route in mountain pasture"
+      },
+      "gallery": [],
+      "days": 0,
+      "highlights": 0,
+      "extras": 0,
+      "dates": 0
+    }
+  ]
+}

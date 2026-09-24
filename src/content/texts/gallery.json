@@ -1,0 +1,14 @@
+{
+  "ru": {
+    "gallery__title": "Галерея",
+    "gallery__subtitle": "Фото и видео с наших туров",
+    "gallery__tab__photo": "Фото",
+    "gallery__tab__video": "Видео"
+  },
+  "en": {
+    "gallery__title": "Gallery",
+    "gallery__subtitle": "Photos and videos from our tours",
+    "gallery__tab__photo": "Photo",
+    "gallery__tab__video": "Video"
+  }
+}
