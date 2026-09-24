@@ -1,0 +1,135 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactCards from '../components/ContactCards.astro';
+import Icon from '../components/Icon.astro';
+import LeadForm from '../components/LeadForm.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import { contacts, officeMapQuery } from '../data/site';
+import { useTranslations, type Lang } from '../i18n/utils';
+import { routes } from '../lib/routes';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const socials = [
+  { icon: 'instagram', label: 'Instagram', href: contacts.instagram },
+  { icon: 'facebook', label: 'Facebook', href: contacts.facebook },
+  { icon: 'youtube', label: 'YouTube', href: contacts.youtube },
+] as const;
+---
+
+<BaseLayout lang={lang} page="contact" path={routes.contact}>
+  <PageHero kicker={`(01) ${t('contact.eyebrow')}`} meta="42°52′N 74°36′E" title={t('contact.title')} subtitle={t('contact.subtitle')} />
+
+  <ContactCards lang={lang} layout="grid" />
+
+  <section class="ct" id="contact-form">
+    <div class="ct__form">
+      <SectionHeader kicker="(02)" title={t('contact.form.title')} subtitle={t('contact.form.subtitle')} />
+      <div class="ct__form-body" data-reveal>
+        <LeadForm lang={lang} variant="contact" id="contact" />
+      </div>
+    </div>
+    <div class="ct__side">
+      <div class="ct__map" data-reveal="curtain">
+        <iframe src={`https://maps.google.com/maps?q=${officeMapQuery}&output=embed`} title="Office location" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+      </div>
+      <div class="ct__social">
+        <p class="label">{t('contact.social.title')}</p>
+        <ul>
+          {
+            socials.map((s) => (
+              <li>
+                <a href={s.href} target="_blank" rel="noopener">
+                  <Icon name={s.icon} size={20} />
+                  <span>{s.label}</span>
+                  <span aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .ct {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    border-bottom: 1px solid var(--line);
+    scroll-margin-top: var(--header-h);
+  }
+
+  .ct__form {
+    border-right: 1px solid var(--line);
+  }
+
+  .ct__form-body {
+    padding: 0 var(--gutter) 48px;
+  }
+
+  .ct__side {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ct__map {
+    flex: 1;
+    min-height: 360px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .ct__map iframe {
+    width: 100%;
+    height: 100%;
+    min-height: 360px;
+    border: 0;
+    filter: grayscale(0.6);
+  }
+
+  .ct__social {
+    padding: 24px var(--gutter);
+  }
+
+  .ct__social ul {
+    margin-top: 12px;
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .ct__social a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .ct__social a span:last-child {
+    margin-left: auto;
+  }
+
+  .ct__social a:hover {
+    color: var(--accent);
+  }
+
+  @media (max-width: 900px) {
+    .ct {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ct__form {
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+  }
+</style>

@@ -1,0 +1,103 @@
+---
+// Шапка внутренней страницы: строка меток, огромный заголовок капсом, подзаголовок справа,
+// по желанию — кадр на всю ширину с «занавесом».
+import { srcset, unsplash, type Photo } from '../lib/img';
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  kicker?: string;
+  meta?: string;
+  photo?: Photo;
+  /** Акцентная (зелёная) вторая часть заголовка. */
+  accent?: string;
+}
+
+const { title, subtitle, kicker: label, meta, photo, accent } = Astro.props;
+---
+
+<section class="ph">
+  {
+    (label || meta) && (
+      <div class="ph__meta label" data-reveal="fade" data-delay="100">
+        <span>{label}</span>
+        {meta && <span class="num">{meta}</span>}
+      </div>
+    )
+  }
+  <div class="ph__head">
+    <h1 class="ph__title h1" data-reveal="up" data-delay="200">
+      {title}
+      {accent && <span class="ph__accent">{accent}</span>}
+    </h1>
+    {subtitle && <p class="ph__subtitle" data-reveal="fade" data-delay="600">{subtitle}</p>}
+  </div>
+  <slot />
+  {
+    photo && (
+      <div class="ph__media" data-reveal="curtain" data-delay="400">
+        <img
+          src={unsplash(photo.id, 1800, 800)}
+          srcset={srcset(photo.id, [800, 1200, 1800, 2400], 0.44)}
+          sizes="100vw"
+          alt={photo.alt}
+          width="1800"
+          height="800"
+          fetchpriority="high"
+        />
+      </div>
+    )
+  }
+</section>
+
+<style>
+  .ph {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .ph__meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 20px var(--gutter) 0;
+  }
+
+  .ph__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px 32px;
+    padding: 8px var(--gutter) 28px;
+  }
+
+  .ph__title {
+    max-width: 100%;
+  }
+
+  .ph__accent {
+    display: block;
+    color: var(--accent);
+  }
+
+  .ph__subtitle {
+    max-width: 360px;
+    padding-bottom: 0.4em;
+    font-size: 16px;
+  }
+
+  .ph__media {
+    position: relative;
+    height: clamp(260px, 44vw, 620px);
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+    background: var(--accent);
+  }
+
+  .ph__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>

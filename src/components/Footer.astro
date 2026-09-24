@@ -1,0 +1,228 @@
+---
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import { contacts } from '../data/site';
+import { tours } from '../data/tours';
+import { localize, useTranslations, type Lang } from '../i18n/utils';
+import { navItems, routes } from '../lib/routes';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const contactLinks = [
+  { label: t('footer.whatsapp'), value: contacts.phone, href: contacts.whatsapp },
+  { label: t('footer.telegram'), value: contacts.telegramHandle, href: contacts.telegram },
+  { label: t('footer.email'), value: contacts.email, href: `mailto:${contacts.email}` },
+  { label: t('footer.phone'), value: contacts.phone, href: contacts.phoneHref },
+];
+
+const socials = [
+  { icon: 'instagram', label: 'Instagram', href: contacts.instagram },
+  { icon: 'facebook', label: 'Facebook', href: contacts.facebook },
+  { icon: 'youtube', label: 'YouTube', href: contacts.youtube },
+] as const;
+---
+
+<footer class="ft">
+  <div class="ornament-band ft__band" aria-hidden="true"></div>
+  <div class="ft__grid">
+    <div class="ft__cell ft__brand">
+      <Logo lang={lang} />
+      <p class="ft__mission">{t('about.mission.text')}</p>
+      <div class="ft__social">
+        {
+          socials.map((s) => (
+            <a href={s.href} aria-label={s.label} target="_blank" rel="noopener">
+              <Icon name={s.icon} size={18} />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="ft__cell">
+      <h2 class="label ft__title">{t('footer.quickLinks')}</h2>
+      <ul class="ft__links">
+        <li><a href={localize('/', lang)}>{t('nav.home')}</a></li>
+        {navItems.map((item) => <li><a href={localize(item.href, lang)}>{t(item.label)}</a></li>)}
+      </ul>
+    </div>
+
+    <div class="ft__cell">
+      <h2 class="label ft__title">{t('nav.tours')}</h2>
+      <ul class="ft__links">
+        {tours.map((tour) => <li><a href={localize(routes.tour(tour.slug), lang)}>{t(`${tour.card}.title`)}</a></li>)}
+      </ul>
+    </div>
+
+    <div class="ft__cell">
+      <h2 class="label ft__title">{t('footer.contact')}</h2>
+      <dl class="ft__contacts">
+        {
+          contactLinks.map((c) => (
+            <div>
+              <dt class="label">{c.label}</dt>
+              <dd>
+                <a href={c.href} target={c.href.startsWith('http') ? '_blank' : undefined} rel="noopener">
+                  {c.value}
+                </a>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+  <div class="ft__bottom label">
+    <span>I AM NOMAD — Bishkek</span>
+    <span>{t('brand.slogan')}</span>
+    <span>{t('footer.copyright')}</span>
+  </div>
+</footer>
+
+<style>
+  .ft {
+    border-top: 1px solid var(--line);
+  }
+
+  .ft__band {
+    margin-top: 28px;
+  }
+
+  .ft__grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+    margin-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+
+  .ft__cell {
+    padding: 28px var(--gutter);
+    border-right: 1px solid var(--line);
+  }
+
+  .ft__cell:last-child {
+    border-right: 0;
+  }
+
+  .ft__mission {
+    max-width: 38ch;
+    margin-top: 20px;
+    color: var(--ink-soft);
+  }
+
+  .ft__social {
+    display: flex;
+    margin-top: 24px;
+    border: 1px solid var(--line);
+    width: max-content;
+  }
+
+  .ft__social a {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-right: 1px solid var(--line);
+    transition:
+      background-color 0.5s,
+      color 0.5s;
+  }
+
+  .ft__social a:last-child {
+    border-right: 0;
+  }
+
+  .ft__social a:hover {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .ft__title {
+    margin-bottom: 16px;
+    color: var(--ink-mute);
+  }
+
+  .ft__links {
+    display: grid;
+    gap: 6px;
+    list-style: none;
+  }
+
+  .ft__links a,
+  .ft__contacts a {
+    text-decoration: none;
+  }
+
+  .ft__links a:hover,
+  .ft__contacts a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  .ft__contacts {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+  }
+
+  .ft__contacts dt {
+    font-size: 11px;
+    color: var(--ink-mute);
+  }
+
+  .ft__contacts dd {
+    margin: 2px 0 0;
+    overflow-wrap: anywhere;
+  }
+
+  .ft__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 24px var(--gutter);
+    border-top: 1px solid var(--line);
+  }
+
+  @media (max-width: 1000px) {
+    .ft__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .ft__brand {
+      grid-column: 1 / -1;
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .ft__cell:nth-child(3) {
+      border-right: 0;
+    }
+
+    .ft__cell:last-child {
+      grid-column: 1 / -1;
+      border-top: 1px solid var(--line);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .ft__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ft__cell {
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .ft__cell:last-child {
+      border-top: 0;
+      border-bottom: 0;
+    }
+  }
+</style>

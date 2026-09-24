@@ -1,0 +1,165 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactCards from '../components/ContactCards.astro';
+import Icon from '../components/Icon.astro';
+import LeadForm from '../components/LeadForm.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import { micePhoto } from '../data/content';
+import { useTranslations, type Lang } from '../i18n/utils';
+import { routes } from '../lib/routes';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const services = [
+  { icon: 'mountain', key: 'conferences' },
+  { icon: 'users', key: 'teambuilding' },
+  { icon: 'sparkles', key: 'incentive' },
+] as const;
+---
+
+<BaseLayout lang={lang} page="mice" path={routes.mice}>
+  <PageHero kicker="(01) MICE" meta="B2B" title={t('mice.title')} subtitle={t('mice.subtitle')} photo={micePhoto} />
+
+  <section class="lead-block">
+    <p class="lead-block__text" data-reveal>{t('mice.description')}</p>
+  </section>
+
+  <section>
+    <SectionHeader kicker="(02)" title={t('mice.services.title')} />
+    <ol class="svc">
+      {
+        services.map((s, i) => (
+          <li class="svc__cell" data-reveal style={`--i:${i}`}>
+            <div class="svc__top">
+              <span class="label num">({String(i + 1).padStart(2, '0')})</span>
+              <Icon name={s.icon} size={28} />
+            </div>
+            <h3 class="svc__title">{t(`mice.services.${s.key}`)}</h3>
+            <p class="muted">{t(`mice.services.${s.key}Text`)}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="form-block" id="contact-form">
+    <SectionHeader kicker="(03)" title={t('mice.form.title')} subtitle={t('mice.form.subtitle')} />
+    <div class="form-block__grid">
+      <div class="form-block__side">
+        <p class="label">{t('home.form.aside')}</p>
+        <ContactCards lang={lang} layout="list" />
+      </div>
+      <div class="form-block__form" data-reveal>
+        <LeadForm lang={lang} variant="corporate" id="corp" />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .lead-block {
+    padding: 48px var(--gutter);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .lead-block__text {
+    max-width: 1100px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(22px, 2.6vw, 40px);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+
+  .svc {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .svc__cell {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 300px;
+    padding: 28px var(--gutter);
+    border-right: 1px solid var(--line);
+    transition:
+      background-color 0.5s,
+      color 0.5s;
+  }
+
+  .svc__cell:last-child {
+    border-right: 0;
+  }
+
+  .svc__cell:hover {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .svc__cell:hover .muted {
+    color: inherit;
+  }
+
+  .svc__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .svc__title {
+    margin-top: auto;
+    font-size: clamp(24px, 2.4vw, 36px);
+    font-weight: 600;
+  }
+
+  .form-block {
+    border-top: 1px solid var(--line);
+    scroll-margin-top: var(--header-h);
+  }
+
+  .form-block__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+    border-top: 1px solid var(--line);
+  }
+
+  .form-block__side {
+    display: grid;
+    align-content: start;
+    gap: 16px;
+    padding: 32px var(--gutter);
+    border-right: 1px solid var(--line);
+  }
+
+  .form-block__form {
+    padding: 32px var(--gutter) 48px;
+    background: var(--surface);
+  }
+
+  @media (max-width: 900px) {
+    .svc,
+    .form-block__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .svc__cell,
+    .form-block__side {
+      min-height: 0;
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .svc__cell:last-child {
+      border-bottom: 0;
+    }
+  }
+</style>

@@ -1,0 +1,1268 @@
+---
+// «Студия» — конструктор индивидуальной экспедиции (по макету «Build yours»).
+// Слева кадр выбранного региона с золотыми точками «особых впечатлений»,
+// справа — регионы (порядок = маршрут), дни, гости, комфорт и выбранные впечатления,
+// внизу — итог и кнопка брони. Итог уходит в форму на странице контактов.
+import {
+  showPrice,
+  studioComfort,
+  studioDays,
+  studioDefaults,
+  studioGuests,
+  studioMoments,
+  studioRegions,
+  transferPerRegion,
+} from '../data/studio';
+import { localize, useTranslations, type Lang } from '../i18n/utils';
+import { srcset, unsplash } from '../lib/img';
+import Ornament from './Ornament.astro';
+import { routes } from '../lib/routes';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const money = (n: number) => '$' + n.toLocaleString('en-US');
+const m = t('unit.m');
+
+const config = {
+  showPrice,
+  transferPerRegion,
+  defaults: studioDefaults,
+  regions: studioRegions.map((r) => ({ name: r.name[lang], alt: `${r.alt.toLocaleString('ru-RU')} ${m}` })),
+  comfort: studioComfort.map((c) => ({ name: c.name[lang], rate: c.rate })),
+  moments: studioMoments.map((x) => ({ title: x.title[lang], desc: x.desc[lang], price: x.price, perGuest: !!x.perGuest, x: x.x, y: x.y })),
+  forms: { day: t('studio.forms.day').split('|'), guest: t('studio.forms.guest').split('|'), region: t('studio.forms.region').split('|') },
+  lang,
+  text: {
+    add: t('studio.add'),
+    addedRemove: t('studio.addedRemove'),
+    perGuest: t('studio.perGuest'),
+    perGroup: t('studio.perGroup'),
+    onRequest: t('studio.onRequest'),
+    msg: {
+      title: t('studio.msg.title'),
+      route: t('studio.msg.route'),
+      duration: t('studio.msg.duration'),
+      guests: t('studio.msg.guests'),
+      comfort: t('studio.msg.comfort'),
+      moments: t('studio.msg.moments'),
+      estimate: t('studio.msg.estimate'),
+    },
+  },
+};
+---
+
+<div class="st" data-studio data-config={JSON.stringify(config)}>
+  <!-- Кадр -->
+  <div class="st__canvas">
+    {
+      studioRegions.map((r, i) => (
+        <img
+          class:list={['st__frame', { 'is-active': i === studioDefaults.route[0] }]}
+          data-frame={i}
+          src={unsplash(r.photo, 1400, 1000)}
+          srcset={srcset(r.photo, [700, 1000, 1400, 1900], 0.71)}
+          sizes="(max-width: 900px) 100vw, 65vw"
+          alt={r.name[lang]}
+          width="1400"
+          height="1000"
+          loading="lazy"
+          decoding="async"
+        />
+      ))
+    }
+    <div class="st__shade" aria-hidden="true"></div>
+
+    <div class="st__top label">
+      <div class="st__route-line" data-route-line></div>
+      <span class="num" data-top-meta></span>
+    </div>
+
+    {
+      studioMoments.map((x, i) => (
+        <button
+          type="button"
+          class="st__spot"
+          style={`left:${x.x}%;top:${x.y}%`}
+          data-spot={i}
+          aria-label={x.title[lang]}
+          aria-expanded="false"
+          aria-controls="studio-pop"
+        >
+          <span />
+        </button>
+      ))
+    }
+
+    <span class="st__cursor" data-cursor aria-hidden="true">
+      <Ornament variant="tunduk" stroke="#C5A059" class="st__cursor-svg" />
+    </span>
+
+    <div class="st__pop" id="studio-pop" data-pop hidden>
+      <div class="st__pop-head">
+        <span class="badge badge--gold">{t('studio.signature')}</span>
+        <button type="button" class="st__pop-close" data-pop-close aria-label={t('ui.close')}>×</button>
+      </div>
+      <div class="st__pop-body">
+        <p class="st__pop-title" data-pop-title></p>
+        <p class="st__pop-desc" data-pop-desc></p>
+        {
+          showPrice && (
+            <p class="st__pop-price">
+              <span class="num" data-pop-price />
+              <span class="label" data-pop-unit />
+            </p>
+          )
+        }
+      </div>
+      <button type="button" class="st__pop-btn" data-pop-toggle>
+        <span data-pop-label></span><span data-pop-icon aria-hidden="true">+</span>
+      </button>
+    </div>
+
+    <div class="st__bottom">
+      <div>
+        <p class="label">{t('studio.focus')} · <span data-focus-alt></span></p>
+        <p class="st__focus" data-focus-name></p>
+      </div>
+      <p class="st__legend label">
+        <span class="st__dot" aria-hidden="true"></span>
+        <span>
+          {`${t('studio.tapHint')} · `}<span class="num" data-extras-count>00</span>{` / ${String(studioMoments.length).padStart(2, '0')} ${t('studio.added')}`}
+        </span>
+      </p>
+    </div>
+  </div>
+
+  <!-- Панель -->
+  <div class="st__panel">
+    <div class="st__scroll">
+      <fieldset class="st__group">
+        <legend class="st__head label"><span>{t('studio.route')}</span><span>{t('studio.routeHint')}</span></legend>
+        <div class="st__regions">
+          {
+            studioRegions.map((r, i) => (
+              <button type="button" class="st__region" data-region={i} aria-pressed="false">
+                <span class="st__region-top label num">
+                  <span>{`${r.alt.toLocaleString('ru-RU')} ${m}`}</span>
+                  <span class="st__order" data-order>
+                    +
+                  </span>
+                </span>
+                <span class="st__region-name">{r.name[lang]}</span>
+              </button>
+            ))
+          }
+        </div>
+      </fieldset>
+
+      <fieldset class="st__group">
+        <legend class="st__head label"><span>{t('studio.duration')}</span><span>{t('studio.durationHint')}</span></legend>
+        <div class="st__slider">
+          <p class="st__readout" aria-hidden="true">
+            <span class="st__readout-num num" data-days-num></span>
+            <span class="st__readout-unit label" data-days-unit></span>
+          </p>
+          <input
+            type="range"
+            class="st__range"
+            data-days-range
+            min={studioDays.min}
+            max={studioDays.max}
+            step="1"
+            value={studioDefaults.days}
+            aria-label={t('studio.duration').replace(/^\d+ — /, '')}
+          />
+          <div class="st__ticks label num" aria-hidden="true">
+            {studioDays.ticks.map((v) => (
+              <span style={`left:${(((v - studioDays.min) / (studioDays.max - studioDays.min)) * 100).toFixed(2)}%`}>{v}</span>
+            ))}
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="st__group">
+        <legend class="st__head label"><span>{t('studio.guests')}</span><span>{t('studio.guestsHint')}</span></legend>
+        <div class="st__slider">
+          <p class="st__readout" aria-hidden="true">
+            <span class="st__readout-num num" data-guests-num></span>
+            <span class="st__readout-unit label" data-guests-unit></span>
+          </p>
+          <input
+            type="range"
+            class="st__range"
+            data-guests-range
+            min={studioGuests.min}
+            max={studioGuests.max}
+            step="1"
+            value={studioDefaults.guests}
+            aria-label={t('studio.guests').replace(/^\d+ — /, '')}
+          />
+          <div class="st__ticks label num" aria-hidden="true">
+            {studioGuests.ticks.map((v) => (
+              <span style={`left:${(((v - studioGuests.min) / (studioGuests.max - studioGuests.min)) * 100).toFixed(2)}%`}>{v}</span>
+            ))}
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="st__group">
+        <legend class="st__head label">
+          <span>{t('studio.comfort')}</span><span>{showPrice ? t('studio.comfortHintPrice') : t('studio.comfortHint')}</span>
+        </legend>
+        <div class="st__comforts">
+          {
+            studioComfort.map((c, i) => (
+              <button type="button" class="st__comfort" data-comfort={i} aria-pressed="false">
+                <span class="st__comfort-text">
+                  <span class="st__comfort-name">
+                    {c.name[lang]}
+                    {c.vip && <span class="badge badge--gold">VIP</span>}
+                  </span>
+                  <span class="st__comfort-desc">{c.desc[lang]}</span>
+                </span>
+                {showPrice && <span class="st__comfort-rate num">{money(c.rate)}</span>}
+              </button>
+            ))
+          }
+        </div>
+      </fieldset>
+
+      <div class="st__group st__group--last">
+        <p class="st__head label"><span>{t('studio.moments')}</span><span>{t('studio.momentsHint')}</span></p>
+        <p class="st__empty" data-extras-empty>
+          <span class="st__dot st__dot--ring" aria-hidden="true"></span>
+          {t('studio.noMoments')}
+        </p>
+        <ul class="st__extras" data-extras-list></ul>
+      </div>
+    </div>
+
+    <div class="st__status">
+      <div class="st__totals">
+        <div>
+          <p class="label">{t('studio.finalRoute')}</p>
+          <p class="st__total" data-route-label></p>
+        </div>
+        <div>
+          <p class="label">{showPrice ? t('studio.from') : t('studio.price')}</p>
+          <p class="st__total st__total--accent num" data-total>{showPrice ? '' : t('studio.onRequest')}</p>
+        </div>
+      </div>
+      <p class="st__summary num" data-summary></p>
+      <a href={localize(routes.contact, lang)} class="st__book" data-book>
+        <span>{t('studio.book')}</span><span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+
+  <template data-extra-template>
+    <li class="st__extra">
+      <span class="st__dot" aria-hidden="true"></span>
+      <span class="st__extra-title"></span>
+      <span class="st__extra-price num"></span>
+      <button type="button" class="st__extra-remove" aria-label={t('builder.remove')}>×</button>
+    </li>
+  </template>
+</div>
+
+<style>
+  .st {
+    display: flex;
+    height: max(700px, calc(100vh - var(--header-h)));
+    border-top: 1px solid var(--line);
+    background: var(--surface);
+  }
+
+  /* ---------- Кадр ---------- */
+  .st__canvas {
+    position: relative;
+    flex: 0 0 65%;
+    min-width: 0;
+    overflow: hidden;
+    background: #111;
+    color: #f5f5f3;
+  }
+
+  .st__frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(1.08);
+    transition:
+      opacity 0.9s ease,
+      transform 2.4s var(--ease);
+  }
+
+  .st__frame.is-active {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .st__shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgb(17 17 17 / 0.5) 0%, rgb(17 17 17 / 0) 26%, rgb(17 17 17 / 0) 58%, rgb(17 17 17 / 0.7) 100%);
+    pointer-events: none;
+  }
+
+  .st__top {
+    position: absolute;
+    inset: 0 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px 24px;
+    padding: 20px 24px;
+    font-size: 11px;
+    pointer-events: none;
+  }
+
+  .st__route-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+  }
+
+  .st__route-line :global(span) {
+    white-space: nowrap;
+    transition: color 0.4s;
+  }
+
+  .st__route-line :global(.is-focus) {
+    color: var(--gold);
+  }
+
+  /* Курсор-тюндюк над кадром (только мышь) */
+  .st__cursor {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    width: 76px;
+    height: 76px;
+    margin: -38px 0 0 -38px;
+    border-radius: 50%;
+    background: rgb(17 17 17 / 0.22);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 0.3s,
+      scale 0.3s var(--ease);
+  }
+
+  .st__cursor.is-on {
+    opacity: 1;
+  }
+
+  .st__cursor.is-hot {
+    scale: 1.35;
+  }
+
+  .st__cursor :global(.st__cursor-svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    animation: spin 24s linear infinite;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .st__canvas.has-cursor,
+    .st__canvas.has-cursor .st__spot {
+      cursor: none;
+    }
+
+    .st__canvas.has-cursor .st__pop {
+      cursor: auto;
+    }
+  }
+
+  .st__spot {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    margin: -19px 0 0 -19px;
+    padding: 0;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    background: rgb(17 17 17 / 0.3);
+    transition:
+      transform 0.4s var(--ease),
+      background-color 0.4s;
+  }
+
+  .st__spot span {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--gold);
+    transition: background-color 0.4s;
+  }
+
+  .st__spot:hover {
+    animation: pulse 1.4s ease-out infinite;
+  }
+
+  .st__spot[aria-expanded='true'] {
+    transform: scale(1.15);
+  }
+
+  .st__spot.is-added {
+    background: var(--gold);
+  }
+
+  .st__spot.is-added span {
+    background: #0d3e26;
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgb(197 160 89 / 0.75);
+    }
+    100% {
+      box-shadow: 0 0 0 22px rgb(197 160 89 / 0);
+    }
+  }
+
+  .st__pop {
+    position: absolute;
+    z-index: 3;
+    width: 290px;
+    max-width: calc(100% - 32px);
+    border: 1px solid #111;
+    background: #fff;
+    color: #111;
+    animation: pop-in 0.35s var(--ease);
+  }
+
+  .st__pop[hidden] {
+    display: none;
+  }
+
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+
+  .st__pop-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 10px 10px 16px;
+    border-bottom: 1px solid #111;
+  }
+
+  .st__pop-close {
+    width: 32px;
+    height: 32px;
+    border: 0;
+    background: transparent;
+    font-size: 20px;
+    line-height: 1;
+    color: #111;
+  }
+
+  .st__pop-body {
+    display: grid;
+    gap: 8px;
+    padding: 16px;
+  }
+
+  .st__pop-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+
+  .st__pop-desc {
+    font-size: 14px;
+  }
+
+  .st__pop-price {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .st__pop-price .num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 24px;
+    color: #0d3e26;
+  }
+
+  .st__pop-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 14px 16px;
+    border: 0;
+    border-top: 1px solid #111;
+    background: #0d3e26;
+    color: #f5f5f3;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    transition: background-color 0.4s;
+  }
+
+  .st__pop-btn.is-added {
+    background: #111;
+  }
+
+  .st__bottom {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    bottom: 22px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 12px 24px;
+    pointer-events: none;
+  }
+
+  .st__bottom .label {
+    font-size: 11px;
+  }
+
+  .st__focus {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(40px, 5.6vw, 96px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  .st__legend {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .st__dot {
+    flex: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  .st__dot--ring {
+    background: transparent;
+    border: 1px solid var(--gold);
+  }
+
+  /* ---------- Панель ---------- */
+  .st__panel {
+    display: flex;
+    flex: 0 0 35%;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    box-shadow: inset 1px 0 0 var(--line);
+    background: var(--surface);
+  }
+
+  .st__scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .st__group {
+    margin: 0;
+    padding: 20px 24px 24px;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    min-width: 0;
+  }
+
+  .st__group--last {
+    border-bottom: 0;
+  }
+
+  /* legend по умолчанию садится на рамку fieldset — выносим в поток */
+  legend.st__head {
+    float: left;
+  }
+
+  legend.st__head + * {
+    clear: both;
+  }
+
+  .st__head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    padding: 0;
+    font-size: 11px;
+  }
+
+  .st__regions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 14px;
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+  }
+
+  .st__region {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 14px;
+    border: 0;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+    text-align: left;
+    transition:
+      background-color 0.4s,
+      color 0.4s,
+      transform 0.2s;
+  }
+
+  .st__region:active {
+    transform: scale(0.97);
+  }
+
+  .st__region[aria-pressed='true'] {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .st__region-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    font-size: 11px;
+  }
+
+  .st__order {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--line-soft);
+    border-radius: 50%;
+    font-weight: 600;
+    letter-spacing: 0;
+    transition: background-color 0.4s;
+  }
+
+  .st__region[aria-pressed='true'] .st__order {
+    border-color: var(--gold);
+    background: var(--gold);
+    color: #111;
+  }
+
+  .st__region-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+
+  /* ---------- Ползунки ---------- */
+  .st__slider {
+    margin-top: 14px;
+  }
+
+  .st__readout {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .st__readout-num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(40px, 3.6vw, 56px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+  }
+
+  .st__readout-unit {
+    font-size: 11px;
+  }
+
+  .st__range {
+    --p: 0%;
+    display: block;
+    width: 100%;
+    height: 36px;
+    margin: 8px 0 0;
+    background: transparent;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .st__range:focus {
+    outline: none;
+  }
+
+  /* дорожка: тонкая линия, пройденная часть — зелёная и толще */
+  .st__range::-webkit-slider-runnable-track {
+    height: 3px;
+    background:
+      linear-gradient(var(--accent), var(--accent)) 0 0 / var(--p) 100% no-repeat,
+      linear-gradient(var(--line), var(--line)) 0 1px / 100% 1px no-repeat;
+  }
+
+  .st__range::-moz-range-track {
+    height: 1px;
+    background: var(--line);
+  }
+
+  .st__range::-moz-range-progress {
+    height: 3px;
+    background: var(--accent);
+  }
+
+  .st__range::-webkit-slider-thumb {
+    width: 28px;
+    height: 28px;
+    margin-top: -12.5px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: inset 0 0 0 5px var(--surface);
+    -webkit-appearance: none;
+    appearance: none;
+    transition: transform 0.2s var(--ease);
+  }
+
+  .st__range::-moz-range-thumb {
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: inset 0 0 0 5px var(--surface);
+    transition: transform 0.2s var(--ease);
+  }
+
+  .st__range:active::-webkit-slider-thumb {
+    transform: scale(1.15);
+  }
+
+  .st__range:active::-moz-range-thumb {
+    transform: scale(1.15);
+  }
+
+  .st__range:focus-visible::-webkit-slider-thumb {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+
+  .st__range:focus-visible::-moz-range-thumb {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+
+  /* метки: насечки на линии и подписи; крайние прижаты к краям бегунка */
+  .st__ticks {
+    position: relative;
+    height: 26px;
+    margin: 0 14px;
+    font-size: 11px;
+  }
+
+  .st__ticks span {
+    position: absolute;
+    top: 0;
+    padding-top: 8px;
+    transform: translateX(-50%);
+    color: var(--ink-mute);
+  }
+
+  .st__ticks span::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 1px;
+    height: 5px;
+    background: var(--line);
+  }
+
+  .st__comforts {
+    display: flex;
+    flex-direction: column;
+    margin-top: 14px;
+    border-top: 1px solid var(--line);
+  }
+
+  .st__comfort {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 14px 16px;
+    border: 1px solid var(--line);
+    border-top: 0;
+    background: var(--surface);
+    color: var(--ink);
+    text-align: left;
+    transition:
+      background-color 0.4s,
+      color 0.4s,
+      transform 0.2s;
+  }
+
+  .st__comfort:active {
+    transform: scale(0.98);
+  }
+
+  .st__comfort[aria-pressed='true'] {
+    background: #0d3e26;
+    color: #f5f5f3;
+  }
+
+  .st__comfort-text {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .st__comfort-name {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+
+  .st__comfort-desc {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .st__comfort-rate {
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .st__empty {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+    font-size: 14px;
+  }
+
+  .st__empty[hidden] {
+    display: none;
+  }
+
+  .st__extras {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    list-style: none;
+  }
+
+  .st__extra {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line-soft);
+    animation: pop-in 0.35s var(--ease);
+  }
+
+  .st__extra-title {
+    flex: 1;
+    min-width: 0;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .st__extra-price {
+    font-size: 14px;
+  }
+
+  .st__extra-remove {
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: transparent;
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  /* ---------- Итог ---------- */
+  .st__status {
+    flex: none;
+    position: relative;
+    z-index: 2;
+    border-top: 1px solid var(--line);
+    background: var(--surface);
+  }
+
+  .st__totals {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .st__totals > div {
+    padding: 14px 24px;
+  }
+
+  .st__totals > div:first-child {
+    border-right: 1px solid var(--line);
+  }
+
+  .st__totals .label {
+    font-size: 11px;
+  }
+
+  .st__total {
+    margin-top: 4px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(22px, 2vw, 30px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+
+  .st__total--accent {
+    color: var(--accent);
+  }
+
+  .st__summary {
+    padding: 8px 24px;
+    border-top: 1px solid var(--line-soft);
+    font-size: 12px;
+  }
+
+  .st__book {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 24px;
+    background: #0d3e26;
+    color: #f5f5f3;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background-color 0.5s;
+  }
+
+  .st__book:hover {
+    background: #111;
+  }
+
+  /* ---------- Узкие экраны: кадр сверху, панель снизу, итог прилипает ---------- */
+  @media (max-width: 900px) {
+    .st {
+      flex-direction: column;
+      height: auto;
+    }
+
+    .st__canvas {
+      flex: none;
+      height: clamp(420px, 90vw, 620px);
+    }
+
+    .st__panel {
+      flex: none;
+      box-shadow: inset 0 1px 0 var(--line);
+    }
+
+    .st__scroll {
+      overflow: visible;
+    }
+
+    .st__status {
+      position: sticky;
+      bottom: 0;
+    }
+
+    .st__top .num {
+      display: none;
+    }
+  }
+
+  @media (max-width: 600px) {
+    /* карточка впечатления — по низу кадра на всю ширину */
+    .st__pop {
+      left: 16px !important;
+      right: 16px !important;
+      top: auto !important;
+      bottom: 16px !important;
+      width: auto;
+      max-width: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .st__group {
+      padding-inline: var(--gutter);
+    }
+
+    .st__totals > div,
+    .st__summary,
+    .st__book {
+      padding-inline: var(--gutter);
+    }
+
+    .st__legend {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  type Config = {
+    showPrice: boolean;
+    transferPerRegion: number;
+    defaults: { route: number[]; days: number; guests: number; comfort: number };
+    regions: { name: string; alt: string }[];
+    comfort: { name: string; rate: number }[];
+    moments: { title: string; desc: string; price: number; perGuest: boolean; x: number; y: number }[];
+    forms: Record<'day' | 'guest' | 'region', string[]>;
+    lang: 'ru' | 'en';
+    text: Record<string, any>;
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-studio]').forEach((root) => {
+    // Курсор-тюндюк следует за мышью над кадром; над карточкой — обычный курсор
+    const canvasEl = root.querySelector<HTMLElement>('.st__canvas');
+    const cursor = root.querySelector<HTMLElement>('[data-cursor]');
+    if (canvasEl && cursor && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      canvasEl.classList.add('has-cursor');
+      canvasEl.addEventListener('pointermove', (e) => {
+        const b = canvasEl.getBoundingClientRect();
+        const target = e.target as HTMLElement;
+        const overPop = !!target.closest('[data-pop]');
+        cursor.style.translate = `${e.clientX - b.left}px ${e.clientY - b.top}px`;
+        cursor.classList.toggle('is-on', !overPop);
+        cursor.classList.toggle('is-hot', !!target.closest('.st__spot'));
+      });
+      canvasEl.addEventListener('pointerleave', () => cursor.classList.remove('is-on', 'is-hot'));
+    }
+    const cfg = JSON.parse(root.dataset.config!) as Config;
+    const $ = <T extends Element = HTMLElement>(sel: string) => root.querySelector<T>(sel)!;
+    const $$ = <T extends Element = HTMLElement>(sel: string) => Array.from(root.querySelectorAll<T>(sel));
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const money = (n: number) => '$' + n.toLocaleString('en-US');
+    const rules = new Intl.PluralRules(cfg.lang);
+    // ru: one/few/many, en: one/other
+    const plural = (n: number, forms: string[]) => {
+      const r = rules.select(n);
+      if (forms.length === 2) return r === 'one' ? forms[0] : forms[1];
+      return r === 'one' ? forms[0] : r === 'few' ? forms[1] : forms[2];
+    };
+
+    const state = {
+      route: [...cfg.defaults.route],
+      focus: cfg.defaults.route[0],
+      days: cfg.defaults.days,
+      guests: cfg.defaults.guests,
+      comfort: cfg.defaults.comfort,
+      extras: [] as number[],
+      openSpot: null as number | null,
+    };
+
+    const momentCost = (i: number) => cfg.moments[i].price * (cfg.moments[i].perGuest ? state.guests : 1);
+    const total = () =>
+      state.guests * (state.days * cfg.comfort[state.comfort].rate + (state.route.length - 1) * cfg.transferPerRegion) +
+      state.extras.reduce((a, i) => a + momentCost(i), 0);
+
+    const frames = $$('[data-frame]');
+    const regionBtns = $$<HTMLButtonElement>('[data-region]');
+    const dayRange = $<HTMLInputElement>('[data-days-range]');
+    const guestRange = $<HTMLInputElement>('[data-guests-range]');
+    const fill = (r: HTMLInputElement) => {
+      const p = ((Number(r.value) - Number(r.min)) / (Number(r.max) - Number(r.min))) * 100;
+      r.style.setProperty('--p', `${p}%`);
+    };
+    const comfortBtns = $$<HTMLButtonElement>('[data-comfort]');
+    const spots = $$<HTMLButtonElement>('[data-spot]');
+    const pop = $('[data-pop]');
+    const extrasList = $('[data-extras-list]');
+    const tpl = $<HTMLTemplateElement>('[data-extra-template]');
+
+    function renderPop() {
+      spots.forEach((s, i) => {
+        s.setAttribute('aria-expanded', String(state.openSpot === i));
+        s.classList.toggle('is-added', state.extras.includes(i));
+      });
+      if (state.openSpot == null) {
+        pop.hidden = true;
+        return;
+      }
+      const i = state.openSpot;
+      const p = cfg.moments[i];
+      const added = state.extras.includes(i);
+      pop.hidden = false;
+      // Позиция рядом с точкой, внутрь кадра
+      pop.style.left = p.x > 50 ? 'auto' : `calc(${p.x}% + 30px)`;
+      pop.style.right = p.x > 50 ? `calc(${100 - p.x}% + 30px)` : 'auto';
+      pop.style.top = p.y > 50 ? 'auto' : `calc(${p.y}% - 19px)`;
+      pop.style.bottom = p.y > 50 ? `calc(${100 - p.y}% - 19px)` : 'auto';
+      $('[data-pop-title]').textContent = p.title;
+      $('[data-pop-desc]').textContent = p.desc;
+      if (cfg.showPrice) {
+        $('[data-pop-price]').textContent = '+' + money(p.price);
+        $('[data-pop-unit]').textContent = p.perGuest ? cfg.text.perGuest : cfg.text.perGroup;
+      }
+      const btn = $('[data-pop-toggle]');
+      btn.classList.toggle('is-added', added);
+      $('[data-pop-label]').textContent = added ? cfg.text.addedRemove : cfg.text.add;
+      $('[data-pop-icon]').textContent = added ? '✓' : '+';
+    }
+
+    function render() {
+      frames.forEach((f, i) => f.classList.toggle('is-active', i === state.focus));
+      regionBtns.forEach((b, i) => {
+        const idx = state.route.indexOf(i);
+        b.setAttribute('aria-pressed', String(idx > -1));
+        b.querySelector('[data-order]')!.textContent = idx > -1 ? String(idx + 1) : '+';
+      });
+      dayRange.value = String(state.days);
+      guestRange.value = String(state.guests);
+      fill(dayRange);
+      fill(guestRange);
+      $('[data-days-num]').textContent = pad(state.days);
+      $('[data-days-unit]').textContent = plural(state.days, cfg.forms.day);
+      $('[data-guests-num]').textContent = pad(state.guests);
+      $('[data-guests-unit]').textContent = plural(state.guests, cfg.forms.guest);
+      dayRange.setAttribute('aria-valuetext', `${state.days} ${plural(state.days, cfg.forms.day)}`);
+      guestRange.setAttribute('aria-valuetext', `${state.guests} ${plural(state.guests, cfg.forms.guest)}`);
+      comfortBtns.forEach((b, i) => b.setAttribute('aria-pressed', String(i === state.comfort)));
+
+      $('[data-route-line]').replaceChildren(
+        ...state.route.map((i, k) => {
+          const s = document.createElement('span');
+          s.textContent = `${pad(k + 1)} ${cfg.regions[i].name}`;
+          if (i === state.focus) s.className = 'is-focus';
+          return s;
+        }),
+      );
+      $('[data-top-meta]').textContent =
+        `${pad(state.days)} ${plural(state.days, cfg.forms.day)} · ${pad(state.guests)} ${plural(state.guests, cfg.forms.guest)}`;
+      $('[data-focus-name]').textContent = cfg.regions[state.focus].name;
+      $('[data-focus-alt]').textContent = cfg.regions[state.focus].alt;
+      $('[data-extras-count]').textContent = pad(state.extras.length);
+
+      $('[data-extras-empty]').hidden = state.extras.length > 0;
+      extrasList.replaceChildren(
+        ...state.extras.map((i) => {
+          const li = tpl.content.firstElementChild!.cloneNode(true) as HTMLLIElement;
+          li.querySelector('.st__extra-title')!.textContent = cfg.moments[i].title;
+          li.querySelector('.st__extra-price')!.textContent = cfg.showPrice ? money(momentCost(i)) : '';
+          li.querySelector('button')!.addEventListener('click', () => {
+            state.extras = state.extras.filter((x) => x !== i);
+            render();
+          });
+          return li;
+        }),
+      );
+
+      const n = state.route.length;
+      $('[data-route-label]').textContent = `${n} ${plural(n, cfg.forms.region)}`;
+      const sum = total();
+      if (cfg.showPrice) $('[data-total]').textContent = money(sum);
+      const parts = [
+        `${state.days} ${plural(state.days, cfg.forms.day)}`,
+        `${state.guests} ${plural(state.guests, cfg.forms.guest)}`,
+        cfg.comfort[state.comfort].name,
+      ];
+      if (cfg.showPrice) parts.push(`${money(Math.round(sum / state.guests))} ${cfg.text.perGuest}`);
+      $('[data-summary]').textContent = parts.join(' · ');
+      renderPop();
+      (window as any).__fit?.(root);
+    }
+
+    regionBtns.forEach((b, i) =>
+      b.addEventListener('click', () => {
+        const on = state.route.includes(i);
+        if (on && state.route.length === 1) return; // хотя бы один регион
+        state.route = on ? state.route.filter((x) => x !== i) : [...state.route, i];
+        state.focus = on ? (state.focus === i ? state.route[state.route.length - 1] : state.focus) : i;
+        render();
+      }),
+    );
+    dayRange.addEventListener('input', () => ((state.days = Number(dayRange.value)), render()));
+    guestRange.addEventListener('input', () => ((state.guests = Number(guestRange.value)), render()));
+    comfortBtns.forEach((b, i) => b.addEventListener('click', () => ((state.comfort = i), render())));
+    spots.forEach((s, i) =>
+      s.addEventListener('click', () => {
+        state.openSpot = state.openSpot === i ? null : i;
+        renderPop();
+      }),
+    );
+    $('[data-pop-close]').addEventListener('click', () => ((state.openSpot = null), renderPop()));
+    $('[data-pop-toggle]').addEventListener('click', () => {
+      const i = state.openSpot;
+      if (i == null) return;
+      state.extras = state.extras.includes(i) ? state.extras.filter((x) => x !== i) : [...state.extras, i];
+      render();
+    });
+    root.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && state.openSpot != null) {
+        spots[state.openSpot].focus();
+        state.openSpot = null;
+        renderPop();
+      }
+    });
+
+    // Бронь: итог уходит в форму на странице контактов.
+    $('[data-book]').addEventListener('click', () => {
+      const m = cfg.text.msg;
+      const lines = [
+        m.title,
+        `${m.route}: ${state.route.map((i, k) => `${k + 1}. ${cfg.regions[i].name}`).join(' → ')}`,
+        `${m.duration}: ${state.days} ${plural(state.days, cfg.forms.day)}`,
+        `${m.guests}: ${state.guests}`,
+        `${m.comfort}: ${cfg.comfort[state.comfort].name}`,
+      ];
+      if (state.extras.length) lines.push(`${m.moments}: ${state.extras.map((i) => cfg.moments[i].title).join(', ')}`);
+      if (cfg.showPrice) lines.push(`${m.estimate}: ${money(total())}`);
+      sessionStorage.setItem('customTourBlocks', JSON.stringify({ text: lines.join('\n'), studio: true }));
+    });
+
+    render();
+  });
+</script>

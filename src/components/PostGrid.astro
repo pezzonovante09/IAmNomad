@@ -1,0 +1,139 @@
+---
+// Сетка постов блога. Полная статья пока одна — все карточки ведут на неё (как и на старом сайте).
+import { blogPosts } from '../data/content';
+import { localize, useTranslations, type Lang } from '../i18n/utils';
+import { srcset, unsplash } from '../lib/img';
+import { routes } from '../lib/routes';
+
+interface Props {
+  lang: Lang;
+  /** Номера постов (1…6), которые показать. */
+  only?: number[];
+}
+
+const { lang, only } = Astro.props;
+const t = useTranslations(lang);
+const href = localize(routes.article, lang);
+const posts = blogPosts.map((photo, i) => ({ photo, n: i + 1 })).filter((p) => !only || only.includes(p.n));
+---
+
+<ul class="pg">
+  {
+    posts.map(({ photo, n }, i) => (
+      <li class="pg__cell" data-reveal style={`--i:${i % 3}`}>
+        <a href={href} class="pg__link">
+          <span class="pg__media">
+            <img src={unsplash(photo.id, 800, 600)} srcset={srcset(photo.id, [400, 800, 1200], 0.75)} sizes="(max-width: 700px) 100vw, 33vw" alt={photo.alt} width="800" height="600" loading="lazy" decoding="async" />
+          </span>
+          <span class="pg__meta label num">
+            <span>({String(n).padStart(2, '0')})</span>
+            <span>{t(`blog.post${n}.date`)}</span>
+          </span>
+          <span class="pg__title">{t(`blog.post${n}.title`)}</span>
+          {!only && <span class="pg__excerpt muted">{t(`blog.post${n}.excerpt`)}</span>}
+          <span class="pg__more label">{t('btn.readMore')} →</span>
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .pg {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .pg__cell {
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .pg__cell:nth-child(3n) {
+    border-right: 0;
+  }
+
+  .pg__link {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 100%;
+    padding: 20px var(--gutter) 28px;
+    text-decoration: none;
+    transition: background-color 0.5s;
+  }
+
+  .pg__link:hover {
+    background: var(--surface);
+  }
+
+  .pg__media {
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--accent);
+  }
+
+  .pg__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.4s var(--ease);
+  }
+
+  .pg__link:hover img {
+    transform: scale(1.05);
+  }
+
+  .pg__meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .pg__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(20px, 1.8vw, 28px);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .pg__link:hover .pg__title {
+    color: var(--accent);
+  }
+
+  .pg__more {
+    margin-top: auto;
+    padding-top: 8px;
+    font-weight: 600;
+  }
+
+  @media (max-width: 900px) {
+    .pg {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .pg__cell:nth-child(3n) {
+      border-right: 1px solid var(--line);
+    }
+
+    .pg__cell:nth-child(2n) {
+      border-right: 0;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .pg {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .pg__cell,
+    .pg__cell:nth-child(3n) {
+      border-right: 0;
+    }
+  }
+</style>

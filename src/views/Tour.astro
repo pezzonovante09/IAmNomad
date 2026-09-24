@@ -1,0 +1,1102 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Faq from '../components/Faq.astro';
+import Icon from '../components/Icon.astro';
+import ReviewCard from '../components/ReviewCard.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import TourIndex from '../components/TourIndex.astro';
+import VideoEmbed from '../components/VideoEmbed.astro';
+import { reviewAvatars } from '../data/content';
+import { contacts, videos } from '../data/site';
+import { tours, type Tour } from '../data/tours';
+import { bullets, localize, splitEmoji, useTranslations, type Lang } from '../i18n/utils';
+import { srcset, unsplash } from '../lib/img';
+import { routes } from '../lib/routes';
+
+interface Props {
+  lang: Lang;
+  tour: Tour;
+}
+
+const { lang, tour } = Astro.props;
+const t = useTranslations(lang);
+const L = (p: string) => localize(p, lang);
+const k = (key: string) => t(`tour.${tour.slug}.${key}`);
+const card = (key: string) => t(`${tour.card}.${key}`);
+const range = (n: number) => Array.from({ length: n }, (_, i) => i + 1);
+const pad = (n: number) => String(n).padStart(2, '0');
+
+const isOpen = tour.status === 'open';
+const bookHref = `${L(routes.contact)}?tour=${tour.slug}`;
+const price = isOpen ? k('pricing.standardPrice') : t('tour.winter.comingSoon');
+
+const days = range(tour.days).map((n) => {
+  const title = k(`program.day${n}.title`);
+  const m = title.match(/^\D*?(\d+)\.\s*(.*)$/);
+  return { n, title: m ? m[2] : title, items: bullets(k(`program.day${n}.text`)) };
+});
+const highlights = range(tour.highlights).map((n) => splitEmoji(k(`highlights.item${n}`)));
+const extras = range(tour.extras).map((n) => splitEmoji(k(`extras.item${n}`)));
+// \u2060 — «склейка», чтобы диапазон «20–26» не переносился по тире.
+const dates = range(tour.dates).map((n) => k(`dates.date${n}`).replace(/(\d)[–-](\d)/g, '$1\u2060–\u2060$2'));
+const included = range(5).map((n) => t(`tour.included.item${n}`));
+const notIncluded = range(4).map((n) => t(`tour.notIncluded.item${n}`));
+const features = range(3).map((n) => t(`tour.pricing.standardFeature${n}`));
+const faq = range(3).map((n) => ({ q: t(`tour.faq.q${n}`), a: t(`tour.faq.a${n}`) }));
+const similar = tours.filter((x) => x.slug !== tour.slug);
+const video = videos.tours[tour.slug];
+
+const facts = [
+  { label: t('tour.facts.duration'), value: card('duration') },
+  { label: t('tour.facts.route'), value: card('location') },
+  { label: t('tour.facts.group'), value: t('tour.facts.groupValue') },
+  { label: t('tour.facts.price'), value: price },
+];
+
+const sections = [
+  { id: 'highlights', label: k('highlights.title') },
+  { id: 'program', label: t('tour.program.title') },
+  { id: 'included', label: t('tour.included.title') },
+  { id: 'dates', label: t('tour.dates.title') },
+  { id: 'faq', label: t('tour.faq.title') },
+];
+
+const numericPrice = Number(price.replace(/[^\d]/g, ''));
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TouristTrip',
+  name: k('title'),
+  description: k('subtitle'),
+  image: unsplash(tour.cover.id, 1200, 630),
+  provider: { '@type': 'TravelAgency', name: 'I AM NOMAD', telephone: contacts.phone, email: contacts.email },
+  ...(isOpen && numericPrice
+    ? { offers: { '@type': 'Offer', price: numericPrice, priceCurrency: 'USD', availability: 'https://schema.org/InStock' } }
+    : {}),
+};
+---
+
+<BaseLayout lang={lang} page={`tour-${tour.slug}`} section="tours" path={routes.tour(tour.slug)} image={unsplash(tour.cover.id, 1200, 630)}>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)} />
+
+  <!-- Заголовок -->
+  <section class="th" data-bookbar-trigger>
+    <div class="th__meta label" data-reveal="fade" data-delay="100">
+      <nav aria-label="Breadcrumb" class="th__crumbs">
+        <a href={L('/')}>{t('nav.home')}</a>
+        <span aria-hidden="true">/</span>
+        <a href={L(routes.tours)}>{t('nav.tours')}</a>
+      </nav>
+      <span class="th__badges">
+        <span class="badge badge--gold">{t(`tours.tab.${tour.category}`)}</span>
+        {!isOpen && <span class="badge">{t('btn.comingSoon')}</span>}
+      </span>
+    </div>
+    <div class="th__head">
+      <h1 class="h1 th__title" data-reveal="up" data-delay="200">{k('title')}</h1>
+      <p class="th__subtitle" data-reveal="fade" data-delay="600">{k('subtitle')}</p>
+    </div>
+    <dl class="th__facts">
+      {
+        facts.map((f, i) => (
+          <div class="th__fact" data-reveal="fade" data-delay={700 + i * 100}>
+            <dt class="label">{f.label}</dt>
+            <dd>{f.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <!-- Галерея -->
+  <section class="gm" aria-label="Gallery">
+    {
+      tour.gallery.map((photo, i) => (
+        <button
+          type="button"
+          class="gm__item"
+          data-lightbox={`tour-${tour.slug}`}
+          data-full={unsplash(photo.id, 1800)}
+          aria-label={photo.alt}
+          data-reveal={i === 0 ? 'curtain' : 'fade'}
+          data-delay={i === 0 ? '300' : String(500 + i * 100)}
+        >
+          <img
+            src={unsplash(photo.id, i === 0 ? 1400 : 700, i === 0 ? 1000 : 500)}
+            srcset={srcset(photo.id, i === 0 ? [700, 1000, 1400, 1900] : [350, 700, 1000], i === 0 ? 0.71 : 0.71)}
+            sizes={i === 0 ? '(max-width: 800px) 100vw, 50vw' : '(max-width: 800px) 50vw, 25vw'}
+            alt={photo.alt}
+            width={i === 0 ? 1400 : 700}
+            height={i === 0 ? 1000 : 500}
+            loading={i === 0 ? 'eager' : 'lazy'}
+            decoding="async"
+          />
+          {i === 0 && <span class="gm__count label num">01 / {pad(tour.gallery.length)}</span>}
+        </button>
+      ))
+    }
+  </section>
+
+  <!-- Подменю -->
+  <nav class="subnav" aria-label={k('title')}>
+    {
+      sections.map((s, i) => (
+        <a href={`#${s.id}`} class="subnav__link">
+          <span class="num">({pad(i + 1)})</span> {s.label}
+        </a>
+      ))
+    }
+  </nav>
+
+  <div class="tl">
+    <div class="tl__main">
+      <!-- (01) Главное -->
+      <section id="highlights" class="blk">
+        <div class="blk__head" data-reveal>
+          <p class="label">(01)</p>
+          <h2 class="blk__title">{k('highlights.title')}</h2>
+        </div>
+        <ul class="hl">
+          {
+            highlights.map((h, i) => (
+              <li class="hl__item" data-reveal style={`--i:${i % 4}`}>
+                <span class="hl__icon" aria-hidden="true">
+                  {h.icon || '✦'}
+                </span>
+                <span>{h.text}</span>
+              </li>
+            ))
+          }
+        </ul>
+        {
+          extras.length > 0 && (
+            <>
+              <div class="blk__sub label" data-reveal>
+                {k('extras.title')}
+              </div>
+              <ul class="hl">
+                {extras.map((h, i) => (
+                  <li class="hl__item" data-reveal style={`--i:${i % 4}`}>
+                    <span class="hl__icon" aria-hidden="true">
+                      {h.icon || '✦'}
+                    </span>
+                    <span>{h.text}</span>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )
+        }
+      </section>
+
+      <!-- (02) Программа -->
+      <section id="program" class="blk">
+        <div class="blk__head" data-reveal>
+          <p class="label">(02)</p>
+          <h2 class="blk__title">{t('tour.program.title')}</h2>
+          <button type="button" class="btn btn--outline btn--sm blk__action" data-expand-all data-expand={t('ui.expandAll')} data-collapse={t('ui.collapseAll')}>
+            {t('ui.expandAll')}
+          </button>
+        </div>
+        <ol class="days">
+          {
+            days.map((day, i) => (
+              <li data-reveal>
+                <details class="day" open={i === 0}>
+                  <summary class="day__head">
+                    <span class="day__num label num">
+                      {t('ui.day')} {pad(day.n)}
+                    </span>
+                    <span class="day__title">{day.title}</span>
+                    <span class="day__icon" aria-hidden="true" />
+                  </summary>
+                  <ul class="day__list">
+                    {day.items.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                </details>
+              </li>
+            ))
+          }
+        </ol>
+      </section>
+
+      <!-- (03) Включено -->
+      <section id="included" class="blk">
+        <div class="blk__head" data-reveal>
+          <p class="label">(03)</p>
+          <h2 class="blk__title">{t('tour.included.title')}</h2>
+        </div>
+        <div class="incl">
+          <ul class="incl__col" data-reveal>
+            {
+              included.map((item) => (
+                <li>
+                  <Icon name="check" size={18} class="incl__yes" />
+                  {item}
+                </li>
+              ))
+            }
+          </ul>
+          <div class="incl__col" data-reveal style="--i:1">
+            <p class="label incl__label">{t('tour.notIncluded.title')}</p>
+            <ul>
+              {
+                notIncluded.map((item) => (
+                  <li>
+                    <Icon name="x" size={18} class="incl__no" />
+                    {item}
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {
+        video && (
+          <section class="blk">
+            <VideoEmbed src={video} title={t('tour.video.label')} />
+          </section>
+        )
+      }
+
+      {
+        tour.mapQuery && (
+          <section class="blk">
+            <div class="blk__head" data-reveal>
+              <p class="label">
+                <Icon name="pin" size={14} />
+              </p>
+              <h2 class="blk__title">{t('tour.map.title')}</h2>
+            </div>
+            <div class="map" data-reveal="curtain">
+              <iframe
+                src={`https://maps.google.com/maps?q=${tour.mapQuery}&output=embed`}
+                title={t('tour.map.title')}
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen
+              />
+            </div>
+          </section>
+        )
+      }
+
+      <!-- (04) Даты -->
+      <section id="dates" class="blk">
+        <div class="blk__head" data-reveal>
+          <p class="label">(04)</p>
+          <h2 class="blk__title">{t('tour.dates.title')}</h2>
+        </div>
+        <ol class="dates">
+          {
+            dates.map((d, i) => (
+              <li data-reveal style={`--i:${i}`}>
+                <span class="label num">{pad(i + 1)}</span>
+                <span class="dates__value">{d}</span>
+                {isOpen && (
+                  <a href={bookHref} class="dates__link label">
+                    {t('btn.bookNow')} →
+                  </a>
+                )}
+              </li>
+            ))
+          }
+        </ol>
+      </section>
+
+      <!-- (05) FAQ -->
+      <section id="faq" class="blk blk--flush">
+        <div class="blk__head" data-reveal>
+          <p class="label">(05)</p>
+          <h2 class="blk__title">{t('tour.faq.title')}</h2>
+        </div>
+        <Faq items={faq} />
+      </section>
+    </div>
+
+    <!-- Бронирование -->
+    <aside class="book" aria-label={t('tour.booking.title')}>
+      <div class="book__inner">
+        <p class="label">{isOpen ? t('home.index.perGuest') : t('tour.facts.price')}</p>
+        <p class="book__price num">{price}</p>
+        {!isOpen && <p class="book__note">{t('tour.winter.comingSoonText')}</p>}
+        {
+          isOpen && (
+            <ul class="book__list">
+              {features.map((f) => (
+                <li>{f}</li>
+              ))}
+            </ul>
+          )
+        }
+        <div>
+          <p class="label book__label">{t('tour.booking.dates')}</p>
+          <ul class="book__list">
+            {dates.slice(0, 3).map((d) => <li class="num">{d}</li>)}
+          </ul>
+        </div>
+        <div class="book__actions">
+          {
+            isOpen ? (
+              <a href={bookHref} class="btn btn--accent btn--block">
+                {t('btn.bookTour')}
+                <span aria-hidden="true">→</span>
+              </a>
+            ) : (
+              <span class="btn btn--accent btn--block" aria-disabled="true">
+                {t('btn.comingSoon')}
+              </span>
+            )
+          }
+          <a href={contacts.whatsapp} class="btn btn--whatsapp btn--block" target="_blank" rel="noopener">
+            {t('tour.booking.whatsapp')}
+            <Icon name="whatsapp" />
+          </a>
+        </div>
+        <p class="book__note">{t('tour.booking.note')}</p>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Отзывы -->
+  <section class="rev">
+    <SectionHeader kicker={t('home.reviews.kicker')} title={t('tour.reviews.title')}>
+      <a href={L(routes.reviews)} class="link-arrow">{t('btn.viewAll')} <Icon name="arrow-right" /></a>
+    </SectionHeader>
+    <div class="rev__grid">
+      {
+        [1, 2, 3].map((n, i) => (
+          <ReviewCard name={t(`home.reviews.review${n}.name`)} text={t(`home.reviews.review${n}.text`)} avatar={reviewAvatars[i]} index={i} />
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Похожие туры -->
+  <section class="sim">
+    <SectionHeader kicker={t('home.index.kicker')} title={t('tour.similar.title')} />
+    <TourIndex lang={lang} tours={similar} open={-1} />
+  </section>
+
+  <!-- Нижняя панель бронирования (мобильные) -->
+  <div class="bookbar" data-bookbar aria-hidden="true">
+    <div class="bookbar__text">
+      <p class="bookbar__title">{k('title')}</p>
+      <p class="bookbar__price label">{k('sticky.from')}</p>
+    </div>
+    {
+      isOpen ? (
+        <a href={bookHref} class="bookbar__btn" tabindex="-1">
+          {t('btn.bookNow')} →
+        </a>
+      ) : (
+        <a href={contacts.whatsapp} class="bookbar__btn" target="_blank" rel="noopener" tabindex="-1">
+          WhatsApp →
+        </a>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  /* ---------- Заголовок ---------- */
+  .th__meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 20px var(--gutter) 0;
+  }
+
+  .th__crumbs {
+    display: flex;
+    gap: 10px;
+  }
+
+  .th__crumbs a {
+    text-decoration: none;
+  }
+
+  .th__crumbs a:hover {
+    text-decoration: underline;
+  }
+
+  .th__badges {
+    display: flex;
+    gap: 8px;
+  }
+
+  .th__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px 32px;
+    padding: 8px var(--gutter) 28px;
+  }
+
+  .th__title {
+    max-width: 14ch;
+    font-size: clamp(40px, min(9vw, 12vh), 170px);
+  }
+
+  .th__subtitle {
+    max-width: 360px;
+    padding-bottom: 0.4em;
+  }
+
+  .th__facts {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .th__fact {
+    display: grid;
+    gap: 6px;
+    padding: 16px var(--gutter);
+    border-right: 1px solid var(--line);
+  }
+
+  .th__fact:last-child {
+    border-right: 0;
+  }
+
+  .th__fact dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(16px, 1.4vw, 22px);
+    line-height: 1.2;
+  }
+
+  @media (max-width: 800px) {
+    .th__facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .th__fact:nth-child(2) {
+      border-right: 0;
+    }
+
+    .th__fact:nth-child(-n + 2) {
+      border-bottom: 1px solid var(--line);
+    }
+  }
+
+  /* ---------- Галерея ---------- */
+  .gm {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    aspect-ratio: 16 / 7;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: var(--line);
+    gap: 1px;
+  }
+
+  .gm__item {
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+    background: var(--accent);
+    cursor: zoom-in;
+  }
+
+  .gm__item:first-child {
+    grid-row: span 2;
+  }
+
+  .gm__item:nth-child(n + 6) {
+    display: none;
+  }
+
+  .gm__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.4s var(--ease);
+  }
+
+  .gm__item:hover img {
+    transform: scale(1.05);
+  }
+
+  .gm__count {
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    color: #f5f5f3;
+  }
+
+  @media (max-width: 800px) {
+    .gm {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: auto;
+      aspect-ratio: auto;
+    }
+
+    .gm__item {
+      aspect-ratio: 4 / 3;
+    }
+
+    .gm__item:first-child {
+      grid-column: span 2;
+      grid-row: auto;
+    }
+
+    .gm__item:nth-child(n + 4) {
+      display: none;
+    }
+  }
+
+  /* ---------- Подменю ---------- */
+  .subnav {
+    position: sticky;
+    top: var(--header-h);
+    z-index: 30;
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    transition: top 0.4s var(--ease);
+  }
+
+  :global(.hd.is-hidden ~ main) .subnav {
+    top: 0;
+  }
+
+  .subnav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .subnav__link {
+    flex: 1 0 auto;
+    padding: 14px 20px;
+    border-right: 1px solid var(--line);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      background-color 0.5s,
+      color 0.5s;
+  }
+
+  .subnav__link:last-child {
+    border-right: 0;
+  }
+
+  .subnav__link:hover,
+  .subnav__link.is-active {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  /* ---------- Раскладка ---------- */
+  .tl {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 400px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .tl__main {
+    min-width: 0;
+    border-right: 1px solid var(--line);
+  }
+
+  .blk {
+    border-bottom: 1px solid var(--line);
+    scroll-margin-top: calc(var(--header-h) + 48px);
+  }
+
+  .blk:last-child {
+    border-bottom: 0;
+  }
+
+  .blk__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 12px 24px;
+    padding: 40px var(--gutter) 24px;
+  }
+
+  .blk__head .label {
+    width: 44px;
+  }
+
+  .blk__title {
+    flex: 1;
+    font-size: clamp(28px, 3.6vw, 56px);
+    text-transform: uppercase;
+  }
+
+  .blk__action {
+    align-self: center;
+  }
+
+  .blk__sub {
+    padding: 32px var(--gutter) 16px;
+  }
+
+  /* ---------- Главное ---------- */
+  .hl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .hl__item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px var(--gutter);
+    border-bottom: 1px solid var(--line);
+    line-height: 1.4;
+  }
+
+  .hl__item:nth-child(odd) {
+    border-right: 1px solid var(--line);
+  }
+
+  .hl__item:nth-last-child(-n + 2):nth-child(odd),
+  .hl__item:last-child {
+    border-bottom: 0;
+  }
+
+  .hl__icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--line);
+    font-size: 1.25rem;
+  }
+
+  @media (max-width: 700px) {
+    .hl {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .hl__item:nth-child(odd) {
+      border-right: 0;
+    }
+
+    .hl__item:nth-last-child(-n + 2):nth-child(odd) {
+      border-bottom: 1px solid var(--line);
+    }
+  }
+
+  /* ---------- Программа ---------- */
+  .days {
+    list-style: none;
+  }
+
+  .day {
+    border-top: 1px solid var(--line);
+    transition: background-color 0.5s;
+  }
+
+  .day[open] {
+    background: var(--surface);
+  }
+
+  .day__head {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    padding: 18px var(--gutter);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .day__head::-webkit-details-marker {
+    display: none;
+  }
+
+  .day__num {
+    width: 72px;
+    flex-shrink: 0;
+  }
+
+  .day__title {
+    flex: 1;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(18px, 1.8vw, 26px);
+    line-height: 1.2;
+  }
+
+  .day[open] .day__title,
+  .day__head:hover .day__title {
+    color: var(--accent);
+  }
+
+  .day__icon {
+    position: relative;
+    align-self: center;
+    width: 16px;
+    height: 16px;
+  }
+
+  .day__icon::before,
+  .day__icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 16px;
+    height: 1px;
+    background: currentColor;
+    transition: transform 0.4s var(--ease);
+  }
+
+  .day__icon::after {
+    transform: rotate(90deg);
+  }
+
+  .day[open] .day__icon::after {
+    transform: none;
+  }
+
+  .day__list {
+    display: grid;
+    gap: 6px;
+    padding: 0 var(--gutter) 24px calc(var(--gutter) + 96px);
+    list-style: none;
+    color: var(--ink-soft);
+  }
+
+  .day__list li {
+    position: relative;
+  }
+
+  .day__list li::before {
+    content: '—';
+    position: absolute;
+    left: -24px;
+    color: var(--gold);
+  }
+
+  @media (max-width: 560px) {
+    .day__head {
+      gap: 12px;
+    }
+
+    .day__num {
+      width: 56px;
+    }
+
+    .day__list {
+      padding-left: calc(var(--gutter) + 28px);
+    }
+  }
+
+  /* ---------- Включено ---------- */
+  .incl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: 1px solid var(--line);
+  }
+
+  .incl__col {
+    padding: 24px var(--gutter) 32px;
+    list-style: none;
+  }
+
+  .incl__col:first-child {
+    border-right: 1px solid var(--line);
+  }
+
+  .incl__col ul {
+    list-style: none;
+  }
+
+  .incl__col li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .incl__label {
+    margin-bottom: 4px;
+    color: var(--ink-mute);
+  }
+
+  .incl__col :global(.incl__yes) {
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .incl__col :global(.incl__no) {
+    color: var(--danger);
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 700px) {
+    .incl {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .incl__col:first-child {
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+  }
+
+  /* ---------- Карта и даты ---------- */
+  .map {
+    aspect-ratio: 16 / 8;
+    border-top: 1px solid var(--line);
+    background: var(--surface);
+  }
+
+  .map iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    filter: grayscale(0.6);
+  }
+
+  .dates {
+    list-style: none;
+  }
+
+  .dates li {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    padding: 16px var(--gutter);
+    border-top: 1px solid var(--line);
+  }
+
+  .dates li > .label:first-child {
+    width: 44px;
+  }
+
+  .dates__link {
+    white-space: nowrap;
+  }
+
+  .dates__value {
+    flex: 1;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(18px, 1.8vw, 26px);
+  }
+
+  .dates__link {
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .dates__link:hover {
+    color: var(--accent);
+  }
+
+  .blk--flush :global(.faq) {
+    border-bottom: 0;
+  }
+
+  /* ---------- Бронирование ---------- */
+  .book {
+    background: var(--surface);
+  }
+
+  .book__inner {
+    position: sticky;
+    top: calc(var(--header-h) + 48px);
+    display: grid;
+    gap: 20px;
+    padding: 32px var(--gutter);
+  }
+
+  .book__price {
+    margin-top: -12px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(44px, 4vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+  }
+
+  .book__list {
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .book__list li {
+    padding: 9px 0;
+    border-bottom: 1px solid var(--line-soft);
+    font-size: 14px;
+  }
+
+  .book__label {
+    margin-bottom: 8px;
+  }
+
+  .book__actions {
+    display: grid;
+    gap: 8px;
+  }
+
+  .book__note {
+    font-size: 13px;
+    color: var(--ink-mute);
+  }
+
+  @media (max-width: 1024px) {
+    .tl {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .tl__main {
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .book__inner {
+      position: static;
+      max-width: 560px;
+    }
+  }
+
+  /* ---------- Отзывы и похожие ---------- */
+  .rev__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid var(--line);
+  }
+
+  .rev__grid > :global(*) {
+    border-right: 1px solid var(--line);
+  }
+
+  .rev__grid > :global(*:last-child) {
+    border-right: 0;
+  }
+
+  .sim {
+    border-top: 1px solid var(--line);
+  }
+
+  @media (max-width: 900px) {
+    .rev__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .rev__grid > :global(*) {
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+  }
+
+  /* ---------- Нижняя панель ---------- */
+  .bookbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 45;
+    display: none;
+    align-items: stretch;
+    border-top: 1px solid var(--line);
+    background: var(--bg);
+    transform: translateY(100%);
+    transition: transform 0.5s var(--ease);
+  }
+
+  .bookbar.is-visible {
+    transform: none;
+  }
+
+  .bookbar__text {
+    flex: 1;
+    min-width: 0;
+    padding: 12px var(--gutter);
+  }
+
+  .bookbar__title {
+    overflow: hidden;
+    font-family: var(--font-display);
+    font-weight: 600;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .bookbar__price {
+    font-size: 11px;
+  }
+
+  .bookbar__btn {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    background: var(--accent);
+    color: var(--on-accent);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 1024px) {
+    .bookbar {
+      display: flex;
+    }
+  }
+</style>
+
+<script>
+  const expandBtn = document.querySelector<HTMLButtonElement>('[data-expand-all]');
+  const dayEls = document.querySelectorAll<HTMLDetailsElement>('.day');
+  expandBtn?.addEventListener('click', () => {
+    const open = Array.from(dayEls).some((d) => !d.open);
+    dayEls.forEach((d) => (d.open = open));
+    expandBtn.textContent = (open ? expandBtn.dataset.collapse : expandBtn.dataset.expand) ?? '';
+  });
+
+  const bar = document.querySelector<HTMLElement>('[data-bookbar]');
+  const trigger = document.querySelector('[data-bookbar-trigger]');
+  if (bar && trigger) {
+    document.body.classList.add('has-bookbar');
+    new IntersectionObserver(([entry]) => {
+      const visible = !entry.isIntersecting;
+      bar.classList.toggle('is-visible', visible);
+      bar.setAttribute('aria-hidden', String(!visible));
+      bar.querySelectorAll('a').forEach((a) => (a.tabIndex = visible ? 0 : -1));
+    }).observe(trigger);
+  }
+
+  const links = document.querySelectorAll<HTMLAnchorElement>('.subnav__link');
+  const spy = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) links.forEach((a) => a.classList.toggle('is-active', a.hash === `#${entry.target.id}`));
+      }
+    },
+    { rootMargin: '-35% 0px -60% 0px' },
+  );
+  links.forEach((a) => {
+    const el = document.querySelector(a.hash);
+    if (el) spy.observe(el);
+  });
+</script>

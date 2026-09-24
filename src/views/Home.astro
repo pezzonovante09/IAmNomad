@@ -1,0 +1,686 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactCards from '../components/ContactCards.astro';
+import Icon from '../components/Icon.astro';
+import LeadForm from '../components/LeadForm.astro';
+import ReviewCard from '../components/ReviewCard.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import TourIndex from '../components/TourIndex.astro';
+import TourStudio from '../components/TourStudio.astro';
+import VideoEmbed from '../components/VideoEmbed.astro';
+import { heroRegions, instagramPhotos, reviewAvatars } from '../data/content';
+import { contacts, videos } from '../data/site';
+import { showPosters } from '../data/show';
+import { tours } from '../data/tours';
+import { localize, useTranslations, type Lang } from '../i18n/utils';
+import { srcset, unsplash } from '../lib/img';
+import { routes } from '../lib/routes';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const L = (p: string) => localize(p, lang);
+const pad = (n: number) => String(n).padStart(2, '0');
+
+const heroPhoto = heroRegions[0];
+const facts = [1, 2, 3, 4].map((n) => ({ value: t(`home.fact${n}.value`), label: t(`home.fact${n}.label`) }));
+
+const features = ['feature1', 'feature2', 'feature3', 'feature4'];
+---
+
+<BaseLayout lang={lang} page="home" path="/" image={unsplash(heroPhoto.photo, 1200, 630)}>
+  <!-- (01) Первый экран: фото во весь экран, заголовок, факты -->
+  <section class="hero" id="top">
+    <img
+      class="hero__bg"
+      src={unsplash(heroPhoto.photo, 1920, 1200)}
+      srcset={srcset(heroPhoto.photo, [800, 1200, 1600, 2200, 2800], 0.62)}
+      sizes="100vw"
+      alt={t('region.sonkul.name')}
+      width="1920"
+      height="1200"
+      fetchpriority="high"
+      loading="eager"
+    />
+    <div class="hero__shade" aria-hidden="true"></div>
+
+    <div class="hero__top label" data-reveal="fade" data-delay="150">
+      <span>I AM NOMAD · {t('home.hero.season')}</span>
+      <span class="num">{t('region.sonkul.name')}, {t('region.sonkul.oblast')} · {heroPhoto.alt} {t('unit.m')}</span>
+    </div>
+
+    <div class="hero__main">
+      <h1 class="hero__title">
+        <span class="hero__l1" data-reveal="up" data-delay="250">{t('home.hero.line1')}</span>
+        <span class="hero__l2" data-reveal="up" data-delay="420">{t('home.hero.line2')}</span>
+      </h1>
+      <div class="hero__side" data-reveal="up" data-delay="650">
+        <p class="hero__text">{t('home.hero.text')}</p>
+        <div class="hero__ctas">
+          <a href="#studio" class="hero__btn hero__btn--solid">{t('home.hero.ctaCustom')} <span aria-hidden="true">↗</span></a>
+          <a href="#index" class="hero__btn hero__btn--ghost">{t('home.hero.cta')}</a>
+        </div>
+      </div>
+    </div>
+
+    <dl class="hero__facts" data-reveal="fade" data-delay="900">
+      {
+        facts.map((f) => (
+          <div class="hero__fact">
+            <dt class="hero__fact-value num">{f.value}</dt>
+            <dd class="hero__fact-label label">{f.label}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <div class="band" data-reveal="fade"><div class="ornament-band"></div></div>
+
+  <!-- (02) Каталог -->
+  <section id="index" class="index">
+    <SectionHeader kicker={t('home.index.kicker')} title={t('home.tours.title')} meta={`${pad(tours.length)} ${t('home.index.count')} · 2026`} />
+    <TourIndex lang={lang} tours={tours} />
+  </section>
+
+  <!-- Отдельное направление: I AM NOMAD SHOW (без номера, чтобы не сбить нумерацию разделов) -->
+  <section class="show-teaser">
+    <div class="show-teaser__text">
+      <p class="label show-teaser__kicker" data-reveal="fade">I AM NOMAD SHOW</p>
+      <h2 class="h2" data-reveal>{t('show.hero.subtitle')}</h2>
+      <p class="show-teaser__lead" data-reveal>{t('show.teaser.text')}</p>
+      <div class="show-teaser__actions" data-reveal>
+        <a href={L(routes.show)} class="btn btn--gold">{t('show.more')} <span aria-hidden="true">→</span></a>
+        <a href={`${L(routes.show)}#show-booking`} class="btn btn--glass">{t('show.cta')}</a>
+      </div>
+    </div>
+    <a href={L(routes.show)} class="show-teaser__media" data-reveal="curtain" tabindex="-1" aria-hidden="true">
+      <img
+        src={unsplash(showPosters.hero.id, 1200, 900)}
+        srcset={srcset(showPosters.hero.id, [600, 900, 1200, 1600], 0.75)}
+        sizes="(max-width: 900px) 100vw, 50vw"
+        alt=""
+        width="1200"
+        height="900"
+        loading="lazy"
+      />
+      <span class="show-teaser__stat num">110+</span>
+    </a>
+  </section>
+
+  <!-- (03) Подход -->
+  <section class="why">
+    <SectionHeader kicker={t('home.why.kicker')} title={t('home.why.title')} subtitle={t('home.why.subtitle')} />
+    <ol class="why__grid">
+      {
+        features.map((f, i) => (
+          <li class="why__cell" data-reveal style={`--i:${i}`}>
+            <span class="label num">({pad(i + 1)})</span>
+            <h3 class="why__title">{t(`home.why.${f}.title`)}</h3>
+            <p class="muted">{t(`home.why.${f}.text`)}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- (04) Студия -->
+  <section class="studio" id="studio">
+    <SectionHeader kicker={t('studio.kicker')} title={t('studio.title')} subtitle={t('studio.subtitle')} />
+    <TourStudio lang={lang} />
+  </section>
+
+  {
+    videos.home && (
+      <section class="video-block">
+        <SectionHeader title={t('home.video.title')} subtitle={t('home.video.subtitle')} />
+        <div class="container">
+          <VideoEmbed src={videos.home} title={t('home.video.title')} />
+        </div>
+      </section>
+    )
+  }
+
+  <!-- (05) Отзывы -->
+  <section class="reviews">
+    <SectionHeader kicker={t('home.reviews.kicker')} title={t('home.reviews.title')} subtitle={t('home.reviews.subtitle')}>
+      <a href={L(routes.reviews)} class="link-arrow">{t('btn.viewAll')} <Icon name="arrow-right" /></a>
+    </SectionHeader>
+    <div class="reviews__grid">
+      {
+        [1, 2, 3].map((n, i) => (
+          <ReviewCard name={t(`home.reviews.review${n}.name`)} text={t(`home.reviews.review${n}.text`)} avatar={reviewAvatars[i]} index={i} />
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- (06) Instagram -->
+  <section class="insta">
+    <SectionHeader kicker={t('home.instagram.kicker')} title={contacts.instagramHandle} subtitle={t('home.instagram.subtitle').replace(/^@\S+\s—\s/, '')}>
+      <a href={contacts.instagram} class="link-arrow" target="_blank" rel="noopener">Instagram <Icon name="arrow-right" /></a>
+    </SectionHeader>
+    <div class="insta__grid">
+      {
+        instagramPhotos.map((p, i) => (
+          <a href={contacts.instagram} class="insta__item" target="_blank" rel="noopener" data-reveal="fade" style={`--i:${i}`}>
+            <img src={unsplash(p.id, 480, 480)} srcset={srcset(p.id, [240, 480, 720], 1)} sizes="(max-width: 700px) 33vw, 17vw" alt={p.alt} width="480" height="480" loading="lazy" />
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- (07) Заявка -->
+  <section class="request" id="contact-form">
+    <SectionHeader kicker={t('home.form.kicker')} title={t('home.form.title')} subtitle={t('home.form.subtitle')} />
+    <div class="request__grid">
+      <div class="request__side">
+        <p class="label">{t('home.form.aside')}</p>
+        <ContactCards lang={lang} layout="list" />
+      </div>
+      <div class="request__form" data-reveal>
+        <LeadForm lang={lang} variant="lead" id="lead" />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- (01) Первый экран ---------- */
+  .hero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100svh - var(--header-h));
+    overflow: hidden;
+    background: #111;
+    color: #f5f5f3;
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: hero-zoom 24s var(--ease) both;
+  }
+
+  @keyframes hero-zoom {
+    from {
+      transform: scale(1.1);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+
+  .hero__shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgb(17 17 17 / 0.45) 0%, rgb(17 17 17 / 0) 22%),
+      linear-gradient(0deg, rgb(17 17 17 / 0.75) 0%, rgb(17 17 17 / 0.35) 38%, rgb(17 17 17 / 0) 62%);
+    pointer-events: none;
+  }
+
+  .hero__top {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding: 22px var(--gutter) 0;
+    letter-spacing: 0.18em;
+  }
+
+  .hero__main {
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px 48px;
+    padding: 48px var(--gutter) 40px;
+  }
+
+  .hero__title {
+    min-width: 0;
+    font-size: clamp(44px, min(7vw, 11vh), 132px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .hero__l1 {
+    display: block;
+    font-weight: 700;
+  }
+
+  .hero__l2 {
+    display: block;
+    margin-top: 0.06em;
+    color: var(--gold);
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.12em;
+    letter-spacing: -0.02em;
+  }
+
+  .hero__side {
+    flex: 0 1 470px;
+    min-width: 0;
+    padding-bottom: 0.6em;
+  }
+
+  .hero__text {
+    font-size: clamp(16px, 1.35vw, 20px);
+    line-height: 1.55;
+  }
+
+  .hero__ctas {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    margin-top: 28px;
+  }
+
+  .hero__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 26px;
+    border: 1px solid rgb(245 245 243 / 0.85);
+    color: #f5f5f3;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition:
+      background-color 0.4s,
+      color 0.4s,
+      border-color 0.4s;
+  }
+
+  .hero__btn--solid {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+
+  .hero__btn--solid:hover {
+    border-color: var(--gold);
+    background: var(--gold);
+    color: #111;
+  }
+
+  .hero__btn--ghost:hover {
+    background: #f5f5f3;
+    color: #111;
+  }
+
+  .hero__facts {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-top: 1px solid rgb(245 245 243 / 0.25);
+    background: rgb(17 17 17 / 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .hero__fact {
+    min-width: 0;
+    padding: 22px var(--gutter) 24px;
+  }
+
+  .hero__fact + .hero__fact {
+    border-left: 1px solid rgb(245 245 243 / 0.25);
+  }
+
+  .hero__fact-value {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(30px, 3.2vw, 48px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+
+  .hero__fact-label {
+    margin: 8px 0 0;
+    color: rgb(245 245 243 / 0.85);
+    letter-spacing: 0.16em;
+    line-height: 1.5;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__bg {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .hero__main {
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding-top: 120px;
+    }
+
+    .hero__side {
+      flex: none;
+      max-width: 520px;
+    }
+
+    .hero__facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .hero__fact:nth-child(3) {
+      border-left: 0;
+    }
+
+    .hero__fact:nth-child(n + 3) {
+      border-top: 1px solid rgb(245 245 243 / 0.25);
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero__top span:last-child {
+      display: none;
+    }
+
+    .hero__ctas {
+      align-items: stretch;
+    }
+
+    .hero__btn {
+      justify-content: space-between;
+    }
+
+    .hero__fact {
+      padding: 16px 16px 18px;
+    }
+  }
+
+  /* ---------- Орнамент ---------- */
+  .band {
+    padding: 28px var(--gutter);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .index {
+    scroll-margin-top: var(--header-h);
+  }
+
+  /* ---------- I AM NOMAD SHOW ---------- */
+  .show-teaser {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    border-top: 1px solid var(--line);
+    background: #111;
+    color: #f5f5f3;
+  }
+
+  .show-teaser__text {
+    display: grid;
+    align-content: center;
+    gap: 20px;
+    padding: clamp(48px, 7vw, 104px) var(--gutter);
+  }
+
+  .show-teaser__kicker {
+    color: var(--gold);
+  }
+
+  .show-teaser__lead {
+    max-width: 52ch;
+    color: rgb(245 245 243 / 0.82);
+  }
+
+  .show-teaser__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .show-teaser__media {
+    position: relative;
+    min-height: 420px;
+    overflow: hidden;
+    border-left: 1px solid var(--line);
+  }
+
+  .show-teaser__media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.6s var(--ease);
+  }
+
+  .show-teaser:hover .show-teaser__media img {
+    transform: scale(1.04);
+  }
+
+  .show-teaser__stat {
+    position: absolute;
+    right: 24px;
+    bottom: 12px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(64px, 9vw, 160px);
+    line-height: 1;
+    color: var(--gold);
+  }
+
+  @media (max-width: 900px) {
+    .show-teaser {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .show-teaser__media {
+      min-height: 300px;
+      border-left: 0;
+      border-top: 1px solid var(--line);
+    }
+  }
+
+  /* ---------- (03) Подход ---------- */
+  .why {
+    border-top: 1px solid var(--line);
+  }
+
+  .why__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .why__cell {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 260px;
+    padding: 28px var(--gutter);
+    border-right: 1px solid var(--line);
+  }
+
+  .why__cell:last-child {
+    border-right: 0;
+  }
+
+  .why__title {
+    margin-top: auto;
+    font-size: clamp(22px, 2vw, 32px);
+    font-weight: 600;
+  }
+
+  @media (max-width: 900px) {
+    .why__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .why__cell:nth-child(2) {
+      border-right: 0;
+    }
+
+    .why__cell:nth-child(-n + 2) {
+      border-bottom: 1px solid var(--line);
+    }
+  }
+
+  @media (max-width: 520px) {
+    .why__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .why__cell {
+      min-height: 0;
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .why__cell:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  /* ---------- (04) Студия ---------- */
+  .studio {
+    border-top: 1px solid var(--line);
+    scroll-margin-top: var(--header-h);
+  }
+
+  /* ---------- (05) Отзывы ---------- */
+  .reviews {
+    border-top: 1px solid var(--line);
+  }
+
+  .reviews__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid var(--line);
+  }
+
+  .reviews__grid > :global(*) {
+    border-right: 1px solid var(--line);
+  }
+
+  .reviews__grid > :global(*:last-child) {
+    border-right: 0;
+  }
+
+  @media (max-width: 900px) {
+    .reviews__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .reviews__grid > :global(*) {
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .reviews__grid > :global(*:last-child) {
+      border-bottom: 0;
+    }
+  }
+
+  /* ---------- (06) Instagram ---------- */
+  .insta {
+    border-top: 1px solid var(--line);
+  }
+
+  .insta__grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    border-top: 1px solid var(--line);
+  }
+
+  .insta__item {
+    position: relative;
+    display: block;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-right: 1px solid var(--line);
+  }
+
+  .insta__item:last-child {
+    border-right: 0;
+  }
+
+  .insta__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.35);
+    transition:
+      transform 1.4s var(--ease),
+      filter 0.6s;
+  }
+
+  .insta__item:hover img {
+    transform: scale(1.06);
+    filter: none;
+  }
+
+  @media (max-width: 700px) {
+    .insta__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .insta__item:nth-child(3) {
+      border-right: 0;
+    }
+
+    .insta__item:nth-child(-n + 3) {
+      border-bottom: 1px solid var(--line);
+    }
+  }
+
+  /* ---------- (07) Заявка ---------- */
+  .request {
+    border-top: 1px solid var(--line);
+    scroll-margin-top: var(--header-h);
+  }
+
+  .request__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+    border-top: 1px solid var(--line);
+  }
+
+  .request__side {
+    display: grid;
+    align-content: start;
+    gap: 16px;
+    padding: 32px var(--gutter);
+    border-right: 1px solid var(--line);
+  }
+
+  .request__form {
+    padding: 32px var(--gutter) 48px;
+    background: var(--surface);
+  }
+
+  @media (max-width: 900px) {
+    .request__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .request__side {
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+  }
+</style>
+

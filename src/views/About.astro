@@ -1,0 +1,141 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import PageHero from '../components/PageHero.astro';
+import { aboutPhoto } from '../data/content';
+import { contacts } from '../data/site';
+import { tours } from '../data/tours';
+import { localize, useTranslations, type Lang } from '../i18n/utils';
+import { routes } from '../lib/routes';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const stats = [
+  { value: '2012', label: t('home.stats.since') },
+  { value: '12', label: t('home.stats.group') },
+  { value: String(tours.length).padStart(2, '0'), label: t('home.stats.formats') },
+];
+---
+
+<BaseLayout lang={lang} page="about" path={routes.about}>
+  <PageHero kicker="(01) I AM NOMAD" meta="Bishkek · 2012" title={t('about.title')} subtitle={t('about.subtitle')} photo={aboutPhoto} />
+
+  <section class="story">
+    <div class="story__head" data-reveal>
+      <p class="label">(02)</p>
+      <h2 class="story__title">{t('about.history.title')}</h2>
+    </div>
+    <div class="story__text">
+      <p class="story__lead" data-reveal>{t('about.history.p1')}</p>
+      <p data-reveal>{t('about.history.p2')}</p>
+      <p data-reveal>{t('about.history.p3')}</p>
+    </div>
+  </section>
+
+  <dl class="stats">
+    {
+      stats.map((s, i) => (
+        <div class="stats__cell" data-reveal style={`--i:${i}`}>
+          <dt class="stats__value num">{s.value}</dt>
+          <dd class="muted">{s.label}</dd>
+        </div>
+      ))
+    }
+  </dl>
+
+  <CtaBanner
+    kicker={`(03) ${t('about.mission.title')}`}
+    title={t('about.cta.title')}
+    text={t('about.mission.text')}
+    primary={{ href: localize(routes.tours, lang), label: t('home.hero.cta') }}
+    secondary={{ href: contacts.whatsapp, label: t('tour.booking.whatsapp'), external: true, icon: 'whatsapp' }}
+  />
+</BaseLayout>
+
+<style>
+  .story {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .story__head {
+    display: grid;
+    align-content: start;
+    gap: 12px;
+    padding: 48px var(--gutter);
+    border-right: 1px solid var(--line);
+  }
+
+  .story__title {
+    font-size: clamp(36px, 5vw, 88px);
+    text-transform: uppercase;
+  }
+
+  .story__text {
+    display: grid;
+    gap: 20px;
+    padding: 48px var(--gutter);
+    font-size: 17px;
+  }
+
+  .story__lead {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(20px, 2vw, 30px);
+    line-height: 1.3;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0;
+  }
+
+  .stats__cell {
+    display: grid;
+    gap: 8px;
+    padding: 32px var(--gutter);
+    border-right: 1px solid var(--line);
+  }
+
+  .stats__cell:last-child {
+    border-right: 0;
+  }
+
+  .stats__value {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(56px, 8vw, 140px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--accent);
+  }
+
+  .stats dd {
+    margin: 0;
+    max-width: 30ch;
+  }
+
+  @media (max-width: 800px) {
+    .story,
+    .stats {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .story__head,
+    .stats__cell {
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .stats__cell:last-child {
+      border-bottom: 0;
+    }
+  }
+</style>

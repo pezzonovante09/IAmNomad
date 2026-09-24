@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import PostGrid from '../components/PostGrid.astro';
+import { blogPosts } from '../data/content';
+import { useTranslations, type Lang } from '../i18n/utils';
+import { routes } from '../lib/routes';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<BaseLayout lang={lang} page="blog" path={routes.blog}>
+  <PageHero kicker={`(01) ${t('nav.blog')}`} meta={`${String(blogPosts.length).padStart(2, '0')} · 2026`} title={t('blog.title')} subtitle={t('blog.subtitle')} />
+  <PostGrid lang={lang} />
+</BaseLayout>

@@ -1,0 +1,76 @@
+---
+import Icon from './Icon.astro';
+import { unsplash } from '../lib/img';
+
+interface Props {
+  name: string;
+  text: string;
+  avatar: string;
+  index?: number;
+}
+
+const { name, text, avatar, index = 0 } = Astro.props;
+---
+
+<figure class="rc" data-reveal style={`--i:${index % 3}`}>
+  <div class="rc__top">
+    <span class="label num">({String(index + 1).padStart(2, '0')})</span>
+    <span class="rc__stars" aria-label="5/5">
+      {[0, 1, 2, 3, 4].map(() => <Icon name="star" size={14} />)}
+    </span>
+  </div>
+  <blockquote class="rc__text">{text}</blockquote>
+  <figcaption class="rc__author">
+    <img src={unsplash(avatar, 96, 96)} alt="" width="40" height="40" loading="lazy" decoding="async" />
+    <span class="label">{name}</span>
+  </figcaption>
+</figure>
+
+<style>
+  .rc {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    height: 100%;
+    margin: 0;
+    padding: 28px var(--gutter);
+    background: var(--bg);
+  }
+
+  .rc__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .rc__stars {
+    display: flex;
+    gap: 2px;
+    color: var(--gold);
+  }
+
+  .rc__text {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(18px, 1.5vw, 22px);
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+  }
+
+  .rc__author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .rc__author img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    filter: grayscale(1);
+  }
+</style>

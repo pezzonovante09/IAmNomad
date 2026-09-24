@@ -1,0 +1,156 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppFab from '../components/WhatsAppFab.astro';
+import Lightbox from '../components/Lightbox.astro';
+import ScrollProgress from '../components/ScrollProgress.astro';
+import { languages, localize, useTranslations, type Lang } from '../i18n/utils';
+import { unsplash } from '../lib/img';
+
+interface Props {
+  lang: Lang;
+  /** Ключ страницы для page.title.* / page.desc.* и подсветки меню. */
+  page: string;
+  /** Путь без языкового префикса, напр. '/tours/classic/'. */
+  path: string;
+  /** Раздел меню, если отличается от page (напр. tour-classic → tours). */
+  section?: string;
+  title?: string;
+  description?: string;
+  image?: string;
+  /** Полный <title> без суффикса « — I AM NOMAD». */
+  fullTitle?: string;
+  /** Не индексировать (например, 404). */
+  noindex?: boolean;
+}
+
+const { lang, page, path, section, title, description, image, fullTitle: fullTitleProp, noindex = false } = Astro.props;
+const t = useTranslations(lang);
+
+const pageTitle = title ?? t(`page.title.${page}`);
+const fullTitle = fullTitleProp ?? (page === 'home' ? `I AM NOMAD — ${pageTitle}` : `${pageTitle} — I AM NOMAD`);
+const desc = description ?? t(`page.desc.${page}`);
+const ogImage = image ?? unsplash('1689788648053-cd482d1acd9c', 1200, 630);
+const site = Astro.site;
+const abs = (p: string) => (site ? new URL(p, site).href : p);
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        try {
+          var s = localStorage.getItem('theme');
+          if (s === 'dark' || (!s && matchMedia('(prefers-color-scheme: dark)').matches)) d.dataset.theme = 'dark';
+        } catch (e) {}
+      })();
+    </script>
+    <title>{fullTitle}</title>
+    <meta name="description" content={desc} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    {
+      !noindex && (
+        <>
+          <link rel="canonical" href={abs(localize(path, lang))} />
+          {(Object.keys(languages) as Lang[]).map((code) => (
+            <link rel="alternate" hreflang={code} href={abs(localize(path, code))} />
+          ))}
+          <link rel="alternate" hreflang="x-default" href={abs(localize(path, 'ru'))} />
+        </>
+      )
+    }
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="I AM NOMAD" />
+    <meta property="og:locale" content={lang === 'ru' ? 'ru_RU' : 'en_US'} />
+    {!noindex && <meta property="og:url" content={abs(localize(path, lang))} />}
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#f5f5f3" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <slot name="head" />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">{t('ui.skip')}</a>
+    <Header lang={lang} active={section ?? page} path={path} />
+    <ScrollProgress />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    <WhatsAppFab lang={lang} />
+    <Lightbox lang={lang} />
+
+    <script>
+      // Крупные заголовки никогда не рвут слова: если самое длинное слово не влезает
+      // в ширину блока, шрифт уменьшается ровно настолько, чтобы влезло.
+      const FIT = [
+        'h1', 'h2', '.h1', '.h2', '[data-fit]',
+        '.hero__title', '.hero__name', '.hero__region-name', '.ti__title', '.ti__price',
+        '.what__title', '.why__title', '.book__title', '.cta-bar__text', '.st__focus', '.st__total',
+        '.mn__title', '.blk__title', '.story__title', '.intro__title', '.svc__title', '.steps__title',
+        '.day__label', '.day__time', '.stats__value', '.th__fact dd', '.dates__value', '.rev__text',
+        '.faq__text', '.pg__title', '.tc__title', '.show-teaser__stat', '.what__num',
+      ].join(',');
+
+      function fitEl(el: HTMLElement) {
+        el.style.fontSize = '';
+        if (!el.clientWidth) return;
+        let size = parseFloat(getComputedStyle(el).fontSize);
+        const min = size * 0.45;
+        const vw = document.documentElement.clientWidth;
+        // не влезает в свой блок или вылезает за край экрана
+        const overflows = () => el.scrollWidth > el.clientWidth + 1 || el.getBoundingClientRect().left + el.scrollWidth > vw + 0.5;
+        for (let i = 0; i < 40 && overflows() && size > min; i++) {
+          size *= 0.95;
+          el.style.fontSize = `${size}px`;
+        }
+      }
+
+      function fitAll(root: ParentNode = document) {
+        root.querySelectorAll<HTMLElement>(FIT).forEach(fitEl);
+      }
+      (window as any).__fit = fitAll;
+
+      fitAll();
+      document.fonts?.ready.then(() => fitAll());
+      let t: number | undefined;
+      addEventListener('resize', () => {
+        clearTimeout(t);
+        t = window.setTimeout(() => fitAll(), 120);
+      });
+
+      // Плавное появление блоков с [data-reveal].
+      const items = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      items.forEach((el) => el.dataset.delay && el.style.setProperty('--delay', `${el.dataset.delay}ms`));
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.05 },
+        );
+        items.forEach((el) => io.observe(el));
+      } else {
+        items.forEach((el) => el.classList.add('is-visible'));
+      }
+    </script>
+  </body>
+</html>

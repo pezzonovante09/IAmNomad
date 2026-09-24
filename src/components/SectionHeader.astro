@@ -1,0 +1,53 @@
+---
+// Шапка раздела в духе макета: «(02) Каталог», огромный заголовок капсом, справа — метка.
+interface Props {
+  kicker?: string;
+  title: string;
+  subtitle?: string;
+  meta?: string;
+  as?: 'h1' | 'h2';
+  align?: 'left' | 'center';
+}
+
+const { kicker: label, title, subtitle, meta, as: Tag = 'h2' } = Astro.props;
+---
+
+<div class="sh" data-reveal>
+  <div class="sh__main">
+    {label && <p class="label sh__kicker">{label}</p>}
+    <Tag class="h2 sh__title">{title}</Tag>
+    {subtitle && <p class="lead sh__subtitle">{subtitle}</p>}
+  </div>
+  {meta && <p class="label num sh__meta">{meta}</p>}
+  {Astro.slots.has('default') && <div class="sh__aside"><slot /></div>}
+</div>
+
+<style>
+  .sh {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px 32px;
+    padding: 48px var(--gutter) 32px;
+  }
+
+  .sh__main {
+    min-width: 0;
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    max-width: 1100px;
+  }
+
+  .sh__subtitle {
+    max-width: 56ch;
+    margin-top: 8px;
+  }
+
+  .sh__meta,
+  .sh__aside {
+    flex-shrink: 0;
+  }
+</style>

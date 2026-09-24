@@ -1,0 +1,92 @@
+// Настройки конструктора индивидуальной экспедиции («Студия»).
+// Тексты — сразу на двух языках; цены — в долларах.
+
+type L = { ru: string; en: string };
+
+/**
+ * Показывать ли расчёт стоимости. Пока выключено: индивидуальные туры считаются по запросу.
+ * Чтобы включить — проставьте реальные ставки ниже и поменяйте на true.
+ */
+export const showPrice = false;
+
+/** Надбавка за каждый дополнительный регион (переезды), $ за гостя. */
+export const transferPerRegion = 240;
+
+export const studioRegions: { key: string; name: L; alt: number; photo: string }[] = [
+  { key: 'sonkul', name: { ru: 'Сон-Куль', en: 'Son-Kul' }, alt: 3016, photo: '1760630149964-200517d8d437' },
+  { key: 'issykkul', name: { ru: 'Иссык-Куль', en: 'Issyk-Kul' }, alt: 1607, photo: '1689788648053-cd482d1acd9c' },
+  { key: 'karakol', name: { ru: 'Каракол', en: 'Karakol' }, alt: 1770, photo: '1519834785169-98be25ec3f84' },
+  { key: 'tashrabat', name: { ru: 'Таш-Рабат', en: 'Tash-Rabat' }, alt: 3530, photo: '1758016860798-0b96354664b9' },
+  { key: 'alakul', name: { ru: 'Ала-Куль', en: 'Ala-Kul' }, alt: 3532, photo: '1551632811-561732d1e306' },
+  { key: 'khantengri', name: { ru: 'Хан-Тенгри', en: 'Khan-Tengri' }, alt: 7010, photo: '1506905925346-21bda4d32df4' },
+];
+
+/** Ползунки: диапазон и метки под шкалой. */
+export const studioDays = { min: 3, max: 21, ticks: [3, 7, 14, 21] };
+export const studioGuests = { min: 1, max: 12, ticks: [1, 4, 8, 12] };
+
+export const studioComfort: { name: L; desc: L; rate: number; vip?: boolean }[] = [
+  {
+    name: { ru: 'Кочевник', en: 'Nomad' },
+    desc: { ru: 'Семейные юрты, общая кухня в лагере.', en: 'Family yurt stays, shared camp kitchen.' },
+    rate: 240,
+  },
+  {
+    name: { ru: 'Традиция', en: 'Heritage' },
+    desc: { ru: 'Гостевые дома и отдельные юрты.', en: 'Guesthouses and private yurts.' },
+    rate: 340,
+  },
+  {
+    name: { ru: 'Этно-люкс', en: 'Ethno-Luxury' },
+    desc: { ru: 'Частные лагеря, повар, личный гид.', en: 'Private camps, chef, dedicated guide.' },
+    rate: 520,
+    vip: true,
+  },
+];
+
+/** Золотые точки на кадре: x/y — позиция в процентах. */
+export const studioMoments: { title: L; desc: L; price: number; perGuest?: boolean; x: number; y: number }[] = [
+  {
+    title: { ru: 'Охота с беркутом', en: 'Eagle hunting at dawn' },
+    desc: {
+      ru: 'Показ охоты с семьёй беркутчи — хозяев золотых орлов.',
+      en: 'A private demonstration with a family of berkutchi — golden-eagle falconers.',
+    },
+    price: 450,
+    x: 22,
+    y: 40,
+  },
+  {
+    title: { ru: 'Конные игры и кок-бору', en: 'Horse games & kok-boru' },
+    desc: {
+      ru: 'Кок-бору, кыз-куумай и другие игры кочевников — рядом, у юрт.',
+      en: 'Kok-boru, kyz-kuumai and other nomad games — right by the yurts.',
+    },
+    price: 600,
+    x: 60,
+    y: 30,
+  },
+  {
+    title: { ru: 'Вертолётный полёт', en: 'Helicopter flight' },
+    desc: {
+      ru: 'Полёт над хребтами Тянь-Шаня и ледниками (по погоде).',
+      en: 'A flight over the Tian Shan ridges and glaciers (weather permitting).',
+    },
+    price: 1200,
+    x: 78,
+    y: 54,
+  },
+  {
+    title: { ru: 'Мастер-класс по шырдаку', en: 'Shyrdak masterclass' },
+    desc: {
+      ru: 'Сделайте войлочный ковёр с мастерицей из Кочкора.',
+      en: 'Make a felt carpet with a master from Kochkor.',
+    },
+    price: 160,
+    perGuest: true,
+    x: 40,
+    y: 64,
+  },
+];
+
+export const studioDefaults = { route: [0, 1], days: 7, guests: 2, comfort: 1 };

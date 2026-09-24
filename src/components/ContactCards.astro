@@ -1,0 +1,112 @@
+---
+import Icon from './Icon.astro';
+import { contacts } from '../data/site';
+import { useTranslations, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  layout?: 'grid' | 'list';
+}
+
+const { lang, layout = 'grid' } = Astro.props;
+const t = useTranslations(lang);
+
+const items = [
+  { icon: 'whatsapp', label: t('footer.whatsapp'), value: contacts.phone, href: contacts.whatsapp },
+  { icon: 'telegram', label: t('footer.telegram'), value: contacts.telegramHandle, href: contacts.telegram },
+  { icon: 'mail', label: t('footer.email'), value: contacts.email, href: `mailto:${contacts.email}` },
+  { icon: 'phone', label: t('footer.phone'), value: contacts.phone, href: contacts.phoneHref },
+] as const;
+---
+
+<ul class:list={['cc', `cc--${layout}`]}>
+  {
+    items.map((item, i) => (
+      <li data-reveal style={`--i:${i}`}>
+        <a
+          class="cc__item"
+          href={item.href}
+          target={item.href.startsWith('http') ? '_blank' : undefined}
+          rel={item.href.startsWith('http') ? 'noopener' : undefined}
+        >
+          <Icon name={item.icon} size={20} class="cc__icon" />
+          <span class="cc__text">
+            <span class="label cc__label">{item.label}</span>
+            <span class="cc__value">{item.value}</span>
+          </span>
+          <span class="cc__arrow" aria-hidden="true">→</span>
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .cc {
+    display: grid;
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .cc--grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    border-left: 1px solid var(--line);
+  }
+
+  .cc--grid li {
+    border-right: 1px solid var(--line);
+  }
+
+  .cc li {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .cc__item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    height: 100%;
+    padding: 16px 4px;
+    text-decoration: none;
+    transition:
+      background-color 0.5s,
+      color 0.5s,
+      padding 0.5s var(--ease);
+  }
+
+  .cc--grid .cc__item {
+    padding: 20px;
+  }
+
+  .cc__item:hover {
+    background: var(--accent);
+    color: var(--on-accent);
+    padding-inline: 16px;
+  }
+
+  .cc__text {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .cc__label {
+    font-size: 11px;
+    opacity: 0.7;
+  }
+
+  .cc__value {
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  .cc__arrow {
+    margin-left: auto;
+    font-size: 18px;
+    transition: transform 0.4s var(--ease);
+  }
+
+  .cc__item:hover .cc__arrow {
+    transform: translateX(4px);
+  }
+</style>

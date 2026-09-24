@@ -1,0 +1,164 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import TourStudio from '../components/TourStudio.astro';
+import TourIndex from '../components/TourIndex.astro';
+import { contacts } from '../data/site';
+import { getTour, tours } from '../data/tours';
+import { localize, useTranslations, type Lang } from '../i18n/utils';
+import { unsplash } from '../lib/img';
+import { routes } from '../lib/routes';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const tour = getTour('custom');
+const steps = [1, 2, 3, 4];
+---
+
+<BaseLayout lang={lang} page="tour-custom" section="tours" path={routes.tour('custom')} image={unsplash(tour.cover.id, 1200, 630)}>
+  <PageHero kicker={t('home.builder.kicker')} meta={t('tour.custom.sticky.from')} title={t('tour.custom.title')} subtitle={t('tour.custom.subtitle')} photo={tour.cover} />
+
+  <section class="intro">
+    <h2 class="intro__title" data-reveal>{t('tour.custom.intro.title')}</h2>
+    <div class="intro__text" data-reveal style="--i:1">
+      <p>{t('tour.custom.intro.p2')}</p>
+      <p class="muted">{t('tour.custom.intro.p3')}</p>
+    </div>
+  </section>
+
+  <section class="steps">
+    <SectionHeader kicker="(01)" title={t('tour.custom.steps.title')} subtitle={t('tour.custom.steps.subtitle')} />
+    <ol class="steps__grid">
+      {
+        steps.map((n, i) => (
+          <li class="steps__cell" data-reveal style={`--i:${i}`}>
+            <span class="steps__num num">0{n}</span>
+            <h3 class="steps__title">{t(`tour.custom.steps.step${n}.title`)}</h3>
+            <p class="muted">{t(`tour.custom.steps.step${n}.text`)}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="build" id="tour-builder">
+    <SectionHeader kicker="(02)" title={t('studio.title')} subtitle={t('studio.subtitle')} />
+    <TourStudio lang={lang} />
+  </section>
+
+  <CtaBanner
+    kicker="(03)"
+    title={t('tour.custom.cta.title')}
+    text={t('tour.custom.cta.text')}
+    primary={{ href: contacts.whatsapp, label: t('tour.booking.whatsapp'), external: true }}
+    secondary={{ href: localize(routes.contact, lang), label: t('nav.contact') }}
+  />
+
+  <section>
+    <SectionHeader kicker={t('home.index.kicker')} title={t('tour.similar.title')} />
+    <TourIndex lang={lang} tours={tours.filter((x) => x.slug !== 'custom')} open={-1} />
+  </section>
+</BaseLayout>
+
+<style>
+  .intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .intro__title {
+    padding: 48px var(--gutter);
+    border-right: 1px solid var(--line);
+    font-size: clamp(32px, 4vw, 64px);
+    text-transform: uppercase;
+  }
+
+  .intro__text {
+    display: grid;
+    align-content: end;
+    gap: 16px;
+    padding: 48px var(--gutter);
+    font-size: 17px;
+  }
+
+  .steps__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .steps__cell {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 280px;
+    padding: 28px var(--gutter);
+    border-right: 1px solid var(--line);
+  }
+
+  .steps__cell:last-child {
+    border-right: 0;
+  }
+
+  .steps__num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 56px;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .steps__title {
+    margin-top: auto;
+    font-size: clamp(20px, 1.8vw, 26px);
+    font-weight: 600;
+  }
+
+  .build {
+    border-top: 1px solid var(--line);
+    scroll-margin-top: var(--header-h);
+  }
+
+  @media (max-width: 900px) {
+    .intro {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .intro__title {
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .steps__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .steps__cell:nth-child(2) {
+      border-right: 0;
+    }
+
+    .steps__cell:nth-child(-n + 2) {
+      border-bottom: 1px solid var(--line);
+    }
+  }
+
+  @media (max-width: 520px) {
+    .steps__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .steps__cell {
+      min-height: 0;
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+  }
+</style>

@@ -1,0 +1,82 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "astro",
+  "trailingSlash": true,
+  "redirects": [
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/about.html",
+      "destination": "/about/",
+      "permanent": true
+    },
+    {
+      "source": "/tours.html",
+      "destination": "/tours/",
+      "permanent": true
+    },
+    {
+      "source": "/tour-classic.html",
+      "destination": "/tours/classic/",
+      "permanent": true
+    },
+    {
+      "source": "/tour-single.html",
+      "destination": "/tours/classic/",
+      "permanent": true
+    },
+    {
+      "source": "/tour-adventure.html",
+      "destination": "/tours/adventure/",
+      "permanent": true
+    },
+    {
+      "source": "/tour-winter.html",
+      "destination": "/tours/winter/",
+      "permanent": true
+    },
+    {
+      "source": "/tour-custom.html",
+      "destination": "/tours/custom/",
+      "permanent": true
+    },
+    {
+      "source": "/mice.html",
+      "destination": "/mice/",
+      "permanent": true
+    },
+    {
+      "source": "/blog.html",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/blog-single.html",
+      "destination": "/blog/top-10-places/",
+      "permanent": true
+    },
+    {
+      "source": "/reviews.html",
+      "destination": "/reviews/",
+      "permanent": true
+    },
+    {
+      "source": "/gallery.html",
+      "destination": "/gallery/",
+      "permanent": true
+    },
+    {
+      "source": "/faq.html",
+      "destination": "/faq/",
+      "permanent": true
+    },
+    {
+      "source": "/contact.html",
+      "destination": "/contact/",
+      "permanent": true
+    }
+  ]
+}
