@@ -1,22 +1,28 @@
 ---
+// Хостинг отдаёт один общий 404.html для всех адресов, поэтому текст сразу на двух языках.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Ornament from '../components/Ornament.astro';
-import { localize, useTranslations, type Lang } from '../i18n/utils';
+import { localize, useTranslations } from '../i18n/utils';
 
-interface Props {
-  lang: Lang;
-}
-
-const { lang } = Astro.props;
-const t = useTranslations(lang);
+const ru = useTranslations('ru');
+const en = useTranslations('en');
 ---
 
-<BaseLayout lang={lang} page="404" path="/404/" title={t('notFound.title')} description={t('notFound.text')}>
+<BaseLayout lang="ru" page="404" path="/404/" title={`${ru('notFound.title')} · ${en('notFound.title')}`} description={ru('notFound.text')} noindex>
   <section class="nf">
     <p class="label">(404)</p>
-    <h1 class="h1">{t('notFound.title')}</h1>
-    <p class="nf__text">{t('notFound.text')}</p>
-    <a href={localize('/', lang)} class="btn btn--accent">{t('notFound.cta')} <span aria-hidden="true">→</span></a>
+    <div class="nf__langs">
+      <div class="nf__lang">
+        <h1 class="h1">{ru('notFound.title')}</h1>
+        <p class="nf__text">{ru('notFound.text')}</p>
+        <a href={localize('/', 'ru')} class="btn btn--accent">{ru('notFound.cta')} <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="nf__lang" lang="en">
+        <p class="nf__title-en">{en('notFound.title')}</p>
+        <p class="nf__text">{en('notFound.text')}</p>
+        <a href={localize('/', 'en')} class="btn btn--outline">{en('notFound.cta')} <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
     <div class="nf__disc" aria-hidden="true"><Ornament variant="tunduk" stroke="#C5A059" /></div>
   </section>
 </BaseLayout>
@@ -26,11 +32,38 @@ const t = useTranslations(lang);
     position: relative;
     display: grid;
     align-content: center;
-    justify-items: start;
-    gap: 20px;
+    gap: 24px;
     min-height: calc(100svh - var(--header-h) - 120px);
     padding: 64px var(--gutter);
     overflow: hidden;
+  }
+
+  .nf__langs {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 40px;
+  }
+
+  .nf__lang {
+    display: grid;
+    justify-items: start;
+    gap: 16px;
+    max-width: 900px;
+  }
+
+  .nf__lang + .nf__lang {
+    padding-top: 32px;
+    border-top: 1px solid var(--line);
+  }
+
+  .nf__title-en {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(28px, 3.6vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
   }
 
   .nf__text {

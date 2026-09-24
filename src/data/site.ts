@@ -13,10 +13,10 @@ export const contacts = {
   youtube: 'https://www.youtube.com/@iamnomad_kg',
 };
 
-// Web3Forms: ключ берётся из переменной окружения PUBLIC_WEB3FORMS_KEY.
+// Web3Forms: публичный ключ формы (он всё равно виден в HTML). Можно переопределить PUBLIC_WEB3FORMS_KEY.
 export const web3forms = {
   endpoint: 'https://api.web3forms.com/submit',
-  accessKey: import.meta.env.PUBLIC_WEB3FORMS_KEY || 'YOUR_WEB3FORMS_ACCESS_KEY',
+  accessKey: import.meta.env.PUBLIC_WEB3FORMS_KEY || 'dad1bfa4-4f13-490a-a5ee-119e176d6b78',
 };
 
 // Видео (ссылка для встраивания YouTube, напр. https://www.youtube.com/embed/XXXX).

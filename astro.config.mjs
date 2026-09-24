@@ -1,16 +1,20 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
-// Абсолютный адрес сайта нужен для canonical/hreflang/og:image.
-// Задайте SITE_URL в настройках хостинга; иначе берём адрес от Vercel/Netlify.
-const site =
-  process.env.SITE_URL ||
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL && `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`) ||
-  process.env.URL ||
-  undefined;
+// Абсолютный адрес сайта нужен для canonical, hreflang, sitemap и og:image.
+// Можно переопределить переменной SITE_URL (например, для тестового домена).
+const site = process.env.SITE_URL || 'https://iamnomadkg.com';
 
 export default defineConfig({
   site,
+  // Карта сайта с парами ru/en (hreflang) для каждой страницы; 404 в неё не попадает.
+  integrations: [
+    sitemap({
+      i18n: { defaultLocale: 'ru', locales: { ru: 'ru-RU', en: 'en-US' } },
+      filter: (page) => !page.includes('/404'),
+    }),
+  ],
   trailingSlash: 'ignore',
   build: { format: 'directory' },
   // Стили родителя применяются к class, переданному в дочерний компонент (орнаменты, иконки).
