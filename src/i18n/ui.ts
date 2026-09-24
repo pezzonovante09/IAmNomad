@@ -3,6 +3,7 @@
 
 export const ui = {
   en: {
+    'page.desc.blog-single': 'Top 10 places in Kyrgyzstan worth seeing: lakes, canyons, mountain passes and nomad camps — a guide from the I AM NOMAD team.',
     'ui.skip': 'Skip to content',
     'ui.menu': 'Menu',
     'ui.close': 'Close',
@@ -139,6 +140,7 @@ export const ui = {
     'studio.msg.estimate': 'Estimate',
   },
   ru: {
+    'page.desc.blog-single': 'Топ-10 мест Кыргызстана, которые стоит увидеть: озёра, каньоны, перевалы и кочевые стоянки — гид от команды I AM NOMAD.',
     'ui.skip': 'Перейти к содержимому',
     'ui.menu': 'Меню',
     'ui.close': 'Закрыть',

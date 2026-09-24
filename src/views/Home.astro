@@ -768,6 +768,7 @@ const features = ['feature1', 'feature2', 'feature3', 'feature4'];
     const line = stage.querySelector('[data-cur-line]')!;
     let current = 0;
     let paused = false;
+    let stopped = false; // пользователь сам выбрал регион — больше не переключаем
 
     function show(i: number) {
       current = i;
@@ -783,15 +784,22 @@ const features = ['feature1', 'feature2', 'feature3', 'feature4'];
 
     items.forEach((item, i) => {
       item.addEventListener('mouseenter', () => i !== current && show(i));
-      item.addEventListener('click', () => show(i));
+      item.addEventListener('click', () => {
+        stopped = true;
+        show(i);
+      });
     });
     const list = stage.querySelector('.hero__list');
     list?.addEventListener('mouseenter', () => (paused = true));
     list?.addEventListener('mouseleave', () => (paused = false));
+    stage.addEventListener('focusin', () => (paused = true));
+    stage.addEventListener('focusout', (e) => {
+      if (!stage.contains(e.relatedTarget as Node)) paused = false;
+    });
 
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
       setInterval(() => {
-        if (!paused && !document.hidden) show((current + 1) % items.length);
+        if (!paused && !stopped && !document.hidden) show((current + 1) % items.length);
       }, 5000);
     }
   }

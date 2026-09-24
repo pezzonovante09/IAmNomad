@@ -50,7 +50,10 @@ const hasGalleryVideos = showGallery.some((g) => g.video);
 const faq = [1, 2, 3, 4, 5, 6].map((n) => ({ q: t(`show.faq.q${n}`), a: t(`show.faq.a${n}`) }));
 const avgRating = (showReviews.reduce((a, r) => a + r.rating, 0) / showReviews.length).toFixed(1);
 
-const seoTitle = 'I AM NOMAD SHOW | Authentic Nomad Experience in Kyrgyzstan';
+const seoTitle =
+  lang === 'en'
+    ? 'I AM NOMAD SHOW | Authentic Nomad Experience in Kyrgyzstan'
+    : 'I AM NOMAD SHOW | Аутентичное кочевое шоу в Кыргызстане';
 const seoDesc =
   lang === 'en'
     ? 'Exclusive cultural show in Kyrgyzstan featuring horse performances, eagle hunting, traditional music, national cuisine and interactive experiences.'
@@ -60,8 +63,7 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'TouristAttraction',
   name: 'I AM NOMAD SHOW',
-  description:
-    'Exclusive cultural show in Kyrgyzstan featuring horse performances, eagle hunting, traditional music, national cuisine and interactive experiences.',
+  description: seoDesc,
   image: unsplash(showPosters.hero.id, 1200, 630),
   touristType: ['Tour groups', 'VIP', 'Corporate events'],
   provider: { '@type': 'TravelAgency', name: 'I AM NOMAD', telephone: contacts.phone, email: contacts.email },

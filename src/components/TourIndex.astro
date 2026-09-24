@@ -67,7 +67,7 @@ const rows = tours.map((tour, i) => {
             <span class="ti__c-price num">{row.price}</span>
           </button>
         </h3>
-        <div class="ti__body" id={`ti-${row.tour.slug}`}>
+        <div class="ti__body" id={`ti-${row.tour.slug}`} inert={i !== open}>
           <div class="ti__inner">
             <div class="ti__card">
               <a href={row.pageHref} class="ti__media" data-disc-area aria-label={`${t('home.index.explore')}: ${row.title}`}>
@@ -466,6 +466,7 @@ const rows = tours.map((tour, i) => {
         const on = r === row;
         r.classList.toggle('is-open', on);
         r.querySelector('[data-row-toggle]')?.setAttribute('aria-expanded', String(on));
+        r.querySelector<HTMLElement>('.ti__body')!.inert = !on;
       });
     }
 
@@ -476,6 +477,7 @@ const rows = tours.map((tour, i) => {
         if (row.classList.contains('is-open') && !canHover) {
           row.classList.remove('is-open');
           toggle.setAttribute('aria-expanded', 'false');
+          row.querySelector<HTMLElement>('.ti__body')!.inert = true;
         } else openRow(row);
       });
       if (canHover) {

@@ -54,17 +54,21 @@ const abs = (p: string) => (site ? new URL(p, site).href : p);
     <title>{fullTitle}</title>
     <meta name="description" content={desc} />
     {noindex && <meta name="robots" content="noindex, follow" />}
-    <link rel="canonical" href={abs(localize(path, lang))} />
     {
-      (Object.keys(languages) as Lang[]).map((code) => (
-        <link rel="alternate" hreflang={code} href={abs(localize(path, code))} />
-      ))
+      !noindex && (
+        <>
+          <link rel="canonical" href={abs(localize(path, lang))} />
+          {(Object.keys(languages) as Lang[]).map((code) => (
+            <link rel="alternate" hreflang={code} href={abs(localize(path, code))} />
+          ))}
+          <link rel="alternate" hreflang="x-default" href={abs(localize(path, 'ru'))} />
+        </>
+      )
     }
-    <link rel="alternate" hreflang="x-default" href={abs(localize(path, 'ru'))} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="I AM NOMAD" />
     <meta property="og:locale" content={lang === 'ru' ? 'ru_RU' : 'en_US'} />
-    <meta property="og:url" content={abs(localize(path, lang))} />
+    {!noindex && <meta property="og:url" content={abs(localize(path, lang))} />}
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={desc} />
     <meta property="og:image" content={ogImage} />

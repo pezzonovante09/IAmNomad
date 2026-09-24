@@ -499,12 +499,20 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
   function setMenu(open: boolean) {
     if (!toggle || !menu) return;
+    const wasOpen = toggle.getAttribute('aria-expanded') === 'true';
     toggle.setAttribute('aria-expanded', String(open));
     menu.hidden = !open;
     if (label) label.textContent = (open ? label.dataset.close : label.dataset.open) ?? '';
     document.body.classList.toggle('is-locked', open);
     header?.classList.remove('is-hidden');
-    if (open) (window as any).__fit?.(menu);
+    // Пока меню открыто, фокус остаётся в шапке и меню: остальная страница недоступна.
+    Array.from(document.body.children).forEach((el) => {
+      if (el !== header && el !== menu && el.tagName !== 'SCRIPT') (el as HTMLElement).inert = open;
+    });
+    if (open) {
+      (window as any).__fit?.(menu);
+      menu.querySelector<HTMLElement>('a')?.focus();
+    } else if (wasOpen && menu.contains(document.activeElement)) toggle.focus();
   }
 
   toggle?.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
@@ -512,7 +520,10 @@ const pad = (n: number) => String(n).padStart(2, '0');
     if ((e.target as HTMLElement).closest('a')) setMenu(false);
   });
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') setMenu(false);
+    if (e.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') {
+      setMenu(false);
+      toggle.focus();
+    }
   });
 
   // Шапка прячется при прокрутке вниз и возвращается при прокрутке вверх.
