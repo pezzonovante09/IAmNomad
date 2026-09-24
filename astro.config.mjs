@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 
 // Абсолютный адрес сайта нужен для canonical, hreflang, sitemap и og:image.
 // Можно переопределить переменной SITE_URL (например, для тестового домена).
-const site = process.env.SITE_URL || 'https://iamnomadkg.com';
+const site = process.env.SITE_URL || 'https://www.iamnomadkg.com';
 
 export default defineConfig({
   site,

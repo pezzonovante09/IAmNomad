@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://iamnomadkg.com/sitemap-index.xml
+Sitemap: https://www.iamnomadkg.com/sitemap-index.xml
