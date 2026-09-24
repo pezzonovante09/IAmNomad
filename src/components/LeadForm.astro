@@ -161,9 +161,9 @@ const f = (name: string) => `${id}-${name}`;
     try {
       const raw = sessionStorage.getItem('customTourBlocks');
       if (raw && (tourField || messageField)) {
-        const data = JSON.parse(raw) as { text?: string };
+        const data = JSON.parse(raw) as { text?: string; studio?: boolean };
         if (tourField) tourField.value = form.dataset.customTitle ?? '';
-        if (messageField && data.text) messageField.value = `${form.dataset.builderPrefix}\n${data.text}`;
+        if (messageField && data.text) messageField.value = data.studio ? data.text : `${form.dataset.builderPrefix}\n${data.text}`;
         sessionStorage.removeItem('customTourBlocks');
       }
     } catch {

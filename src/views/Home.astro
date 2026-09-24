@@ -3,10 +3,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ContactCards from '../components/ContactCards.astro';
 import Icon from '../components/Icon.astro';
 import LeadForm from '../components/LeadForm.astro';
-import Ornament from '../components/Ornament.astro';
 import ReviewCard from '../components/ReviewCard.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import TourIndex from '../components/TourIndex.astro';
+import TourStudio from '../components/TourStudio.astro';
 import VideoEmbed from '../components/VideoEmbed.astro';
 import { heroRegions, instagramPhotos, reviewAvatars } from '../data/content';
 import { contacts, videos } from '../data/site';
@@ -146,26 +146,10 @@ const features = ['feature1', 'feature2', 'feature3', 'feature4'];
     </ol>
   </section>
 
-  <!-- (04) Свой маршрут -->
-  <section class="builder">
-    <div class="builder__text">
-      <p class="label" data-reveal="fade">{t('home.builder.kicker')}</p>
-      <h2 class="h2" data-reveal>{t('tour.custom.cta.title')}</h2>
-      <p class="builder__lead" data-reveal>{t('tour.custom.intro.p2')}</p>
-      <div class="builder__actions" data-reveal>
-        <a href={L(routes.tour('custom'))} class="btn btn--light">
-          {t('tour.custom.cta.button')}
-          <span aria-hidden="true">→</span>
-        </a>
-        <a href={contacts.whatsapp} class="btn btn--glass" target="_blank" rel="noopener">
-          {t('tour.booking.whatsapp')}
-          <Icon name="whatsapp" />
-        </a>
-      </div>
-    </div>
-    <div class="builder__disc" aria-hidden="true">
-      <Ornament variant="tunduk" stroke="#C5A059" />
-    </div>
+  <!-- (04) Студия -->
+  <section class="studio" id="studio">
+    <SectionHeader kicker={t('studio.kicker')} title={t('studio.title')} subtitle={t('studio.subtitle')} />
+    <TourStudio lang={lang} />
   </section>
 
   {
@@ -541,54 +525,10 @@ const features = ['feature1', 'feature2', 'feature3', 'feature4'];
     }
   }
 
-  /* ---------- (04) Свой маршрут ---------- */
-  .builder {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 32px;
-    overflow: hidden;
-    padding: clamp(56px, 8vw, 120px) var(--gutter);
+  /* ---------- (04) Студия ---------- */
+  .studio {
     border-top: 1px solid var(--line);
-    background: #0d3e26;
-    color: #f5f5f3;
-  }
-
-  .builder__text {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    gap: 20px;
-    max-width: 900px;
-  }
-
-  .builder__lead {
-    max-width: 58ch;
-    font-size: 16px;
-    color: rgb(245 245 243 / 0.85);
-  }
-
-  .builder__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 8px;
-  }
-
-  .builder__disc {
-    position: absolute;
-    right: clamp(-160px, -8vw, -40px);
-    top: 50%;
-    width: clamp(280px, 38vw, 560px);
-    aspect-ratio: 1;
-    transform: translateY(-50%);
-    opacity: 0.55;
-  }
-
-  .builder__disc :global(svg) {
-    width: 100%;
-    height: 100%;
-    animation: spin 60s linear infinite;
+    scroll-margin-top: var(--header-h);
   }
 
   /* ---------- (05) Отзывы ---------- */

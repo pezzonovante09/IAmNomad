@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import CtaBanner from '../components/CtaBanner.astro';
 import PageHero from '../components/PageHero.astro';
 import SectionHeader from '../components/SectionHeader.astro';
-import TourBuilder from '../components/TourBuilder.astro';
+import TourStudio from '../components/TourStudio.astro';
 import TourIndex from '../components/TourIndex.astro';
 import { contacts } from '../data/site';
 import { getTour, tours } from '../data/tours';
@@ -48,10 +48,8 @@ const steps = [1, 2, 3, 4];
   </section>
 
   <section class="build" id="tour-builder">
-    <SectionHeader kicker="(02)" title={t('builder.title')} subtitle={t('tour.custom.intro.p1')} />
-    <div class="build__body">
-      <TourBuilder lang={lang} />
-    </div>
+    <SectionHeader kicker="(02)" title={t('studio.title')} subtitle={t('studio.subtitle')} />
+    <TourStudio lang={lang} />
   </section>
 
   <CtaBanner
@@ -127,10 +125,6 @@ const steps = [1, 2, 3, 4];
   .build {
     border-top: 1px solid var(--line);
     scroll-margin-top: var(--header-h);
-  }
-
-  .build__body {
-    padding: 0 var(--gutter) 56px;
   }
 
   @media (max-width: 900px) {
