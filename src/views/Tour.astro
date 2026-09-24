@@ -1,0 +1,1108 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Faq from '../components/Faq.astro';
+import Icon from '../components/Icon.astro';
+import ReviewCard from '../components/ReviewCard.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import TourCard from '../components/TourCard.astro';
+import VideoEmbed from '../components/VideoEmbed.astro';
+import { reviewAvatars } from '../data/content';
+import { contacts, videos } from '../data/site';
+import { tours, type Tour } from '../data/tours';
+import { bullets, localize, splitEmoji, useTranslations, type Lang } from '../i18n/utils';
+import { srcset, unsplash } from '../lib/img';
+import { routes } from '../lib/routes';
+
+interface Props {
+  lang: Lang;
+  tour: Tour;
+}
+
+const { lang, tour } = Astro.props;
+const t = useTranslations(lang);
+const L = (p: string) => localize(p, lang);
+const k = (key: string) => t(`tour.${tour.slug}.${key}`);
+const card = (key: string) => t(`${tour.card}.${key}`);
+const range = (n: number) => Array.from({ length: n }, (_, i) => i + 1);
+
+const isOpen = tour.status === 'open';
+const bookHref = `${L(routes.contact)}?tour=${tour.slug}`;
+const price = isOpen ? k('pricing.standardPrice') : t('tour.winter.comingSoon');
+
+const days = range(tour.days).map((n) => {
+  const title = k(`program.day${n}.title`);
+  const m = title.match(/^\D*?(\d+)\.\s*(.*)$/);
+  return { n, title: m ? m[2] : title, items: bullets(k(`program.day${n}.text`)) };
+});
+const highlights = range(tour.highlights).map((n) => splitEmoji(k(`highlights.item${n}`)));
+const extras = range(tour.extras).map((n) => splitEmoji(k(`extras.item${n}`)));
+const dates = range(tour.dates).map((n) => k(`dates.date${n}`));
+const included = range(5).map((n) => t(`tour.included.item${n}`));
+const notIncluded = range(4).map((n) => t(`tour.notIncluded.item${n}`));
+const features = range(3).map((n) => t(`tour.pricing.standardFeature${n}`));
+const faq = range(3).map((n) => ({ q: t(`tour.faq.q${n}`), a: t(`tour.faq.a${n}`) }));
+const similar = tours.filter((x) => x.slug !== tour.slug);
+const video = videos.tours[tour.slug];
+
+const facts = [
+  { icon: 'clock', label: t('tour.facts.duration'), value: card('duration') },
+  { icon: 'route', label: t('tour.facts.route'), value: card('location') },
+  { icon: 'users', label: t('tour.facts.group'), value: t('tour.facts.groupValue') },
+  { icon: 'tag', label: t('tour.facts.price'), value: price },
+] as const;
+
+const sections = [
+  { id: 'highlights', label: k('highlights.title') },
+  { id: 'program', label: t('tour.program.title') },
+  { id: 'included', label: t('tour.included.title') },
+  { id: 'dates', label: t('tour.dates.title') },
+  { id: 'faq', label: t('tour.faq.title') },
+];
+
+const numericPrice = Number(price.replace(/[^\d]/g, ''));
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TouristTrip',
+  name: k('title'),
+  description: k('subtitle'),
+  image: unsplash(tour.cover.id, 1200, 630),
+  provider: { '@type': 'TravelAgency', name: 'I AM NOMAD', telephone: contacts.phone, email: contacts.email },
+  ...(isOpen && numericPrice
+    ? { offers: { '@type': 'Offer', price: numericPrice, priceCurrency: 'USD', availability: 'https://schema.org/InStock' } }
+    : {}),
+};
+---
+
+<BaseLayout
+  lang={lang}
+  page={`tour-${tour.slug}`}
+  section="tours"
+  path={routes.tour(tour.slug)}
+  image={unsplash(tour.cover.id, 1200, 630)}
+>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)} />
+
+  <!-- Герой -->
+  <section class="th" data-bookbar-trigger>
+    <img
+      class="th__bg"
+      src={unsplash(tour.gallery[0].id, 1920, 1000)}
+      srcset={srcset(tour.gallery[0].id, [800, 1200, 1600, 2200], 0.52)}
+      sizes="100vw"
+      alt=""
+      width="1920"
+      height="1000"
+      fetchpriority="high"
+    />
+    <div class="container th__inner">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href={L('/')}>{t('nav.home')}</a>
+        <span aria-hidden="true">/</span>
+        <a href={L(routes.tours)}>{t('nav.tours')}</a>
+      </nav>
+      <div class="th__badges">
+        <span class="badge">{t(`tours.tab.${tour.category}`)}</span>
+        {!isOpen && <span class="badge badge--gold">{t('btn.comingSoon')}</span>}
+      </div>
+      <h1 class="h1 th__title">{k('title')}</h1>
+      <p class="th__subtitle">{k('subtitle')}</p>
+      <dl class="facts">
+        {
+          facts.map((f) => (
+            <div class="facts__item">
+              <Icon name={f.icon} size={22} />
+              <div>
+                <dt>{f.label}</dt>
+                <dd>{f.value}</dd>
+              </div>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+    <div class="ornament-band th__band" aria-hidden="true"></div>
+  </section>
+
+  <!-- Галерея -->
+  <section class="container gallery-mosaic" aria-label="Gallery">
+    {
+      tour.gallery.map((photo, i) => (
+        <button
+          type="button"
+          class="gm__item"
+          data-lightbox={`tour-${tour.slug}`}
+          data-full={unsplash(photo.id, 1800)}
+          aria-label={photo.alt}
+        >
+          <img
+            src={unsplash(photo.id, i === 0 ? 1000 : 600, i === 0 ? 750 : 450)}
+            srcset={srcset(photo.id, i === 0 ? [600, 1000, 1400] : [300, 600], 0.75)}
+            sizes={i === 0 ? '(max-width: 800px) 100vw, 50vw' : '(max-width: 800px) 50vw, 25vw'}
+            alt={photo.alt}
+            width={i === 0 ? 1000 : 600}
+            height={i === 0 ? 750 : 450}
+            loading={i === 0 ? 'eager' : 'lazy'}
+            decoding="async"
+          />
+          {i === 4 && tour.gallery.length > 5 && (
+            <span class="gm__more">
+              <Icon name="expand" size={20} />+{tour.gallery.length - 5} {t('ui.photos')}
+            </span>
+          )}
+        </button>
+      ))
+    }
+  </section>
+
+  <!-- Навигация по разделам -->
+  <nav class="subnav" aria-label={k('title')} data-subnav>
+    <div class="container subnav__inner">
+      {sections.map((s) => <a href={`#${s.id}`} class="subnav__link">{s.label}</a>)}
+    </div>
+  </nav>
+
+  <div class="container tour-layout">
+    <div class="tour-main">
+      <!-- Главное -->
+      <section id="highlights" class="tour-block">
+        <h2 class="h2 tour-block__title" data-reveal>{k('highlights.title')}</h2>
+        <ul class="hl">
+          {
+            highlights.map((h, i) => (
+              <li class="hl__item" data-reveal style={`--i:${i % 4}`}>
+                <span class="hl__icon" aria-hidden="true">{h.icon || '✦'}</span>
+                <span>{h.text}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      {
+        extras.length > 0 && (
+          <section class="tour-block">
+            <h2 class="h2 tour-block__title" data-reveal>{k('extras.title')}</h2>
+            <ul class="hl hl--extras">
+              {extras.map((h, i) => (
+                <li class="hl__item" data-reveal style={`--i:${i % 4}`}>
+                  <span class="hl__icon" aria-hidden="true">{h.icon || '✦'}</span>
+                  <span>{h.text}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      <!-- Программа -->
+      <section id="program" class="tour-block">
+        <div class="tour-block__head" data-reveal>
+          <h2 class="h2">{t('tour.program.title')}</h2>
+          <button
+            type="button"
+            class="btn btn--outline btn--sm"
+            data-expand-all
+            data-expand={t('ui.expandAll')}
+            data-collapse={t('ui.collapseAll')}>{t('ui.expandAll')}</button
+          >
+        </div>
+        <ol class="timeline">
+          {
+            days.map((day, i) => (
+              <li class="timeline__item" data-reveal>
+                <details class="day" open={i === 0}>
+                  <summary class="day__head">
+                    <span class="day__num">
+                      <small>{t('ui.day')}</small>
+                      {day.n}
+                    </span>
+                    <span class="day__title">{day.title}</span>
+                    <Icon name="chevron-down" class="day__chevron" />
+                  </summary>
+                  <ul class="day__list">
+                    {day.items.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                </details>
+              </li>
+            ))
+          }
+        </ol>
+      </section>
+
+      <!-- Включено -->
+      <section id="included" class="tour-block">
+        <div class="incl">
+          <div class="incl__col" data-reveal>
+            <h2 class="h3">{t('tour.included.title')}</h2>
+            <ul>
+              {
+                included.map((item) => (
+                  <li>
+                    <span class="incl__mark incl__mark--yes">
+                      <Icon name="check" size={16} />
+                    </span>
+                    {item}
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+          <div class="incl__col" data-reveal style="--i:1">
+            <h2 class="h3">{t('tour.notIncluded.title')}</h2>
+            <ul>
+              {
+                notIncluded.map((item) => (
+                  <li>
+                    <span class="incl__mark incl__mark--no">
+                      <Icon name="x" size={16} />
+                    </span>
+                    {item}
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {
+        video && (
+          <section class="tour-block">
+            <VideoEmbed src={video} title={t('tour.video.label')} />
+          </section>
+        )
+      }
+
+      {
+        tour.mapQuery && (
+          <section class="tour-block">
+            <h2 class="h2 tour-block__title" data-reveal>{t('tour.map.title')}</h2>
+            <div class="map" data-reveal>
+              <iframe
+                src={`https://maps.google.com/maps?q=${tour.mapQuery}&output=embed`}
+                title={t('tour.map.title')}
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen
+              />
+            </div>
+          </section>
+        )
+      }
+
+      <!-- Даты -->
+      <section id="dates" class="tour-block">
+        <h2 class="h2 tour-block__title" data-reveal>{t('tour.dates.title')}</h2>
+        <ul class="dates">
+          {
+            dates.map((d, i) => (
+              <li data-reveal style={`--i:${i}`}>
+                <Icon name="calendar" size={20} />
+                {d}
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- FAQ -->
+      <section id="faq" class="tour-block">
+        <h2 class="h2 tour-block__title" data-reveal>{t('tour.faq.title')}</h2>
+        <Faq items={faq} />
+      </section>
+    </div>
+
+    <!-- Бронирование -->
+    <aside class="book" aria-label={t('tour.booking.title')}>
+      <div class="book__card">
+        <p class="book__label">{isOpen ? t('misc.from') : t('tour.facts.price')}</p>
+        <p class="book__price">
+          {price}
+          {isOpen && <small>/ {t('misc.perPerson')}</small>}
+        </p>
+        {!isOpen && <p class="book__note">{t('tour.winter.comingSoonText')}</p>}
+        {
+          isOpen && (
+            <ul class="book__features">
+              {features.map((f) => (
+                <li>
+                  <Icon name="check" size={18} />
+                  {f}
+                </li>
+              ))}
+            </ul>
+          )
+        }
+        <div class="book__dates">
+          <p class="book__label">{t('tour.booking.dates')}</p>
+          <ul>
+            {dates.slice(0, 3).map((d) => <li>{d}</li>)}
+          </ul>
+        </div>
+        <div class="book__actions">
+          {
+            isOpen ? (
+              <a href={bookHref} class="btn btn--accent btn--block">
+                {t('btn.bookTour')}
+                <Icon name="arrow-right" />
+              </a>
+            ) : (
+              <span class="btn btn--accent btn--block" aria-disabled="true">
+                {t('btn.comingSoon')}
+              </span>
+            )
+          }
+          <a href={contacts.whatsapp} class="btn btn--whatsapp btn--block" target="_blank" rel="noopener">
+            <Icon name="whatsapp" />
+            {t('tour.booking.whatsapp')}
+          </a>
+        </div>
+        <p class="book__note">{t('tour.booking.note')}</p>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Отзывы -->
+  <section class="section section--alt">
+    <div class="container">
+      <SectionHeader title={t('tour.reviews.title')}>
+        <a href={L(routes.reviews)} class="link-arrow">{t('btn.viewAll')} <Icon name="arrow-right" /></a>
+      </SectionHeader>
+      <div class="grid grid--3">
+        {
+          [1, 2, 3].map((n, i) => (
+            <ReviewCard name={t(`home.reviews.review${n}.name`)} text={t(`home.reviews.review${n}.text`)} avatar={reviewAvatars[i]} index={i} />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Похожие туры -->
+  <section class="section">
+    <div class="container">
+      <SectionHeader title={t('tour.similar.title')}>
+        <a href={L(routes.tours)} class="link-arrow">{t('btn.viewAll')} <Icon name="arrow-right" /></a>
+      </SectionHeader>
+      <div class="grid grid--3">
+        {similar.map((x, i) => <TourCard tour={x} lang={lang} index={i} compact />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Нижняя панель бронирования (мобильные) -->
+  <div class="bookbar" data-bookbar aria-hidden="true">
+    <div class="bookbar__text">
+      <p class="bookbar__title">{k('title')}</p>
+      <p class="bookbar__price">{k('sticky.from')}</p>
+    </div>
+    {
+      isOpen ? (
+        <a href={bookHref} class="btn btn--accent btn--sm" tabindex="-1">
+          {t('btn.bookNow')}
+        </a>
+      ) : (
+        <a href={contacts.whatsapp} class="btn btn--whatsapp btn--sm" target="_blank" rel="noopener" tabindex="-1">
+          <Icon name="whatsapp" />
+        </a>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  /* ---------- Герой ---------- */
+  .th {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: min(78vh, 720px);
+    padding-block: 56px 64px;
+    overflow: hidden;
+    color: var(--hero-ink);
+    background: #1b140e;
+  }
+
+  .th::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--overlay);
+  }
+
+  .th__bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .th__inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 16px;
+  }
+
+  .crumbs {
+    display: flex;
+    gap: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: rgb(255 250 242 / 0.75);
+  }
+
+  .crumbs a {
+    text-decoration: none;
+  }
+
+  .crumbs a:hover {
+    color: #fff;
+    text-decoration: underline;
+  }
+
+  .th__badges {
+    display: flex;
+    gap: 8px;
+  }
+
+  .th__title {
+    max-width: 16ch;
+  }
+
+  .th__subtitle {
+    max-width: 52ch;
+    font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+    color: rgb(255 250 242 / 0.88);
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, auto));
+    justify-content: start;
+    gap: 12px;
+    margin: 12px 0 0;
+  }
+
+  .facts__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px 12px 14px;
+    border-radius: 16px;
+    background: rgb(255 255 255 / 0.1);
+    border: 1px solid rgb(255 255 255 / 0.2);
+    backdrop-filter: blur(10px);
+  }
+
+  .facts__item :global(svg) {
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .facts dt {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .facts dd {
+    margin: 0;
+    font-weight: 700;
+  }
+
+  .th__band {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    color: var(--gold);
+    opacity: 0.6;
+  }
+
+  @media (max-width: 900px) {
+    .facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 420px) {
+    .facts {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------- Галерея ---------- */
+  .gallery-mosaic {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 32px;
+    aspect-ratio: 16 / 7;
+  }
+
+  .gm__item {
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--bg-alt);
+    cursor: zoom-in;
+  }
+
+  .gm__item:first-child {
+    grid-row: span 2;
+  }
+
+  .gm__item:nth-child(n + 6) {
+    display: none;
+  }
+
+  .gm__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s var(--ease);
+  }
+
+  .gm__item:hover img {
+    transform: scale(1.05);
+  }
+
+  .gm__more {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 0.85rem;
+    font-weight: 700;
+    box-shadow: var(--shadow);
+  }
+
+  @media (max-width: 800px) {
+    .gallery-mosaic {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto;
+      aspect-ratio: auto;
+    }
+
+    .gm__item {
+      aspect-ratio: 4 / 3;
+    }
+
+    .gm__item:first-child {
+      grid-column: span 2;
+      grid-row: auto;
+    }
+
+    .gm__item:nth-child(n + 4) {
+      display: none;
+    }
+
+  }
+
+  /* ---------- Подменю ---------- */
+  .subnav {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    margin-top: 32px;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-block: 1px solid var(--line);
+    transition: top 0.35s var(--ease);
+  }
+
+  :global(.header:not(.is-hidden) ~ main) .subnav {
+    top: var(--header-h);
+  }
+
+  .subnav__inner {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .subnav__inner::-webkit-scrollbar {
+    display: none;
+  }
+
+  .subnav__link {
+    flex-shrink: 0;
+    padding: 16px 14px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition:
+      color 0.2s,
+      border-color 0.2s;
+  }
+
+  .subnav__link:hover,
+  .subnav__link.is-active {
+    color: var(--ink);
+    border-color: var(--accent);
+  }
+
+  /* ---------- Раскладка ---------- */
+  .tour-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+    padding-block: 24px var(--section);
+  }
+
+  .tour-block {
+    padding-top: clamp(40px, 5vw, 64px);
+    scroll-margin-top: calc(var(--header-h) + 72px);
+  }
+
+  .tour-block__title {
+    margin-bottom: 28px;
+  }
+
+  .tour-block__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+
+  /* ---------- Главное ---------- */
+  .hl {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+    gap: 12px;
+    list-style: none;
+  }
+
+  .hl__item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: var(--radius);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .hl__icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: var(--gold-soft);
+    font-size: 1.35rem;
+  }
+
+  .hl--extras .hl__icon {
+    background: var(--lake-soft);
+  }
+
+  /* ---------- Программа ---------- */
+  .timeline {
+    position: relative;
+    display: grid;
+    gap: 12px;
+    list-style: none;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 28px;
+    bottom: 28px;
+    left: 31px;
+    width: 2px;
+    background: repeating-linear-gradient(to bottom, var(--line) 0 6px, transparent 6px 12px);
+  }
+
+  .day {
+    position: relative;
+    border-radius: var(--radius);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    transition: border-color 0.2s;
+  }
+
+  .day[open] {
+    border-color: var(--ink-mute);
+  }
+
+  .day__head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 18px 10px 8px;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .day__head::-webkit-details-marker {
+    display: none;
+  }
+
+  .day__num {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    flex-shrink: 0;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--bg-alt);
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1;
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+  }
+
+  .day__num small {
+    font-family: var(--font-body);
+    font-size: 0.55rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .day[open] .day__num {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .day__title {
+    flex: 1;
+    font-weight: 700;
+    font-size: 1.05rem;
+    line-height: 1.35;
+  }
+
+  .day__head :global(.day__chevron) {
+    flex-shrink: 0;
+    color: var(--ink-mute);
+    transition: transform 0.3s var(--ease);
+  }
+
+  .day[open] :global(.day__chevron) {
+    transform: rotate(180deg);
+  }
+
+  .day__list {
+    display: grid;
+    gap: 8px;
+    padding: 4px 22px 22px 78px;
+    list-style: none;
+    color: var(--ink-soft);
+  }
+
+  .day__list li {
+    position: relative;
+  }
+
+  .day__list li::before {
+    content: '';
+    position: absolute;
+    left: -18px;
+    top: 0.65em;
+    width: 6px;
+    height: 6px;
+    border-radius: 2px;
+    background: var(--gold);
+    transform: rotate(45deg);
+  }
+
+  @media (max-width: 520px) {
+    .day__list {
+      padding-left: 44px;
+    }
+  }
+
+  /* ---------- Включено ---------- */
+  .incl {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: 16px;
+  }
+
+  .incl__col {
+    padding: 26px;
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+
+  .incl__col ul {
+    display: grid;
+    gap: 12px;
+    margin-top: 18px;
+    list-style: none;
+  }
+
+  .incl__col li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .incl__mark {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+  }
+
+  .incl__mark--yes {
+    background: color-mix(in srgb, var(--success) 16%, transparent);
+    color: var(--success);
+  }
+
+  .incl__mark--no {
+    background: color-mix(in srgb, var(--danger) 12%, transparent);
+    color: var(--danger);
+  }
+
+  /* ---------- Карта и даты ---------- */
+  .map {
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--line);
+    background: var(--bg-alt);
+  }
+
+  .map iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .dates {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
+    gap: 10px;
+    list-style: none;
+  }
+
+  .dates li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    border-radius: var(--radius);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    font-weight: 700;
+  }
+
+  .dates :global(svg) {
+    color: var(--accent);
+  }
+
+  /* ---------- Бронирование ---------- */
+  .book {
+    position: sticky;
+    top: calc(var(--header-h) + 80px);
+    padding-top: clamp(40px, 5vw, 64px);
+  }
+
+  .book__card {
+    display: grid;
+    gap: 18px;
+    padding: 28px;
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+  }
+
+  .book__label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+
+  .book__price {
+    margin-top: -12px;
+    font-family: var(--font-display);
+    font-size: 2.3rem;
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  .book__price small {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink-mute);
+  }
+
+  .book__features {
+    display: grid;
+    gap: 8px;
+    list-style: none;
+  }
+
+  .book__features li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+  }
+
+  .book__features :global(svg) {
+    color: var(--success);
+  }
+
+  .book__dates {
+    padding-top: 16px;
+    border-top: 1px dashed var(--line);
+  }
+
+  .book__dates ul {
+    display: grid;
+    gap: 4px;
+    margin-top: 8px;
+    list-style: none;
+    font-weight: 600;
+  }
+
+  .book__actions {
+    display: grid;
+    gap: 10px;
+  }
+
+  .book__note {
+    font-size: 0.85rem;
+    color: var(--ink-mute);
+  }
+
+  @media (max-width: 1024px) {
+    .tour-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .book {
+      position: static;
+      max-width: 560px;
+    }
+  }
+
+  /* ---------- Нижняя панель ---------- */
+  .bookbar {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    z-index: 45;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 12px 12px 20px;
+    border-radius: 20px;
+    background: var(--ink);
+    color: var(--bg);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(140%);
+    transition: transform 0.4s var(--ease);
+  }
+
+  .bookbar.is-visible {
+    transform: none;
+  }
+
+  .bookbar__text {
+    min-width: 0;
+  }
+
+  .bookbar__title {
+    overflow: hidden;
+    font-weight: 700;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .bookbar__price {
+    font-size: 0.85rem;
+    opacity: 0.75;
+  }
+
+  @media (max-width: 1024px) {
+    .bookbar {
+      display: flex;
+    }
+  }
+</style>
+
+<script>
+  // Развернуть/свернуть все дни программы
+  const expandBtn = document.querySelector<HTMLButtonElement>('[data-expand-all]');
+  const days = document.querySelectorAll<HTMLDetailsElement>('.day');
+  expandBtn?.addEventListener('click', () => {
+    const open = Array.from(days).some((d) => !d.open);
+    days.forEach((d) => (d.open = open));
+    expandBtn.textContent = (open ? expandBtn.dataset.collapse : expandBtn.dataset.expand) ?? '';
+  });
+
+  // Нижняя панель бронирования после героя
+  const bar = document.querySelector<HTMLElement>('[data-bookbar]');
+  const trigger = document.querySelector('[data-bookbar-trigger]');
+  if (bar && trigger) {
+    document.body.classList.add('has-bookbar');
+    new IntersectionObserver(([entry]) => {
+      const visible = !entry.isIntersecting;
+      bar.classList.toggle('is-visible', visible);
+      bar.setAttribute('aria-hidden', String(!visible));
+      bar.querySelectorAll('a').forEach((a) => (a.tabIndex = visible ? 0 : -1));
+    }).observe(trigger);
+  }
+
+  // Подсветка текущего раздела в подменю
+  const links = document.querySelectorAll<HTMLAnchorElement>('.subnav__link');
+  const targets = Array.from(links)
+    .map((a) => document.querySelector<HTMLElement>(a.hash))
+    .filter((el): el is HTMLElement => !!el);
+  const spy = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        links.forEach((a) => a.classList.toggle('is-active', a.hash === `#${entry.target.id}`));
+      }
+    },
+    { rootMargin: '-35% 0px -60% 0px' },
+  );
+  targets.forEach((el) => spy.observe(el));
+</script>

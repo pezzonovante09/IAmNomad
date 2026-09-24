@@ -1,0 +1,67 @@
+---
+import Icon from './Icon.astro';
+import { contacts } from '../data/site';
+import { useTranslations, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const t = useTranslations(Astro.props.lang);
+---
+
+<a href={contacts.whatsapp} class="wa-fab" target="_blank" rel="noopener" aria-label={t('ui.whatsappChat')} data-wa-fab>
+  <Icon name="whatsapp" size={28} />
+  <span class="wa-fab__label">{t('ui.whatsappChat')}</span>
+</a>
+
+<style>
+  .wa-fab {
+    position: fixed;
+    right: max(16px, env(safe-area-inset-right));
+    bottom: max(16px, env(safe-area-inset-bottom));
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    height: 58px;
+    padding: 0 15px;
+    border-radius: 999px;
+    background: #25d366;
+    color: #06351a;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 10px 30px rgb(37 211 102 / 0.35);
+    transition:
+      transform 0.3s var(--ease),
+      bottom 0.3s var(--ease),
+      gap 0.3s var(--ease);
+  }
+
+  .wa-fab__label {
+    max-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: max-width 0.4s var(--ease);
+  }
+
+  .wa-fab:hover {
+    gap: 10px;
+    transform: translateY(-2px);
+  }
+
+  .wa-fab:hover .wa-fab__label {
+    max-width: 220px;
+  }
+
+  /* На страницах тура на мобильных поднимаем кнопку над нижней панелью бронирования. */
+  :global(body.has-bookbar) .wa-fab {
+    bottom: calc(max(16px, env(safe-area-inset-bottom)) + 84px);
+  }
+
+  @media (min-width: 1025px) {
+    :global(body.has-bookbar) .wa-fab {
+      bottom: max(16px, env(safe-area-inset-bottom));
+    }
+  }
+</style>

@@ -1,0 +1,60 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  subtitle?: string;
+  align?: 'left' | 'center';
+  as?: 'h1' | 'h2';
+}
+
+const { eyebrow, title, subtitle, align = 'left', as: Tag = 'h2' } = Astro.props;
+---
+
+<div class:list={['sh', `sh--${align}`]} data-reveal>
+  <div class="sh__text">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <Tag class="h2">{title}</Tag>
+    {subtitle && <p class="lead">{subtitle}</p>}
+  </div>
+  {Astro.slots.has('default') && <div class="sh__aside"><slot /></div>}
+</div>
+
+<style>
+  .sh {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: clamp(32px, 4vw, 56px);
+  }
+
+  .sh__text {
+    display: grid;
+    gap: 14px;
+    max-width: 720px;
+  }
+
+  .sh--center {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .sh--center .sh__text {
+    justify-items: center;
+  }
+
+  .sh__aside {
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 720px) {
+    .sh {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .sh--center {
+      align-items: center;
+    }
+  }
+</style>

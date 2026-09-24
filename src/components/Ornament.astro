@@ -1,0 +1,58 @@
+---
+// Кыргызские мотивы:
+//  - rosette — четыре «кочкор мүйүз» (рога барана) вокруг ромба, как в центре шырдака;
+//  - tunduk  — навершие юрты с флага Кыргызстана (используется в логотипе).
+interface Props {
+  variant: 'rosette' | 'tunduk';
+  class?: string;
+  size?: number;
+}
+
+const { variant, class: className, size } = Astro.props;
+const id = `horn-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+{
+  variant === 'rosette' ? (
+    <svg
+      class={className}
+      viewBox="0 0 100 100"
+      width={size}
+      height={size}
+      fill="none"
+      stroke="currentColor"
+      stroke-width="3"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <defs>
+        <path
+          id={id}
+          d="M50 42V31c0-10-9-15-17-13-8 2-8.5 13-.5 13 5.5 0 6-7 1.5-7M50 31c0-10 9-15 17-13 8 2 8.5 13 .5 13-5.5 0-6-7-1.5-7"
+        />
+      </defs>
+      <use href={`#${id}`} />
+      <use href={`#${id}`} transform="rotate(90 50 50)" />
+      <use href={`#${id}`} transform="rotate(180 50 50)" />
+      <use href={`#${id}`} transform="rotate(270 50 50)" />
+      <path d="M50 42 58 50 50 58 42 50Z" fill="currentColor" stroke="none" />
+    </svg>
+  ) : (
+    <svg
+      class={className}
+      viewBox="0 0 32 32"
+      width={size}
+      height={size}
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      aria-hidden="true"
+    >
+      <circle cx="16" cy="16" r="13" />
+      <path d="M11 4.2c-2 7.3-2 16.3 0 23.6M16 3v26M21 4.2c2 7.3 2 16.3 0 23.6" />
+      <path d="M4.2 11c7.3-2 16.3-2 23.6 0M3 16h26M4.2 21c7.3 2 16.3 2 23.6 0" />
+    </svg>
+  )
+}

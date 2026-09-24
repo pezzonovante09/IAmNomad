@@ -1,0 +1,209 @@
+---
+// Форма заявки. Отправляется в Web3Forms (как и раньше) — письмо приходит на почту агентства.
+import Icon from './Icon.astro';
+import { web3forms } from '../data/site';
+import { tours } from '../data/tours';
+import { useTranslations, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  variant?: 'lead' | 'contact' | 'corporate';
+  id?: string;
+}
+
+const { lang, variant = 'lead', id = 'form' } = Astro.props;
+const t = useTranslations(lang);
+
+const subjects = {
+  lead: 'Tour inquiry — I AM NOMAD',
+  contact: 'Contact form — I AM NOMAD',
+  corporate: 'Corporate inquiry — I AM NOMAD',
+};
+const f = (name: string) => `${id}-${name}`;
+---
+
+<form
+  class="form"
+  data-form
+  data-endpoint={web3forms.endpoint}
+  data-success={t('misc.formSuccess')}
+  data-error={t('misc.formError')}
+  data-sending={t('form.sending')}
+  data-builder-prefix={t('builder.requestPrefix')}
+  data-custom-title={t('tour.custom.title')}
+>
+  <input type="hidden" name="access_key" value={web3forms.accessKey} />
+  <input type="hidden" name="subject" value={subjects[variant]} />
+  <input type="checkbox" name="botcheck" class="sr-only" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+  {
+    variant === 'corporate' ? (
+      <>
+        <div class="field">
+          <label class="field__label" for={f('company')}>{t('form.company')}</label>
+          <input class="field__input" type="text" id={f('company')} name="company" autocomplete="organization" required />
+        </div>
+        <div class="form__row">
+          <div class="field">
+            <label class="field__label" for={f('contact')}>{t('form.contact')}</label>
+            <input class="field__input" type="text" id={f('contact')} name="contact" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label class="field__label" for={f('email')}>{t('form.email')}</label>
+            <input class="field__input" type="email" id={f('email')} name="email" autocomplete="email" required />
+          </div>
+        </div>
+        <div class="form__row">
+          <div class="field">
+            <label class="field__label" for={f('participants')}>{t('form.participants')}</label>
+            <input class="field__input" type="number" min="1" inputmode="numeric" id={f('participants')} name="participants" />
+          </div>
+          <div class="field">
+            <label class="field__label" for={f('dates')}>{t('form.dates')}</label>
+            <input class="field__input" type="text" id={f('dates')} name="dates" />
+          </div>
+        </div>
+      </>
+    ) : (
+      <>
+        <div class="field">
+          <label class="field__label" for={f('name')}>{t('form.name')}</label>
+          <input class="field__input" type="text" id={f('name')} name="name" autocomplete="name" required />
+        </div>
+        <div class="form__row">
+          <div class="field">
+            <label class="field__label" for={f('phone')}>{t('form.phone')}</label>
+            <input class="field__input" type="tel" id={f('phone')} name="phone" autocomplete="tel" placeholder="+" />
+          </div>
+          <div class="field">
+            <label class="field__label" for={f('email')}>{t('form.email')}</label>
+            <input class="field__input" type="email" id={f('email')} name="email" autocomplete="email" required />
+          </div>
+        </div>
+        <div class="field">
+          <label class="field__label" for={f('tour')}>{t('form.tour')}</label>
+          <input class="field__input" type="text" id={f('tour')} name="tour" list={f('tours')} data-field-tour />
+          <datalist id={f('tours')}>
+            {tours.map((tour) => (
+              <option value={t(`${tour.card}.title`)} data-slug={tour.slug} />
+            ))}
+          </datalist>
+        </div>
+      </>
+    )
+  }
+
+  <div class="field">
+    <label class="field__label" for={f('message')}>{t('form.message')}</label>
+    <textarea class="field__input" id={f('message')} name="message" rows="5" data-field-message></textarea>
+  </div>
+
+  <button type="submit" class="btn btn--accent form__submit">
+    <span data-label>{variant === 'corporate' ? t('btn.requestQuote') : t('btn.send')}</span>
+    <Icon name="arrow-right" />
+  </button>
+  <p class="form__status" role="status" aria-live="polite" data-status></p>
+</form>
+
+<style>
+  .form {
+    display: grid;
+    gap: 18px;
+  }
+
+  .form__row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 18px;
+  }
+
+  .form__submit {
+    justify-self: start;
+    min-width: 200px;
+  }
+
+  .form__status {
+    min-height: 1.5em;
+    font-weight: 600;
+  }
+
+  .form__status[data-type='success'] {
+    color: var(--success);
+  }
+
+  .form__status[data-type='error'] {
+    color: var(--danger);
+  }
+
+  @media (max-width: 520px) {
+    .form__submit {
+      justify-self: stretch;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('form[data-form]').forEach((form) => {
+    const status = form.querySelector<HTMLElement>('[data-status]');
+    const button = form.querySelector<HTMLButtonElement>('[type="submit"]');
+    const label = button?.querySelector<HTMLElement>('[data-label]');
+    const tourField = form.querySelector<HTMLInputElement>('[data-field-tour]');
+    const messageField = form.querySelector<HTMLTextAreaElement>('[data-field-message]');
+
+    // Подстановка тура из ссылки ?tour=slug (кнопки «Забронировать» на страницах туров).
+    const slug = new URLSearchParams(location.search).get('tour');
+    if (slug && tourField) {
+      const option = form.querySelector<HTMLOptionElement>(`datalist option[data-slug="${CSS.escape(slug)}"]`);
+      if (option) tourField.value = option.value;
+    }
+
+    // Подстановка маршрута из конструктора индивидуального тура.
+    try {
+      const raw = sessionStorage.getItem('customTourBlocks');
+      if (raw && (tourField || messageField)) {
+        const data = JSON.parse(raw) as { text?: string };
+        if (tourField) tourField.value = form.dataset.customTitle ?? '';
+        if (messageField && data.text) messageField.value = `${form.dataset.builderPrefix}\n${data.text}`;
+        sessionStorage.removeItem('customTourBlocks');
+      }
+    } catch {
+      sessionStorage.removeItem('customTourBlocks');
+    }
+
+    function setStatus(text: string, type: 'success' | 'error' | '') {
+      if (!status) return;
+      status.textContent = text;
+      status.dataset.type = type;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!button || !label) return;
+      const original = label.textContent;
+      button.disabled = true;
+      label.textContent = form.dataset.sending ?? '…';
+      setStatus('', '');
+
+      try {
+        const data = Object.fromEntries(new FormData(form).entries());
+        const res = await fetch(form.dataset.endpoint!, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(data),
+        });
+        const json = await res.json();
+        if (json.success) {
+          form.reset();
+          setStatus(form.dataset.success ?? '', 'success');
+        } else {
+          setStatus(form.dataset.error ?? '', 'error');
+        }
+      } catch {
+        setStatus(form.dataset.error ?? '', 'error');
+      } finally {
+        button.disabled = false;
+        label.textContent = original;
+      }
+    });
+  });
+</script>

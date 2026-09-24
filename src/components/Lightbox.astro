@@ -1,0 +1,163 @@
+---
+// Просмотр фото на весь экран. Любая кнопка/ссылка с data-lightbox="группа" и data-full="url" открывает его.
+import Icon from './Icon.astro';
+import { useTranslations, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const t = useTranslations(Astro.props.lang);
+---
+
+<dialog class="lb" data-lb aria-label="Photo">
+  <figure class="lb__figure">
+    <img class="lb__img" alt="" data-lb-img />
+    <figcaption class="lb__caption"><span data-lb-count></span></figcaption>
+  </figure>
+  <button class="lb__btn lb__close" type="button" data-lb-close aria-label={t('ui.close')}><Icon name="x" /></button>
+  <button class="lb__btn lb__prev" type="button" data-lb-prev aria-label={t('btn.prev')}><Icon name="arrow-left" /></button>
+  <button class="lb__btn lb__next" type="button" data-lb-next aria-label={t('btn.next')}><Icon name="arrow-right" /></button>
+</dialog>
+
+<style>
+  .lb {
+    width: 100vw;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgb(12 9 6 / 0.94);
+    color: #fff;
+  }
+
+  .lb::backdrop {
+    background: transparent;
+  }
+
+  .lb[open] {
+    display: grid;
+    place-items: center;
+    animation: lb-in 0.3s var(--ease);
+  }
+
+  .lb__figure {
+    margin: 0;
+    display: grid;
+    gap: 12px;
+    justify-items: center;
+    padding: 64px 16px;
+  }
+
+  .lb__img {
+    max-width: min(1400px, 100%);
+    max-height: calc(100dvh - 160px);
+    border-radius: 12px;
+    object-fit: contain;
+  }
+
+  .lb__caption {
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+
+  .lb__btn {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border: 1px solid rgb(255 255 255 / 0.25);
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.08);
+    color: #fff;
+    transition: background-color 0.2s;
+  }
+
+  .lb__btn:hover {
+    background: rgb(255 255 255 / 0.2);
+  }
+
+  .lb__close {
+    top: 16px;
+    right: 16px;
+  }
+
+  .lb__prev,
+  .lb__next {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .lb__prev {
+    left: 16px;
+  }
+
+  .lb__next {
+    right: 16px;
+  }
+
+  @media (max-width: 640px) {
+    .lb__prev,
+    .lb__next {
+      top: auto;
+      bottom: 16px;
+      transform: none;
+    }
+  }
+
+  @keyframes lb-in {
+    from {
+      opacity: 0;
+    }
+  }
+</style>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-lb]');
+  const img = dialog?.querySelector<HTMLImageElement>('[data-lb-img]');
+  const count = dialog?.querySelector<HTMLElement>('[data-lb-count]');
+  let items: HTMLElement[] = [];
+  let index = 0;
+
+  function show(i: number) {
+    if (!img || !items.length) return;
+    index = (i + items.length) % items.length;
+    const item = items[index];
+    img.src = item.dataset.full ?? '';
+    img.alt = item.querySelector('img')?.alt ?? '';
+    if (count) count.textContent = `${index + 1} / ${items.length}`;
+  }
+
+  document.addEventListener('click', (e) => {
+    const trigger = (e.target as HTMLElement).closest<HTMLElement>('[data-lightbox]');
+    if (!trigger || !dialog) return;
+    e.preventDefault();
+    items = Array.from(document.querySelectorAll<HTMLElement>(`[data-lightbox="${trigger.dataset.lightbox}"]`));
+    show(items.indexOf(trigger));
+    dialog.showModal();
+    document.body.classList.add('is-locked');
+  });
+
+  dialog?.addEventListener('close', () => document.body.classList.remove('is-locked'));
+  dialog?.querySelector('[data-lb-close]')?.addEventListener('click', () => dialog.close());
+  dialog?.querySelector('[data-lb-prev]')?.addEventListener('click', () => show(index - 1));
+  dialog?.querySelector('[data-lb-next]')?.addEventListener('click', () => show(index + 1));
+  dialog?.addEventListener('click', (e) => {
+    if (e.target === dialog || (e.target as HTMLElement).classList.contains('lb__figure')) dialog.close();
+  });
+  dialog?.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') show(index - 1);
+    if (e.key === 'ArrowRight') show(index + 1);
+  });
+
+  // Свайп на телефоне
+  let startX = 0;
+  dialog?.addEventListener('touchstart', (e) => (startX = e.touches[0].clientX), { passive: true });
+  dialog?.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 50) show(index + (dx < 0 ? 1 : -1));
+  });
+</script>

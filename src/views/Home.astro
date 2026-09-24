@@ -1,0 +1,500 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactCards from '../components/ContactCards.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import Icon from '../components/Icon.astro';
+import LeadForm from '../components/LeadForm.astro';
+import Ornament from '../components/Ornament.astro';
+import ReviewCard from '../components/ReviewCard.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import TourCard from '../components/TourCard.astro';
+import VideoEmbed from '../components/VideoEmbed.astro';
+import { heroPhoto, instagramPhotos, reviewAvatars } from '../data/content';
+import { contacts, videos } from '../data/site';
+import { tours } from '../data/tours';
+import { localize, useTranslations, type Lang } from '../i18n/utils';
+import { srcset, unsplash } from '../lib/img';
+import { routes } from '../lib/routes';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const L = (p: string) => localize(p, lang);
+
+const features = [
+  { icon: 'compass', key: 'feature1' },
+  { icon: 'mountain', key: 'feature2' },
+  { icon: 'sofa', key: 'feature3' },
+  { icon: 'users', key: 'feature4' },
+] as const;
+
+const stats = [
+  { value: '2012', label: t('home.stats.since') },
+  { value: '12', label: t('home.stats.group') },
+  { value: String(tours.length), label: t('home.stats.formats') },
+];
+---
+
+<BaseLayout lang={lang} page="home" path="/" overlayHeader image={unsplash(heroPhoto.id, 1200, 630)}>
+  <!-- Герой -->
+  <section class="hero">
+    <img
+      class="hero__bg"
+      src={unsplash(heroPhoto.id, 1920, 1200)}
+      srcset={srcset(heroPhoto.id, [640, 960, 1400, 1920, 2560], 0.625)}
+      sizes="100vw"
+      alt={heroPhoto.alt}
+      width="1920"
+      height="1200"
+      fetchpriority="high"
+    />
+    <div class="container hero__inner">
+      <p class="eyebrow hero__eyebrow">{t('home.hero.eyebrow')}</p>
+      <h1 class="hero__title">
+        <span>{t('home.hero.titleLine1')}</span>
+        <span class="hero__accent">{t('home.hero.titleLine2')}</span>
+      </h1>
+      <p class="hero__lead">{t('brand.slogan')}</p>
+      <div class="hero__actions">
+        <a href={L(routes.tours)} class="btn btn--accent">
+          {t('home.hero.cta')}
+          <Icon name="arrow-right" />
+        </a>
+        <a href={L(routes.tour('custom'))} class="btn btn--glass">{t('home.hero.ctaCustom')}</a>
+      </div>
+      <dl class="hero__stats">
+        {
+          stats.map((s) => (
+            <div>
+              <dt>{s.value}</dt>
+              <dd>{s.label}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+    <div class="ornament-band hero__band" aria-hidden="true"></div>
+  </section>
+
+  <!-- Туры -->
+  <section class="section" id="tours">
+    <div class="container">
+      <SectionHeader eyebrow={t('home.tours.eyebrow')} title={t('home.tours.title')} subtitle={t('home.tours.subtitle')}>
+        <a href={L(routes.tours)} class="link-arrow">{t('btn.viewAll')} <Icon name="arrow-right" /></a>
+      </SectionHeader>
+      <div class="grid grid--4">
+        {tours.map((tour, i) => <TourCard tour={tour} lang={lang} index={i} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Почему мы -->
+  <section class="section section--alt why">
+    <div class="container why__grid">
+      <div class="why__media" data-reveal>
+        <img
+          class="why__img why__img--main"
+          src={unsplash('1761872936161-9c2075a7ca11', 800, 1000)}
+          srcset={srcset('1761872936161-9c2075a7ca11', [400, 600, 800, 1000], 1.25)}
+          sizes="(max-width: 900px) 70vw, 34vw"
+          alt="Nomad culture in Kyrgyzstan"
+          width="800"
+          height="1000"
+          loading="lazy"
+        />
+        <img
+          class="why__img why__img--small"
+          src={unsplash('1758016860798-0b96354664b9', 500, 500)}
+          alt="Yurts in Kyrgyzstan"
+          width="500"
+          height="500"
+          loading="lazy"
+        />
+        <Ornament variant="rosette" class="why__rosette" />
+      </div>
+      <div>
+        <SectionHeader eyebrow={t('home.why.eyebrow')} title={t('home.why.title')} subtitle={t('home.why.subtitle')} />
+        <ul class="why__list">
+          {
+            features.map((f, i) => (
+              <li class="why__item" data-reveal style={`--i:${i}`}>
+                <span class="why__icon">
+                  <Icon name={f.icon} size={26} />
+                </span>
+                <span>
+                  <h3 class="h3">{t(`home.why.${f.key}.title`)}</h3>
+                  <p class="muted">{t(`home.why.${f.key}.text`)}</p>
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Конструктор -->
+  <section class="section section--tight">
+    <div class="container">
+      <CtaBanner
+        eyebrow={t('home.builder.eyebrow')}
+        title={t('tour.custom.cta.title')}
+        text={t('tour.custom.intro.p2')}
+        primary={{ href: L(routes.tour('custom')), label: t('tour.custom.cta.button') }}
+        secondary={{ href: contacts.whatsapp, label: t('tour.booking.whatsapp'), external: true }}
+        photo={{ id: '1760630149964-200517d8d437', alt: '' }}
+      />
+    </div>
+  </section>
+
+  {
+    videos.home && (
+      <section class="section section--tight">
+        <div class="container">
+          <SectionHeader title={t('home.video.title')} subtitle={t('home.video.subtitle')} />
+          <VideoEmbed src={videos.home} title={t('home.video.title')} />
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Отзывы -->
+  <section class="section" id="reviews">
+    <div class="container">
+      <SectionHeader eyebrow={t('home.reviews.eyebrow')} title={t('home.reviews.title')} subtitle={t('home.reviews.subtitle')}>
+        <a href={L(routes.reviews)} class="link-arrow">{t('btn.viewAll')} <Icon name="arrow-right" /></a>
+      </SectionHeader>
+      <div class="grid grid--3">
+        {
+          [1, 2, 3].map((n, i) => (
+            <ReviewCard
+              name={t(`home.reviews.review${n}.name`)}
+              text={t(`home.reviews.review${n}.text`)}
+              avatar={reviewAvatars[i]}
+              index={i}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Instagram -->
+  <section class="section section--alt section--tight">
+    <div class="container">
+      <SectionHeader eyebrow={t('home.instagram.title')} title={t('home.instagram.subtitle')}>
+        <a href={contacts.instagram} class="btn btn--outline" target="_blank" rel="noopener">
+          <Icon name="instagram" />
+          {contacts.instagramHandle}
+        </a>
+      </SectionHeader>
+      <div class="insta">
+        {
+          instagramPhotos.map((p, i) => (
+            <a href={contacts.instagram} class="insta__item" target="_blank" rel="noopener" data-reveal style={`--i:${i}`}>
+              <img src={unsplash(p.id, 480, 480)} srcset={srcset(p.id, [240, 480, 720], 1)} sizes="(max-width: 700px) 33vw, 16vw" alt={p.alt} width="480" height="480" loading="lazy" />
+              <span class="insta__overlay" aria-hidden="true">
+                <Icon name="instagram" size={28} />
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Заявка -->
+  <section class="section" id="contact-form">
+    <div class="container lead-grid">
+      <div class="lead-grid__info">
+        <SectionHeader eyebrow={t('home.form.eyebrow')} title={t('home.form.title')} subtitle={t('home.form.subtitle')} />
+        <p class="lead-grid__aside">{t('home.form.aside')}</p>
+        <ContactCards lang={lang} layout="list" />
+      </div>
+      <div class="lead-grid__form" data-reveal>
+        <LeadForm lang={lang} variant="lead" id="lead" />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- Герой ---------- */
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: 100svh;
+    padding-block: calc(var(--header-h) + 48px) clamp(56px, 8vh, 96px);
+    overflow: hidden;
+    color: var(--hero-ink);
+    background: #1b140e;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgb(20 14 8 / 0.45) 0%, rgb(20 14 8 / 0) 30%),
+      linear-gradient(0deg, rgb(20 14 8 / 0.85) 0%, rgb(20 14 8 / 0.35) 45%, rgb(20 14 8 / 0) 70%);
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: hero-zoom 24s ease-out both;
+  }
+
+  .hero__inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 20px;
+  }
+
+  .hero__eyebrow {
+    color: var(--gold);
+  }
+
+  .hero__title {
+    display: grid;
+    font-size: clamp(2.5rem, 7.4vw, 6.4rem);
+    line-height: 1;
+    letter-spacing: -0.025em;
+  }
+
+  .hero__accent {
+    color: var(--gold);
+  }
+
+  .hero__lead {
+    max-width: 44ch;
+    font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+    color: rgb(255 250 242 / 0.88);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .hero__stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+    max-width: 880px;
+    margin: clamp(24px, 5vh, 56px) 0 0;
+    padding-top: 24px;
+    border-top: 1px solid rgb(255 250 242 / 0.25);
+  }
+
+  .hero__stats dt {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+    font-weight: 600;
+    color: var(--gold);
+  }
+
+  .hero__stats dd {
+    margin: 4px 0 0;
+    font-size: 0.9rem;
+    color: rgb(255 250 242 / 0.75);
+  }
+
+  .hero__band {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    color: var(--gold);
+    opacity: 0.6;
+  }
+
+  @media (max-width: 640px) {
+    .hero__stats {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .hero__stats div {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .hero__stats dt {
+      min-width: 72px;
+    }
+  }
+
+  @keyframes hero-zoom {
+    from {
+      transform: scale(1.12);
+    }
+  }
+
+  /* ---------- Почему мы ---------- */
+  .why__grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(40px, 7vw, 110px);
+    align-items: center;
+  }
+
+  .why__media {
+    position: relative;
+    padding: 0 12% 12% 0;
+  }
+
+  .why__img {
+    border-radius: var(--radius-lg);
+    object-fit: cover;
+  }
+
+  .why__img--main {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+  }
+
+  .why__img--small {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 48%;
+    aspect-ratio: 1;
+    border: 6px solid var(--bg-alt);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .why__rosette {
+    position: absolute;
+    top: -34px;
+    left: -34px;
+    width: 110px;
+    height: 110px;
+    color: var(--accent);
+  }
+
+  .why__list {
+    display: grid;
+    gap: 14px;
+    list-style: none;
+  }
+
+  .why__item {
+    display: flex;
+    gap: 18px;
+    padding: 20px;
+    border-radius: var(--radius);
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+
+  .why__item .h3 {
+    margin-bottom: 4px;
+  }
+
+  .why__icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 54px;
+    height: 54px;
+    border-radius: 16px;
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+
+  @media (max-width: 900px) {
+    .why__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .why__media {
+      max-width: 520px;
+    }
+  }
+
+  /* ---------- Instagram ---------- */
+  .insta {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+  }
+
+  .insta__item {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius);
+    aspect-ratio: 1;
+  }
+
+  .insta__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s var(--ease);
+  }
+
+  .insta__overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: rgb(178 63 42 / 0.55);
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .insta__item:hover img {
+    transform: scale(1.08);
+  }
+
+  .insta__item:hover .insta__overlay {
+    opacity: 1;
+  }
+
+  @media (max-width: 800px) {
+    .insta {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /* ---------- Заявка ---------- */
+  .lead-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: clamp(32px, 6vw, 88px);
+    align-items: start;
+  }
+
+  .lead-grid__aside {
+    margin-bottom: 16px;
+    font-weight: 700;
+  }
+
+  .lead-grid__form {
+    padding: clamp(24px, 4vw, 44px);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+  }
+
+  @media (max-width: 900px) {
+    .lead-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

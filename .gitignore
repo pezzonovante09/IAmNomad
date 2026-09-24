@@ -3,3 +3,13 @@ Thumbs.db
 desktop.ini
 *.log
 .cursor/
+
+# Astro
+node_modules/
+dist/
+.astro/
+.vercel/
+.netlify/
+.env
+.env.*
+!.env.example

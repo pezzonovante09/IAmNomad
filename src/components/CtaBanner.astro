@@ -1,0 +1,125 @@
+---
+import Icon from './Icon.astro';
+import Ornament from './Ornament.astro';
+import { srcset, unsplash, type Photo } from '../lib/img';
+
+interface Link {
+  href: string;
+  label: string;
+  external?: boolean;
+}
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  text?: string;
+  primary: Link;
+  secondary?: Link;
+  photo?: Photo;
+}
+
+const { eyebrow, title, text, primary, secondary, photo } = Astro.props;
+---
+
+<div class:list={['cta', { 'cta--photo': photo }]} data-reveal>
+  {
+    photo && (
+      <img
+        class="cta__bg"
+        src={unsplash(photo.id, 1400, 700)}
+        srcset={srcset(photo.id, [700, 1000, 1400, 2000], 0.5)}
+        sizes="(max-width: 1300px) 100vw, 1240px"
+        alt=""
+        loading="lazy"
+        width="1400"
+        height="700"
+      />
+    )
+  }
+  <Ornament variant="rosette" class="cta__rosette" />
+  <div class="cta__content">
+    {eyebrow && <p class="eyebrow cta__eyebrow">{eyebrow}</p>}
+    <h2 class="h2">{title}</h2>
+    {text && <p class="cta__text">{text}</p>}
+    <div class="cta__actions">
+      <a href={primary.href} class="btn btn--light" target={primary.external ? '_blank' : undefined} rel={primary.external ? 'noopener' : undefined}>
+        {primary.label}
+        <Icon name="arrow-right" />
+      </a>
+      {
+        secondary && (
+          <a href={secondary.href} class="btn btn--glass" target={secondary.external ? '_blank' : undefined} rel={secondary.external ? 'noopener' : undefined}>
+            {secondary.label}
+          </a>
+        )
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  .cta {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    padding: clamp(40px, 7vw, 96px) clamp(24px, 6vw, 88px);
+    border-radius: var(--radius-lg);
+    background: radial-gradient(120% 140% at 0% 0%, #2a6275 0%, #173b48 55%, #10282f 100%);
+    color: var(--hero-ink);
+  }
+
+  .cta--photo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(100deg, rgb(16 22 20 / 0.88) 0%, rgb(16 22 20 / 0.55) 55%, rgb(16 22 20 / 0.15) 100%);
+  }
+
+  .cta__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cta__rosette {
+    position: absolute;
+    right: -80px;
+    top: 50%;
+    z-index: -1;
+    width: clamp(240px, 40vw, 520px);
+    height: auto;
+    color: var(--gold);
+    opacity: 0.16;
+    transform: translateY(-50%);
+  }
+
+  .cta--photo .cta__rosette {
+    opacity: 0.1;
+  }
+
+  .cta__content {
+    display: grid;
+    gap: 18px;
+    max-width: 620px;
+  }
+
+  .cta__eyebrow {
+    color: var(--gold);
+  }
+
+  .cta__text {
+    font-size: 1.08rem;
+    color: rgb(255 250 242 / 0.82);
+  }
+
+  .cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+  }
+</style>

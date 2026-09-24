@@ -1,0 +1,101 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  items: { q: string; a: string }[];
+  /** Открыть первый пункт сразу. */
+  openFirst?: boolean;
+}
+
+const { items, openFirst = false } = Astro.props;
+---
+
+<div class="faq">
+  {
+    items.map((item, i) => (
+      <details class="faq__item" open={openFirst && i === 0} data-reveal style={`--i:${i % 4}`}>
+        <summary class="faq__q">
+          <span>{item.q}</span>
+          <span class="faq__icon" aria-hidden="true">
+            <Icon name="plus" size={20} />
+          </span>
+        </summary>
+        <div class="faq__a">
+          <p>{item.a}</p>
+        </div>
+      </details>
+    ))
+  }
+</div>
+
+<style>
+  .faq {
+    display: grid;
+    gap: 12px;
+  }
+
+  .faq__item {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    transition: border-color 0.2s;
+  }
+
+  .faq__item[open] {
+    border-color: var(--ink-mute);
+  }
+
+  .faq__q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 22px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .faq__q::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--bg-alt);
+    transition:
+      transform 0.35s var(--ease),
+      background-color 0.2s,
+      color 0.2s;
+  }
+
+  .faq__item[open] .faq__icon {
+    transform: rotate(45deg);
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .faq__a {
+    padding: 0 22px 22px;
+    color: var(--ink-soft);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .faq__item[open] .faq__a {
+      animation: faq-in 0.35s var(--ease);
+    }
+  }
+
+  @keyframes faq-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+</style>

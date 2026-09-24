@@ -1,0 +1,123 @@
+// Новые строки интерфейса редизайна + замены служебных плейсхолдеров вида «[... placeholder]».
+// Накладываются поверх translations.ts.
+
+export const ui = {
+  en: {
+    'ui.skip': 'Skip to content',
+    'ui.menu': 'Menu',
+    'ui.close': 'Close',
+    'ui.language': 'Language',
+    'ui.whatsappChat': 'Chat on WhatsApp',
+    'ui.expandAll': 'Expand all',
+    'ui.collapseAll': 'Collapse all',
+    'ui.day': 'Day',
+    'ui.photos': 'photos',
+
+    'home.hero.eyebrow': 'Kyrgyzstan · Central Asia',
+    'home.hero.ctaCustom': 'Build your own tour',
+    'home.stats.since': 'since then we’ve been showing Kyrgyzstan to guests from all over the world',
+    'home.stats.group': 'travelers max per group',
+    'home.stats.formats': 'travel formats — from classic routes to custom tours',
+    'home.tours.eyebrow': 'Itineraries',
+    'home.why.eyebrow': 'Why I AM NOMAD',
+    'home.reviews.eyebrow': 'Travelers',
+    'home.builder.eyebrow': 'Custom tour',
+    'home.form.eyebrow': 'Let’s plan',
+    'home.form.subtitle': 'Tell us about your plans — we’ll get back to you and help shape the route.',
+    'home.form.aside': 'Prefer messengers? Reach us directly',
+    'home.video.subtitle': 'Landscapes and traditions of Kyrgyzstan',
+
+    'tour.facts.duration': 'Duration',
+    'tour.facts.route': 'Route',
+    'tour.facts.group': 'Group',
+    'tour.facts.groupValue': 'up to 12 people',
+    'tour.facts.price': 'Price',
+    'tour.map.title': 'Route on the map',
+    'tour.booking.title': 'Book this tour',
+    'tour.booking.note': 'A request is not binding — we’ll contact you to discuss the details.',
+    'tour.booking.whatsapp': 'Ask on WhatsApp',
+    'tour.booking.dates': 'Upcoming dates',
+
+    'builder.add': 'Add',
+    'builder.remove': 'Remove',
+    'builder.moveUp': 'Move up',
+    'builder.moveDown': 'Move down',
+
+    'form.sending': 'Sending…',
+    'contact.form.subtitle': 'We reply on WhatsApp, Telegram or email — whichever suits you.',
+    'contact.eyebrow': 'Get in touch',
+
+    'mice.form.subtitle': 'Tell us about your event — we’ll prepare a program and a quote.',
+    'mice.services.conferencesText': 'Venues, transfers, accommodation and a cultural program for business events of any scale.',
+    'mice.services.teambuildingText': 'Team games, horseback rides, nomadic traditions and outdoor activities.',
+    'mice.services.incentiveText': 'Incentive trips for employees and partners — from yurt camps to premium hotels.',
+
+    'faq.cta.title': 'Didn’t find your answer?',
+    'faq.cta.text': 'Write to us — we’ll answer any question about your trip.',
+
+    'about.cta.title': 'Ready to see the real Kyrgyzstan?',
+
+    'notFound.title': 'Page not found',
+    'notFound.text': 'Looks like this trail leads nowhere. Let’s head back to base camp.',
+    'notFound.cta': 'Back to home',
+  },
+  ru: {
+    'ui.skip': 'Перейти к содержимому',
+    'ui.menu': 'Меню',
+    'ui.close': 'Закрыть',
+    'ui.language': 'Язык',
+    'ui.whatsappChat': 'Написать в WhatsApp',
+    'ui.expandAll': 'Развернуть все',
+    'ui.collapseAll': 'Свернуть все',
+    'ui.day': 'День',
+    'ui.photos': 'фото',
+
+    'home.hero.eyebrow': 'Кыргызстан · Центральная Азия',
+    'home.hero.ctaCustom': 'Собрать свой тур',
+    'home.stats.since': 'с тех пор показываем Кыргызстан гостям со всего мира',
+    'home.stats.group': 'человек максимум в группе',
+    'home.stats.formats': 'формата путешествий — от классики до индивидуальных туров',
+    'home.tours.eyebrow': 'Маршруты',
+    'home.why.eyebrow': 'Почему I AM NOMAD',
+    'home.reviews.eyebrow': 'Путешественники',
+    'home.builder.eyebrow': 'Индивидуальный тур',
+    'home.form.eyebrow': 'Спланируем поездку',
+    'home.form.subtitle': 'Расскажите о планах — мы свяжемся с вами и поможем с маршрутом.',
+    'home.form.aside': 'Удобнее в мессенджере? Пишите напрямую',
+    'home.video.subtitle': 'Пейзажи и традиции Кыргызстана',
+
+    'tour.facts.duration': 'Длительность',
+    'tour.facts.route': 'Маршрут',
+    'tour.facts.group': 'Группа',
+    'tour.facts.groupValue': 'до 12 человек',
+    'tour.facts.price': 'Стоимость',
+    'tour.map.title': 'Маршрут на карте',
+    'tour.booking.title': 'Забронировать тур',
+    'tour.booking.note': 'Заявка ни к чему не обязывает — мы свяжемся и обсудим детали.',
+    'tour.booking.whatsapp': 'Спросить в WhatsApp',
+    'tour.booking.dates': 'Ближайшие даты',
+
+    'builder.add': 'Добавить',
+    'builder.remove': 'Убрать',
+    'builder.moveUp': 'Выше',
+    'builder.moveDown': 'Ниже',
+
+    'form.sending': 'Отправка…',
+    'contact.form.subtitle': 'Ответим в WhatsApp, Telegram или на почту — как вам удобнее.',
+    'contact.eyebrow': 'Связаться с нами',
+
+    'mice.form.subtitle': 'Расскажите о мероприятии — подготовим программу и смету.',
+    'mice.services.conferencesText': 'Площадки, трансферы, проживание и культурная программа для деловых мероприятий любого масштаба.',
+    'mice.services.teambuildingText': 'Командные игры, конные прогулки, кочевые традиции и активности на природе.',
+    'mice.services.incentiveText': 'Мотивационные поездки для сотрудников и партнёров — от юрточных лагерей до премиальных отелей.',
+
+    'faq.cta.title': 'Не нашли ответ?',
+    'faq.cta.text': 'Напишите нам — ответим на любой вопрос о поездке.',
+
+    'about.cta.title': 'Готовы увидеть настоящий Кыргызстан?',
+
+    'notFound.title': 'Страница не найдена',
+    'notFound.text': 'Похоже, эта тропа никуда не ведёт. Вернёмся в базовый лагерь.',
+    'notFound.cta': 'На главную',
+  },
+} as const;

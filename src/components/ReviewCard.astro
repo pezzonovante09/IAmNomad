@@ -1,0 +1,79 @@
+---
+import Icon from './Icon.astro';
+import { unsplash } from '../lib/img';
+
+interface Props {
+  name: string;
+  text: string;
+  avatar: string;
+  index?: number;
+}
+
+const { name, text, avatar, index = 0 } = Astro.props;
+---
+
+<figure class="rc" data-reveal style={`--i:${index % 3}`}>
+  <div class="rc__stars" aria-label="5/5">
+    {[0, 1, 2, 3, 4].map(() => <Icon name="star" size={18} />)}
+  </div>
+  <blockquote class="rc__text">{text}</blockquote>
+  <figcaption class="rc__author">
+    <img src={unsplash(avatar, 112, 112)} alt="" width="56" height="56" loading="lazy" decoding="async" />
+    <span>{name}</span>
+  </figcaption>
+</figure>
+
+<style>
+  .rc {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    height: 100%;
+    margin: 0;
+    padding: 28px;
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+
+  .rc::before {
+    content: '“';
+    position: absolute;
+    top: 6px;
+    right: 22px;
+    font-family: var(--font-display);
+    font-size: 5rem;
+    line-height: 1;
+    color: var(--accent-soft);
+  }
+
+  .rc__stars {
+    display: flex;
+    gap: 2px;
+    color: var(--gold);
+  }
+
+  .rc__text {
+    margin: 0;
+    font-size: 1.02rem;
+    line-height: 1.65;
+  }
+
+  .rc__author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+    font-weight: 700;
+  }
+
+  .rc__author img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    outline: 2px solid var(--gold-soft);
+    outline-offset: 2px;
+  }
+</style>

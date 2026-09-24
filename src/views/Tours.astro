@@ -1,0 +1,109 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import PageHero from '../components/PageHero.astro';
+import TourCard from '../components/TourCard.astro';
+import { contacts } from '../data/site';
+import { tourCategories, tours } from '../data/tours';
+import { localize, useTranslations, type Lang } from '../i18n/utils';
+import { routes } from '../lib/routes';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<BaseLayout lang={lang} page="tours" path={routes.tours}>
+  <PageHero eyebrow={t('home.tours.eyebrow')} title={t('tours.title')} subtitle={t('tours.subtitle')} />
+
+  <section class="section">
+    <div class="container">
+      <div class="filters" role="group" aria-label={t('tours.title')} data-filters>
+        {
+          tourCategories.map((cat, i) => (
+            <button type="button" class="filters__btn" data-filter={cat} aria-pressed={i === 0 ? 'true' : 'false'}>
+              {t(`tours.tab.${cat}`)}
+            </button>
+          ))
+        }
+      </div>
+      <div class="grid grid--4" data-filter-grid>
+        {tours.map((tour, i) => <TourCard tour={tour} lang={lang} index={i} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="container">
+      <CtaBanner
+        eyebrow={t('home.builder.eyebrow')}
+        title={t('tour.custom.intro.title')}
+        text={t('tour.custom.intro.p3')}
+        primary={{ href: localize(routes.tour('custom'), lang), label: t('tour.custom.cta.button') }}
+        secondary={{ href: contacts.whatsapp, label: t('tour.booking.whatsapp'), external: true }}
+      />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 36px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+
+  .filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filters__btn {
+    flex-shrink: 0;
+    padding: 10px 20px;
+    border: 1.5px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition:
+      background-color 0.2s,
+      color 0.2s,
+      border-color 0.2s;
+  }
+
+  .filters__btn:hover {
+    border-color: var(--ink);
+  }
+
+  .filters__btn[aria-pressed='true'] {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--bg);
+  }
+</style>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const cards = document.querySelectorAll<HTMLElement>('[data-filter-grid] [data-category]');
+
+  buttons.forEach((btn) =>
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter;
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      const apply = () =>
+        cards.forEach((card) => {
+          card.classList.toggle('is-hidden', filter !== 'all' && card.dataset.category !== filter);
+          card.classList.add('is-visible');
+        });
+      // Плавная смена, если браузер умеет View Transitions.
+      if ('startViewTransition' in document) (document as any).startViewTransition(apply);
+      else apply();
+    }),
+  );
+</script>
