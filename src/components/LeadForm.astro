@@ -1,7 +1,7 @@
 ---
 // Форма заявки. Отправляется в Web3Forms (как и раньше) — письмо приходит на почту агентства.
 import Icon from './Icon.astro';
-import { web3forms } from '../data/site';
+import { supabase, web3forms } from '../data/site';
 import { tours } from '../data/tours';
 import { useTranslations, type Lang } from '../i18n/utils';
 
@@ -32,6 +32,10 @@ const f = (name: string) => `${id}-${name}`;
   class="form"
   data-form
   data-endpoint={web3forms.endpoint}
+  data-db={`${supabase.url}/rest/v1/leads`}
+  data-db-key={supabase.key}
+  data-variant={variant}
+  data-lang={lang}
   data-success={success ?? t('misc.formSuccess')}
   data-error={t('misc.formError')}
   data-sending={t('form.sending')}
@@ -215,6 +219,44 @@ const f = (name: string) => `${id}-${name}`;
       sessionStorage.removeItem('customTourBlocks');
     }
 
+    async function sendMail(data: Record<string, string>): Promise<boolean> {
+      const res = await fetch(form.dataset.endpoint!, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const json = await res.json();
+      return Boolean(json.success);
+    }
+
+    // Служебные поля Web3Forms и основные колонки таблицы; всё остальное — в data (jsonb).
+    const SKIP = ['access_key', 'subject', 'botcheck'];
+    const COLUMNS = ['name', 'email', 'phone', 'tour', 'message'];
+
+    async function saveLead(data: Record<string, string>): Promise<boolean> {
+      if (data.botcheck) return false; // ловушка для ботов
+      const extra = Object.fromEntries(
+        Object.entries(data).filter(([k, v]) => v && !SKIP.includes(k) && !COLUMNS.includes(k)),
+      );
+      const row = {
+        form: form.dataset.variant,
+        name: data.name || data.contact || null,
+        email: data.email || null,
+        phone: data.phone || data.whatsapp || null,
+        tour: data.tour || null,
+        message: data.message || null,
+        data: extra,
+        page: location.pathname,
+        lang: form.dataset.lang,
+      };
+      const res = await fetch(form.dataset.db!, {
+        method: 'POST',
+        headers: { apikey: form.dataset.dbKey!, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+        body: JSON.stringify(row),
+      });
+      return res.ok;
+    }
+
     function setStatus(text: string, type: 'success' | 'error' | '') {
       if (!status) return;
       status.textContent = text;
@@ -230,14 +272,12 @@ const f = (name: string) => `${id}-${name}`;
       setStatus('', '');
 
       try {
-        const data = Object.fromEntries(new FormData(form).entries());
-        const res = await fetch(form.dataset.endpoint!, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify(data),
-        });
-        const json = await res.json();
-        if (json.success) {
+        const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+        // Письмо на почту (Web3Forms) и запись в базу (Supabase) — параллельно.
+        // Заявка принята, если сработало хотя бы одно из двух.
+        const [mail, db] = await Promise.allSettled([sendMail(data), saveLead(data)]);
+        const ok = (r: PromiseSettledResult<boolean>) => r.status === 'fulfilled' && r.value;
+        if (ok(mail) || ok(db)) {
           form.reset();
           setStatus(form.dataset.success ?? '', 'success');
         } else {
