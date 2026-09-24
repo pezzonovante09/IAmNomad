@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import PostGrid from '../components/PostGrid.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import { blogPosts } from '../data/content';
+import { localize, useTranslations, type Lang } from '../i18n/utils';
+import { unsplash } from '../lib/img';
+import { routes } from '../lib/routes';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const photo = { id: blogPosts[0].id, alt: 'Issyk-Kul lake panorama' };
+const paragraphs = [1, 2, 3, 4].map((n) => t(`blogSingle.content.p${n}`));
+---
+
+<BaseLayout lang={lang} page="blog-single" section="blog" path={routes.article} title={t('blogSingle.title')} image={unsplash(photo.id, 1200, 630)}>
+  <PageHero kicker={t('blogSingle.date')} meta={t('blogSingle.author')} title={t('blogSingle.title')} photo={photo} />
+
+  <article class="art">
+    <aside class="art__side label">
+      <a href={localize(routes.blog, lang)}>← {t('nav.blog')}</a>
+    </aside>
+    <div class="art__body">
+      {paragraphs.map((p, i) => <p class:list={{ art__lead: i === 0 }} data-reveal>{p}</p>)}
+    </div>
+  </article>
+
+  <section>
+    <SectionHeader kicker="(02)" title={t('blogSingle.related.title')} />
+    <PostGrid lang={lang} only={[2, 3, 5]} />
+  </section>
+</BaseLayout>
+
+<style>
+  .art {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .art__side {
+    padding: 48px var(--gutter);
+    border-right: 1px solid var(--line);
+  }
+
+  .art__side a {
+    text-decoration: none;
+  }
+
+  .art__side a:hover {
+    color: var(--accent);
+  }
+
+  .art__body {
+    display: grid;
+    gap: 24px;
+    max-width: 780px;
+    padding: 48px var(--gutter) 64px;
+    font-size: 18px;
+    line-height: 1.7;
+  }
+
+  .art__lead {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(20px, 2vw, 28px);
+    line-height: 1.35;
+  }
+
+  @media (max-width: 800px) {
+    .art {
+      grid-template-columns: 1fr;
+    }
+
+    .art__side {
+      padding-block: 20px;
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+  }
+</style>

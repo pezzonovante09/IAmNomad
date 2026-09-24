@@ -1,0 +1,16 @@
+# Старые адреса статического сайта → новые (Netlify)
+/index.html  /  301
+/about.html  /about/  301
+/tours.html  /tours/  301
+/tour-classic.html  /tours/classic/  301
+/tour-single.html  /tours/classic/  301
+/tour-adventure.html  /tours/adventure/  301
+/tour-winter.html  /tours/winter/  301
+/tour-custom.html  /tours/custom/  301
+/mice.html  /mice/  301
+/blog.html  /blog/  301
+/blog-single.html  /blog/top-10-places/  301
+/reviews.html  /reviews/  301
+/gallery.html  /gallery/  301
+/faq.html  /faq/  301
+/contact.html  /contact/  301

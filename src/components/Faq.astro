@@ -1,13 +1,11 @@
 ---
-import Icon from './Icon.astro';
-
 interface Props {
   items: { q: string; a: string }[];
-  /** Открыть первый пункт сразу. */
   openFirst?: boolean;
 }
 
 const { items, openFirst = false } = Astro.props;
+const pad = (n: number) => String(n).padStart(2, '0');
 ---
 
 <div class="faq">
@@ -15,10 +13,9 @@ const { items, openFirst = false } = Astro.props;
     items.map((item, i) => (
       <details class="faq__item" open={openFirst && i === 0} data-reveal style={`--i:${i % 4}`}>
         <summary class="faq__q">
-          <span>{item.q}</span>
-          <span class="faq__icon" aria-hidden="true">
-            <Icon name="plus" size={20} />
-          </span>
+          <span class="label num faq__num">{pad(i + 1)}</span>
+          <span class="faq__text">{item.q}</span>
+          <span class="faq__icon" aria-hidden="true" />
         </summary>
         <div class="faq__a">
           <p>{item.a}</p>
@@ -30,29 +27,23 @@ const { items, openFirst = false } = Astro.props;
 
 <style>
   .faq {
-    display: grid;
-    gap: 12px;
+    border-bottom: 1px solid var(--line);
   }
 
   .faq__item {
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: var(--surface);
-    transition: border-color 0.2s;
+    border-top: 1px solid var(--line);
+    transition: background-color 0.5s;
   }
 
   .faq__item[open] {
-    border-color: var(--ink-mute);
+    background: var(--surface);
   }
 
   .faq__q {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 20px 22px;
-    font-weight: 700;
-    font-size: 1.05rem;
+    align-items: baseline;
+    gap: 24px;
+    padding: 20px var(--gutter);
     cursor: pointer;
     list-style: none;
   }
@@ -61,41 +52,70 @@ const { items, openFirst = false } = Astro.props;
     display: none;
   }
 
-  .faq__icon {
-    display: grid;
-    place-items: center;
+  .faq__num {
+    width: 44px;
     flex-shrink: 0;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: var(--bg-alt);
-    transition:
-      transform 0.35s var(--ease),
-      background-color 0.2s,
-      color 0.2s;
   }
 
-  .faq__item[open] .faq__icon {
-    transform: rotate(45deg);
-    background: var(--accent);
-    color: var(--on-accent);
+  .faq__text {
+    flex: 1;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(18px, 1.8vw, 26px);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  .faq__q:hover .faq__text,
+  .faq__item[open] .faq__text {
+    color: var(--accent);
+  }
+
+  .faq__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    align-self: center;
+  }
+
+  .faq__icon::before,
+  .faq__icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 16px;
+    height: 1px;
+    background: currentColor;
+    transition: transform 0.4s var(--ease);
+  }
+
+  .faq__icon::after {
+    transform: rotate(90deg);
+  }
+
+  .faq__item[open] .faq__icon::after {
+    transform: rotate(0);
   }
 
   .faq__a {
-    padding: 0 22px 22px;
+    padding: 0 var(--gutter) 24px calc(var(--gutter) + 68px);
+    max-width: calc(760px + var(--gutter) + 68px);
     color: var(--ink-soft);
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    .faq__item[open] .faq__a {
-      animation: faq-in 0.35s var(--ease);
+  @media (max-width: 560px) {
+    .faq__q {
+      gap: 12px;
     }
-  }
 
-  @keyframes faq-in {
-    from {
-      opacity: 0;
-      transform: translateY(-6px);
+    .faq__num {
+      width: 28px;
+    }
+
+    .faq__a {
+      padding-left: calc(var(--gutter) + 40px);
     }
   }
 </style>

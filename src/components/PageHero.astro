@@ -1,129 +1,105 @@
 ---
-// Шапка внутренних страниц: заголовок на тёплом фоне с орнаментом или на фото.
-import Ornament from './Ornament.astro';
+// Шапка внутренней страницы: строка меток, огромный заголовок капсом, подзаголовок справа,
+// по желанию — кадр на всю ширину с «занавесом».
 import { srcset, unsplash, type Photo } from '../lib/img';
 
 interface Props {
   title: string;
   subtitle?: string;
-  eyebrow?: string;
+  kicker?: string;
+  meta?: string;
   photo?: Photo;
+  /** Акцентная (зелёная) вторая часть заголовка. */
+  accent?: string;
 }
 
-const { title, subtitle, eyebrow, photo } = Astro.props;
+const { title, subtitle, kicker: label, meta, photo, accent } = Astro.props;
 ---
 
-<section class:list={['ph', { 'ph--photo': photo }]}>
+<section class="ph">
   {
-    photo && (
-      <img
-        class="ph__bg"
-        src={unsplash(photo.id, 1600, 700)}
-        srcset={srcset(photo.id, [800, 1200, 1600, 2200], 0.44)}
-        sizes="100vw"
-        alt=""
-        width="1600"
-        height="700"
-        fetchpriority="high"
-      />
+    (label || meta) && (
+      <div class="ph__meta label" data-reveal="fade" data-delay="100">
+        <span>{label}</span>
+        {meta && <span class="num">{meta}</span>}
+      </div>
     )
   }
-  {!photo && <Ornament variant="rosette" class="ph__rosette" />}
-  <div class="container ph__inner">
-    {eyebrow && <p class="eyebrow ph__eyebrow">{eyebrow}</p>}
-    <h1 class="h1 ph__title">{title}</h1>
-    {subtitle && <p class="lead ph__subtitle">{subtitle}</p>}
-    <slot />
+  <div class="ph__head">
+    <h1 class="ph__title h1" data-reveal="up" data-delay="200">
+      {title}
+      {accent && <span class="ph__accent">{accent}</span>}
+    </h1>
+    {subtitle && <p class="ph__subtitle" data-reveal="fade" data-delay="600">{subtitle}</p>}
   </div>
-  <div class="ornament-band ph__band" aria-hidden="true"></div>
+  <slot />
+  {
+    photo && (
+      <div class="ph__media" data-reveal="curtain" data-delay="400">
+        <img
+          src={unsplash(photo.id, 1800, 800)}
+          srcset={srcset(photo.id, [800, 1200, 1800, 2400], 0.44)}
+          sizes="100vw"
+          alt={photo.alt}
+          width="1800"
+          height="800"
+          fetchpriority="high"
+        />
+      </div>
+    )
+  }
 </section>
 
 <style>
   .ph {
-    position: relative;
-    overflow: hidden;
-    padding-block: clamp(56px, 8vw, 112px) clamp(48px, 6vw, 88px);
-    background: var(--bg-alt);
+    border-bottom: 1px solid var(--line);
   }
 
-  .ph__rosette {
-    position: absolute;
-    top: 50%;
-    right: -60px;
-    width: clamp(260px, 36vw, 480px);
-    height: auto;
-    color: var(--accent);
-    opacity: 0.08;
-    transform: translateY(-50%);
-    animation: ph-spin 120s linear infinite;
+  .ph__meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 20px var(--gutter) 0;
   }
 
-  .ph__inner {
-    position: relative;
-    display: grid;
-    gap: 16px;
+  .ph__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px 32px;
+    padding: 8px var(--gutter) 28px;
   }
 
   .ph__title {
-    max-width: 18ch;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+
+  .ph__accent {
+    display: block;
+    color: var(--accent);
   }
 
   .ph__subtitle {
-    max-width: 60ch;
+    max-width: 360px;
+    padding-bottom: 0.4em;
+    font-size: 16px;
   }
 
-  .ph__band {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 0.35;
+  .ph__media {
+    position: relative;
+    height: clamp(260px, 44vw, 620px);
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+    background: var(--accent);
   }
 
-  .ph--photo {
-    min-height: min(62vh, 560px);
-    display: flex;
-    align-items: flex-end;
-    color: var(--hero-ink);
-    background: #1b140e;
-  }
-
-  .ph--photo::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--overlay);
-  }
-
-  .ph__bg {
-    position: absolute;
-    inset: 0;
+  .ph__media img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-
-  .ph--photo .ph__inner {
-    z-index: 1;
-  }
-
-  .ph--photo .ph__subtitle {
-    color: rgb(255 250 242 / 0.85);
-  }
-
-  .ph--photo .ph__eyebrow {
-    color: var(--gold);
-  }
-
-  .ph--photo .ph__band {
-    z-index: 1;
-    color: var(--gold);
-    opacity: 0.7;
-  }
-
-  @keyframes ph-spin {
-    to {
-      transform: translateY(-50%) rotate(360deg);
-    }
   }
 </style>

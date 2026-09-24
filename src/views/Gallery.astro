@@ -1,0 +1,132 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import VideoEmbed from '../components/VideoEmbed.astro';
+import { galleryPhotos } from '../data/content';
+import { videos } from '../data/site';
+import { useTranslations, type Lang } from '../i18n/utils';
+import { srcset, unsplash } from '../lib/img';
+import { routes } from '../lib/routes';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+// Крупные фото подобраны так, чтобы сетка 4×N закрывалась без дыр (12 фото → 6 рядов).
+const bigIndexes = [0, 5, 7, 9];
+const big = (i: number) => bigIndexes.includes(i);
+---
+
+<BaseLayout lang={lang} page="gallery" path={routes.gallery}>
+  <PageHero kicker={`(01) ${t('gallery.tab.photo')}`} meta={`${String(galleryPhotos.length).padStart(2, '0')} ${t('ui.photos')}`} title={t('gallery.title')} subtitle={t('gallery.subtitle')} />
+
+  <section class="gal" aria-label={t('gallery.tab.photo')}>
+    {
+      galleryPhotos.map((p, i) => (
+        <button
+          type="button"
+          class:list={['gal__item', { 'gal__item--big': big(i) }]}
+          data-lightbox="gallery"
+          data-full={unsplash(p.id, 1800)}
+          aria-label={p.alt}
+          data-reveal="fade"
+          style={`--i:${i % 4}`}
+        >
+          <img src={unsplash(p.id, 900, 900)} srcset={srcset(p.id, [400, 700, 1000, 1400], 1)} sizes={big(i) ? '(max-width: 700px) 100vw, 50vw' : '(max-width: 700px) 50vw, 25vw'} alt={p.alt} width="900" height="900" loading={i < 4 ? 'eager' : 'lazy'} decoding="async" />
+          <span class="gal__cap label num">
+            {String(i + 1).padStart(2, '0')} — {p.alt}
+          </span>
+        </button>
+      ))
+    }
+  </section>
+
+  {
+    videos.gallery.length > 0 && (
+      <section>
+        <SectionHeader kicker={`(02) ${t('gallery.tab.video')}`} title={t('gallery.tab.video')} />
+        <div class="vids">
+          {videos.gallery.map((src, i) => (
+            <VideoEmbed src={src} title={`${t('gallery.tab.video')} ${i + 1}`} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .gal {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-flow: dense;
+    gap: 1px;
+    background: var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .gal__item {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+    background: var(--accent);
+    cursor: zoom-in;
+  }
+
+  .gal__item--big {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .gal__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.4s var(--ease);
+  }
+
+  .gal__item:hover img {
+    transform: scale(1.05);
+  }
+
+  .gal__cap {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 12px 16px;
+    background: linear-gradient(0deg, rgb(17 17 17 / 0.7), transparent);
+    color: #f5f5f3;
+    text-align: left;
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 0.4s,
+      transform 0.5s var(--ease);
+  }
+
+  .gal__item:hover .gal__cap,
+  .gal__item:focus-visible .gal__cap {
+    opacity: 1;
+    transform: none;
+  }
+
+  .vids {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr));
+    gap: 1px;
+    background: var(--line);
+    border-top: 1px solid var(--line);
+  }
+
+  @media (max-width: 700px) {
+    .gal {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CtaBanner from '../components/CtaBanner.astro';
 import PageHero from '../components/PageHero.astro';
-import TourCard from '../components/TourCard.astro';
+import TourIndex from '../components/TourIndex.astro';
 import { contacts } from '../data/site';
 import { tourCategories, tours } from '../data/tours';
 import { localize, useTranslations, type Lang } from '../i18n/utils';
@@ -14,49 +14,43 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
+const pad = (n: number) => String(n).padStart(2, '0');
 ---
 
 <BaseLayout lang={lang} page="tours" path={routes.tours}>
-  <PageHero eyebrow={t('home.tours.eyebrow')} title={t('tours.title')} subtitle={t('tours.subtitle')} />
+  <PageHero
+    kicker={t('home.index.kicker')}
+    meta={`${pad(tours.length)} ${t('home.index.count')} · 2026`}
+    title={t('tours.title')}
+    subtitle={t('tours.subtitle')}
+  />
 
-  <section class="section">
-    <div class="container">
-      <div class="filters" role="group" aria-label={t('tours.title')} data-filters>
-        {
-          tourCategories.map((cat, i) => (
-            <button type="button" class="filters__btn" data-filter={cat} aria-pressed={i === 0 ? 'true' : 'false'}>
-              {t(`tours.tab.${cat}`)}
-            </button>
-          ))
-        }
-      </div>
-      <div class="grid grid--4" data-filter-grid>
-        {tours.map((tour, i) => <TourCard tour={tour} lang={lang} index={i} />)}
-      </div>
-    </div>
-  </section>
+  <div class="filters" role="group" aria-label={t('tours.title')} data-filters>
+    {
+      tourCategories.map((cat, i) => (
+        <button type="button" class="filters__btn" data-filter={cat} aria-pressed={i === 0 ? 'true' : 'false'}>
+          {t(`tours.tab.${cat}`)}
+        </button>
+      ))
+    }
+  </div>
 
-  <section class="section section--tight">
-    <div class="container">
-      <CtaBanner
-        eyebrow={t('home.builder.eyebrow')}
-        title={t('tour.custom.intro.title')}
-        text={t('tour.custom.intro.p3')}
-        primary={{ href: localize(routes.tour('custom'), lang), label: t('tour.custom.cta.button') }}
-        secondary={{ href: contacts.whatsapp, label: t('tour.booking.whatsapp'), external: true }}
-      />
-    </div>
-  </section>
+  <TourIndex lang={lang} tours={tours} />
+
+  <CtaBanner
+    kicker={t('home.builder.kicker')}
+    title={t('tour.custom.intro.title')}
+    text={t('tour.custom.intro.p3')}
+    primary={{ href: localize(routes.tour('custom'), lang), label: t('tour.custom.cta.button') }}
+    secondary={{ href: contacts.whatsapp, label: t('tour.booking.whatsapp'), external: true, icon: 'whatsapp' }}
+  />
 </BaseLayout>
 
 <style>
   .filters {
     display: flex;
-    gap: 8px;
-    margin-bottom: 36px;
     overflow-x: auto;
     scrollbar-width: none;
-    padding-bottom: 4px;
   }
 
   .filters::-webkit-scrollbar {
@@ -64,46 +58,53 @@ const t = useTranslations(lang);
   }
 
   .filters__btn {
-    flex-shrink: 0;
-    padding: 10px 20px;
-    border: 1.5px solid var(--line);
-    border-radius: 999px;
-    background: var(--surface);
-    font-weight: 700;
-    font-size: 0.95rem;
+    flex: 1 0 auto;
+    padding: 16px 24px;
+    border: 0;
+    border-right: 1px solid var(--line);
+    background: var(--bg);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
     transition:
-      background-color 0.2s,
-      color 0.2s,
-      border-color 0.2s;
+      background-color 0.5s,
+      color 0.5s;
+  }
+
+  .filters__btn:last-child {
+    border-right: 0;
   }
 
   .filters__btn:hover {
-    border-color: var(--ink);
+    background: var(--surface);
   }
 
   .filters__btn[aria-pressed='true'] {
     background: var(--ink);
-    border-color: var(--ink);
     color: var(--bg);
   }
 </style>
 
 <script>
   const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
-  const cards = document.querySelectorAll<HTMLElement>('[data-filter-grid] [data-category]');
+  const rows = document.querySelectorAll<HTMLElement>('[data-tour-index] [data-row]');
 
   buttons.forEach((btn) =>
     btn.addEventListener('click', () => {
       const filter = btn.dataset.filter;
       buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
-      const apply = () =>
-        cards.forEach((card) => {
-          card.classList.toggle('is-hidden', filter !== 'all' && card.dataset.category !== filter);
-          card.classList.add('is-visible');
-        });
-      // Плавная смена, если браузер умеет View Transitions.
-      if ('startViewTransition' in document) (document as any).startViewTransition(apply);
-      else apply();
+      let first: HTMLElement | null = null;
+      rows.forEach((row) => {
+        const show = filter === 'all' || row.dataset.category === filter;
+        row.classList.toggle('is-hidden', !show);
+        row.classList.add('is-visible');
+        if (show && !first) first = row;
+      });
+      // Раскрываем первую видимую строку.
+      if (first && !(first as HTMLElement).classList.contains('is-open')) {
+        (first as HTMLElement).querySelector<HTMLButtonElement>('[data-row-toggle]')?.click();
+      }
     }),
   );
 </script>

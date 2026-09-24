@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import PageHero from '../components/PageHero.astro';
+import ReviewCard from '../components/ReviewCard.astro';
+import { reviewAvatars } from '../data/content';
+import { localize, useTranslations, type Lang } from '../i18n/utils';
+import { routes } from '../lib/routes';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const reviews = reviewAvatars.map((avatar, i) => ({ avatar, n: i + 1 }));
+---
+
+<BaseLayout lang={lang} page="reviews" path={routes.reviews}>
+  <PageHero kicker={t('home.reviews.kicker')} meta={`${String(reviews.length).padStart(2, '0')} · ★★★★★`} title={t('reviews.title')} subtitle={t('reviews.subtitle')} />
+  <div class="grid-rev">
+    {reviews.map(({ avatar, n }, i) => <ReviewCard name={t(`reviews.review${n}.name`)} text={t(`reviews.review${n}.text`)} avatar={avatar} index={i} />)}
+  </div>
+  <CtaBanner
+    kicker={t('home.form.kicker')}
+    title={t('home.form.title')}
+    text={t('home.form.subtitle')}
+    primary={{ href: localize(routes.tours, lang), label: t('home.hero.cta') }}
+    secondary={{ href: localize(routes.contact, lang), label: t('nav.contact') }}
+  />
+</BaseLayout>
+
+<style>
+  .grid-rev {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .grid-rev > :global(*) {
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .grid-rev > :global(*:nth-child(3n)) {
+    border-right: 0;
+  }
+
+  @media (max-width: 900px) {
+    .grid-rev {
+      grid-template-columns: 1fr;
+    }
+
+    .grid-rev > :global(*) {
+      border-right: 0;
+    }
+  }
+</style>
