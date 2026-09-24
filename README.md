@@ -9,9 +9,12 @@ npm install
 npm run dev      # локально: http://localhost:4321
 npm run build    # сборка в dist/
 npm run check    # проверка типов
+npm run check:text  # после build: весь текст помещается на всех страницах (320–1920px)
 ```
 
 Нужен Node.js 22.12+.
+
+Для `check:text` нужен Chromium для Playwright: `npx playwright install chromium`.
 
 ## Настройка
 
