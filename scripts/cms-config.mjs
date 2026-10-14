@@ -29,6 +29,7 @@ const sections = {
   gallery: 'Галерея',
   faq: 'FAQ',
   contact: 'Контакты',
+  legal: 'Политика конфиденциальности',
 };
 
 const textFiles = fs
@@ -41,7 +42,7 @@ const textCollection = {
   name: 'texts',
   label: 'Тексты',
   label_singular: 'Раздел',
-  description: 'Все тексты сайта по разделам — русский и английский рядом. «•» в начале строки — пункт списка.',
+  description: 'Все тексты сайта по разделам — русский и английский рядом. «•» в начале строки — пункт списка. {email}, {phone} и {policy} подставляются автоматически — не удаляйте их.',
   i18n: true,
   files: textFiles.map((name) => {
     const data = JSON.parse(fs.readFileSync(path.join(textsDir, `${name}.json`), 'utf8'));
