@@ -22,7 +22,7 @@ const big = (i: number) => bigIndexes.includes(i);
 ---
 
 <BaseLayout lang={lang} page="gallery" path={routes.gallery}>
-  <PageHero kicker={`(01) ${t('gallery.tab.photo')}`} meta={`${String(galleryPhotos.length).padStart(2, '0')} ${t('ui.photos')}`} title={t('gallery.title')} subtitle={t('gallery.subtitle')} />
+  <PageHero kicker={`${t('gallery.tab.photo')}`} meta={`${String(galleryPhotos.length).padStart(2, '0')} ${t('ui.photos')}`} title={t('gallery.title')} subtitle={t('gallery.subtitle')} />
 
   <section class="gal" aria-label={t('gallery.tab.photo')}>
     {
@@ -48,7 +48,7 @@ const big = (i: number) => bigIndexes.includes(i);
   {
     videos.gallery.length > 0 && (
       <section>
-        <SectionHeader kicker={`(02) ${t('gallery.tab.video')}`} title={t('gallery.tab.video')} />
+        <SectionHeader kicker={`${t('gallery.tab.video')}`} title={t('gallery.tab.video')} />
         <div class="vids">
           {videos.gallery.map((src, i) => (
             <VideoEmbed src={src} title={`${t('gallery.tab.video')} ${i + 1}`} />

@@ -22,12 +22,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 const rows = tours.map((tour, i) => {
   const k = (f: string) => t(`${tour.card}.${f}`);
   const pageHref = localize(routes.tour(tour.slug), lang);
-  const cta =
-    tour.status === 'open'
-      ? { href: `${localize(routes.contact, lang)}?tour=${tour.slug}`, label: t('home.index.reserve') }
-      : tour.status === 'request'
-        ? { href: pageHref, label: t('tour.custom.cta.button') }
-        : { href: pageHref, label: t('btn.viewDetails') };
+  const cta = { href: `${localize(routes.contact, lang)}?tour=${tour.slug}`, label: t('home.index.contact') };
   return {
     tour,
     num: pad(i + 1),
@@ -35,7 +30,6 @@ const rows = tours.map((tour, i) => {
     route: k('location'),
     duration: k('duration'),
     days: tour.days ? pad(tour.days) : '—',
-    price: k('price'),
     desc: tour.slug === 'custom' ? t('tour.custom.intro.p2') : t(`tour.${tour.slug}.subtitle`),
     excerpt: k('excerpt'),
     nextDate: tour.dates ? t(`tour.${tour.slug}.dates.date1`) : null,
@@ -52,7 +46,7 @@ const rows = tours.map((tour, i) => {
     <span class="ti__c-title">{t('home.index.titleCol')}</span>
     <span class="ti__c-route">{t('home.index.route')}</span>
     <span class="ti__c-days">{t('home.index.days')}</span>
-    <span class="ti__c-price">{t('home.index.from')}</span>
+    <span class="ti__c-price"></span>
   </div>
 
   {
@@ -64,7 +58,7 @@ const rows = tours.map((tour, i) => {
             <span class="ti__c-title ti__title">{row.title}</span>
             <span class="ti__c-route">{row.route}</span>
             <span class="ti__c-days num">{row.days}</span>
-            <span class="ti__c-price num">{row.price}</span>
+            <span class="ti__c-price" aria-hidden="true">→</span>
           </button>
         </h3>
         <div class="ti__body" id={`ti-${row.tour.slug}`} inert={i !== open}>
@@ -94,10 +88,6 @@ const rows = tours.map((tour, i) => {
                 </span>
               </a>
               <div class="ti__info">
-                <div>
-                  <p class="label">{row.tour.status === 'open' ? t('home.index.perGuest') : t('tour.facts.price')}</p>
-                  <p class="ti__price num">{row.price}</p>
-                </div>
                 <p class="ti__desc">{row.desc}</p>
                 <dl class="ti__specs">
                   <dt>{t('tour.facts.duration')}</dt>
@@ -114,12 +104,10 @@ const rows = tours.map((tour, i) => {
                   )}
                 </dl>
                 <div class="ti__actions">
-                  {row.tour.status === 'open' && (
-                    <a href={row.pageHref} class="link-arrow">
-                      {t('home.index.program')}
-                      <Icon name="arrow-right" />
-                    </a>
-                  )}
+                  <a href={row.pageHref} class="link-arrow">
+                    {t('btn.viewDetails')}
+                    <Icon name="arrow-right" />
+                  </a>
                   <a href={row.cta.href} class="btn btn--accent btn--block">
                     {row.cta.label}
                     <span aria-hidden="true">→</span>

@@ -9,7 +9,7 @@ import Ornament from '../components/Ornament.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import VideoModal from '../components/VideoModal.astro';
 import { contacts } from '../data/site';
-import { showGallery, showMoments, showPosters, showReviews, showStats, showTimeline, showVideos } from '../data/show';
+import { showGallery, showMoments, showPosters, showStats, showTimeline, showVideos } from '../data/show';
 import { useTranslations, type Lang } from '../i18n/utils';
 import { srcset, unsplash } from '../lib/img';
 import { routes } from '../lib/routes';
@@ -48,7 +48,6 @@ const moments = showMoments.map((photo, i) => {
 const bigs = bigTiles(showGallery.length);
 const hasGalleryVideos = showGallery.some((g) => g.video);
 const faq = [1, 2, 3, 4, 5, 6].map((n) => ({ q: t(`show.faq.q${n}`), a: t(`show.faq.a${n}`) }));
-const avgRating = (showReviews.reduce((a, r) => a + r.rating, 0) / showReviews.length).toFixed(1);
 
 const seoTitle =
   lang === 'en'
@@ -120,14 +119,39 @@ const jsonLd = {
         </div>
         <div class="hero__actions" data-reveal="up" data-delay="900">
           <a href="#show-booking" class="btn btn--gold btn--lg">{t('show.cta')} <span aria-hidden="true">→</span></a>
-          <a href={contacts.youtube} class="btn btn--glass btn--lg" data-video={showVideos.main} target="_blank" rel="noopener">
-            <Icon name="play" size={16} />
-            {t('show.watch')}
-          </a>
         </div>
       </div>
     </div>
     <div class="ornament-band hero__band" aria-hidden="true"></div>
+  </section>
+
+  <!-- Видео -->
+  <section class="block">
+    <SectionHeader kicker={t('show.video.kicker')} title={t('show.video.title')} />
+    <a
+      href={contacts.youtube}
+      class="vid"
+      data-video={showVideos.main}
+      target="_blank"
+      rel="noopener"
+      aria-label={t('show.video.play')}
+      data-reveal="curtain"
+    >
+      <img
+        src={unsplash(showPosters.video.id, 1920, 1000)}
+        srcset={srcset(showPosters.video.id, [800, 1200, 1920, 2560], 0.52)}
+        sizes="100vw"
+        alt={showPosters.video.alt}
+        width="1920"
+        height="1000"
+        loading="lazy"
+      />
+      <span class="vid__shade" aria-hidden="true"></span>
+      <span class="vid__play" aria-hidden="true">
+        <Icon name="play" size={44} />
+      </span>
+      <span class="vid__label label">{showVideos.main ? t('show.video.play') : t('show.video.soon')}</span>
+    </a>
   </section>
 
   <!-- (01) Почему выбирают нас -->
@@ -138,7 +162,7 @@ const jsonLd = {
         why.map((w, i) => (
           <li class="why__card" data-reveal style={`--i:${i % 3}`}>
             <div class="why__top">
-              <span class="label num">({pad(w.n)})</span>
+              
               <Icon name={w.icon} size={26} />
             </div>
             <h3 class="why__title">{t(`show.why.${w.n}.title`)}</h3>
@@ -305,92 +329,12 @@ const jsonLd = {
     </div>
   </section>
 
-  <!-- (06) Видео -->
-  <section class="block">
-    <SectionHeader kicker={t('show.video.kicker')} title={t('show.video.title')} />
-    <a
-      href={contacts.youtube}
-      class="vid"
-      data-video={showVideos.main}
-      target="_blank"
-      rel="noopener"
-      aria-label={t('show.video.play')}
-      data-reveal="curtain"
-    >
-      <img
-        src={unsplash(showPosters.video.id, 1920, 1000)}
-        srcset={srcset(showPosters.video.id, [800, 1200, 1920, 2560], 0.52)}
-        sizes="100vw"
-        alt={showPosters.video.alt}
-        width="1920"
-        height="1000"
-        loading="lazy"
-      />
-      <span class="vid__shade" aria-hidden="true"></span>
-      <span class="vid__play" aria-hidden="true">
-        <Icon name="play" size={44} />
-      </span>
-      <span class="vid__label label">{showVideos.main ? t('show.video.play') : t('show.video.soon')}</span>
-    </a>
-  </section>
 
   <a href="#show-booking" class="cta-bar" data-reveal="fade">
     <span class="label">I AM NOMAD SHOW</span>
     <span class="cta-bar__text">{t('show.cta')}</span>
     <span class="cta-bar__arrow" aria-hidden="true">→</span>
   </a>
-
-  <!-- (07) Отзывы -->
-  <section class="block">
-    <SectionHeader kicker={t('show.reviews.kicker')} title={t('show.reviews.title')}>
-      <div class="rev-head">
-        <p class="rev-rating">
-          <span class="rev-rating__num num">{avgRating}</span>
-          <span class="rev-rating__stars" aria-label={`${avgRating}/5`}>
-            {[0, 1, 2, 3, 4].map(() => <Icon name="star" size={16} />)}
-          </span>
-        </p>
-        <p class="label">{t('show.reviews.rating')}</p>
-        <div class="rev-nav">
-          <button type="button" data-rev-prev aria-label={t('btn.prev')}>←</button>
-          <button type="button" data-rev-next aria-label={t('btn.next')}>→</button>
-        </div>
-      </div>
-    </SectionHeader>
-    <ul class="rev" data-rev-track>
-      {
-        showReviews.map((r, i) => (
-          <li class="rev__card" data-reveal="fade" style={`--i:${i % 3}`}>
-            {r.video ? (
-              <a href={r.video} class="rev__media" data-video={r.video} aria-label={t('show.reviews.video')}>
-                <img src={unsplash(r.photo, 800, 600)} alt="" width="800" height="600" loading="lazy" decoding="async" />
-                <span class="rev__play">
-                  <Icon name="play" size={20} />
-                  <span class="label">{t('show.reviews.video')}</span>
-                </span>
-              </a>
-            ) : (
-              <div class="rev__media">
-                <img src={unsplash(r.photo, 800, 600)} alt="" width="800" height="600" loading="lazy" decoding="async" />
-              </div>
-            )}
-            <div class="rev__body">
-              <div class="rev__stars" aria-label={`${r.rating}/5`}>
-                {Array.from({ length: r.rating }).map(() => (
-                  <Icon name="star" size={14} />
-                ))}
-              </div>
-              <blockquote class="rev__text">{t(`${r.key}.text`)}</blockquote>
-              <p class="rev__author">
-                <img src={unsplash(r.avatar, 96, 96)} alt="" width="36" height="36" loading="lazy" />
-                <span class="label">{t(`${r.key}.name`)}</span>
-              </p>
-            </div>
-          </li>
-        ))
-      }
-    </ul>
-  </section>
 
   <!-- (08) FAQ -->
   <section class="block">

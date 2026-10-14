@@ -35,7 +35,7 @@ const { title, subtitle, kicker: label, meta, photo, accent } = Astro.props;
   <slot />
   {
     photo && (
-      <div class="ph__media" data-reveal="curtain" data-delay="400">
+      <div class:list={['ph__media', { 'ph__media--text': Astro.slots.has('overlay') }]} data-reveal="curtain" data-delay="400">
         <img
           src={unsplash(photo.id, 1800, 800)}
           srcset={srcset(photo.id, [800, 1200, 1800, 2400], 0.44)}
@@ -45,6 +45,11 @@ const { title, subtitle, kicker: label, meta, photo, accent } = Astro.props;
           height="800"
           fetchpriority="high"
         />
+        {Astro.slots.has('overlay') && (
+          <div class="ph__overlay">
+            <slot name="overlay" />
+          </div>
+        )}
       </div>
     )
   }
@@ -99,5 +104,36 @@ const { title, subtitle, kicker: label, meta, photo, accent } = Astro.props;
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  /* Текст поверх фото (напр. «О нас»): фото растягивается под текст */
+  .ph__media--text {
+    display: flex;
+    align-items: flex-end;
+    height: auto;
+    min-height: clamp(420px, 56vw, 760px);
+  }
+
+  .ph__media--text img {
+    position: absolute;
+    inset: 0;
+  }
+
+  .ph__media--text::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgb(0 0 0 / 0.78), rgb(0 0 0 / 0.25) 70%, rgb(0 0 0 / 0.1));
+  }
+
+  .ph__overlay {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 16px;
+    max-width: 760px;
+    padding: 48px var(--gutter);
+    color: #f5f5f3;
+    font-size: 17px;
   }
 </style>

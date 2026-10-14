@@ -3,12 +3,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ContactCards from '../components/ContactCards.astro';
 import Icon from '../components/Icon.astro';
 import LeadForm from '../components/LeadForm.astro';
-import ReviewCard from '../components/ReviewCard.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import TourIndex from '../components/TourIndex.astro';
 import TourStudio from '../components/TourStudio.astro';
 import VideoEmbed from '../components/VideoEmbed.astro';
-import { homeHero, instagramPhotos, reviewAvatars } from '../data/content';
+import { homeHero, instagramPhotos } from '../data/content';
 import { contacts, videos } from '../data/site';
 import { showPosters } from '../data/show';
 import { tours } from '../data/tours';
@@ -79,12 +78,6 @@ const features = ['feature1', 'feature2', 'feature3', 'feature4'];
 
   <div class="band" data-reveal="fade"><div class="ornament-band"></div></div>
 
-  <!-- (02) Каталог -->
-  <section id="index" class="index">
-    <SectionHeader kicker={t('home.index.kicker')} title={t('home.tours.title')} meta={`${pad(tours.length)} ${t('home.index.count')} · 2026`} />
-    <TourIndex lang={lang} tours={tours} />
-  </section>
-
   <!-- Отдельное направление: I AM NOMAD SHOW (без номера, чтобы не сбить нумерацию разделов) -->
   <section class="show-teaser">
     <div class="show-teaser__text">
@@ -110,6 +103,12 @@ const features = ['feature1', 'feature2', 'feature3', 'feature4'];
     </a>
   </section>
 
+  <!-- (02) Каталог -->
+  <section id="index" class="index">
+    <SectionHeader kicker={t('home.index.kicker')} title={t('home.tours.title')} meta={`${pad(tours.length)} ${t('home.index.count')} · 2026`} />
+    <TourIndex lang={lang} tours={tours} />
+  </section>
+
   <!-- (03) Подход -->
   <section class="why">
     <SectionHeader kicker={t('home.why.kicker')} title={t('home.why.title')} subtitle={t('home.why.subtitle')} />
@@ -117,7 +116,7 @@ const features = ['feature1', 'feature2', 'feature3', 'feature4'];
       {
         features.map((f, i) => (
           <li class="why__cell" data-reveal style={`--i:${i}`}>
-            <span class="label num">({pad(i + 1)})</span>
+            
             <h3 class="why__title">{t(`home.why.${f}.title`)}</h3>
             <p class="muted">{t(`home.why.${f}.text`)}</p>
           </li>
@@ -142,20 +141,6 @@ const features = ['feature1', 'feature2', 'feature3', 'feature4'];
       </section>
     )
   }
-
-  <!-- (05) Отзывы -->
-  <section class="reviews">
-    <SectionHeader kicker={t('home.reviews.kicker')} title={t('home.reviews.title')} subtitle={t('home.reviews.subtitle')}>
-      <a href={L(routes.reviews)} class="link-arrow">{t('btn.viewAll')} <Icon name="arrow-right" /></a>
-    </SectionHeader>
-    <div class="reviews__grid">
-      {
-        [1, 2, 3].map((n, i) => (
-          <ReviewCard name={t(`home.reviews.review${n}.name`)} text={t(`home.reviews.review${n}.text`)} avatar={reviewAvatars[i]} index={i} />
-        ))
-      }
-    </div>
-  </section>
 
   <!-- (06) Instagram -->
   <section class="insta">
@@ -558,40 +543,6 @@ const features = ['feature1', 'feature2', 'feature3', 'feature4'];
   .studio {
     border-top: 1px solid var(--line);
     scroll-margin-top: var(--header-h);
-  }
-
-  /* ---------- (05) Отзывы ---------- */
-  .reviews {
-    border-top: 1px solid var(--line);
-  }
-
-  .reviews__grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    border-top: 1px solid var(--line);
-  }
-
-  .reviews__grid > :global(*) {
-    border-right: 1px solid var(--line);
-  }
-
-  .reviews__grid > :global(*:last-child) {
-    border-right: 0;
-  }
-
-  @media (max-width: 900px) {
-    .reviews__grid {
-      grid-template-columns: minmax(0, 1fr);
-    }
-
-    .reviews__grid > :global(*) {
-      border-right: 0;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .reviews__grid > :global(*:last-child) {
-      border-bottom: 0;
-    }
   }
 
   /* ---------- (06) Instagram ---------- */

@@ -25,4 +25,8 @@ export const videos: { home: string; tours: Partial<Record<string, string>>; gal
   gallery: site.videos.gallery.filter(Boolean),
 };
 
+/** Ссылка «забронировать» — открывает письмо на почту агентства с готовой темой. */
+export const bookingMailto = (subject: string, body = '') =>
+  `mailto:${contacts.email}?subject=${encodeURIComponent(subject)}${body ? `&body=${encodeURIComponent(body)}` : ''}`;
+
 export const officeMapQuery = 'Bishkek+Kyrgyzstan';

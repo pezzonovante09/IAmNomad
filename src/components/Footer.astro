@@ -15,15 +15,14 @@ const t = useTranslations(lang);
 
 const contactLinks = [
   { label: t('footer.whatsapp'), value: contacts.phone, href: contacts.whatsapp },
-  { label: t('footer.telegram'), value: contacts.telegramHandle, href: contacts.telegram },
   { label: t('footer.email'), value: contacts.email, href: `mailto:${contacts.email}` },
   { label: t('footer.phone'), value: contacts.phone, href: contacts.phoneHref },
 ];
 
 const socials = [
   { icon: 'instagram', label: 'Instagram', href: contacts.instagram },
-  { icon: 'facebook', label: 'Facebook', href: contacts.facebook },
-  { icon: 'youtube', label: 'YouTube', href: contacts.youtube },
+  { icon: 'whatsapp', label: 'WhatsApp', href: contacts.whatsapp },
+  { icon: 'mail', label: 'Email', href: `mailto:${contacts.email}` },
 ] as const;
 ---
 
@@ -36,7 +35,7 @@ const socials = [
       <div class="ft__social">
         {
           socials.map((s) => (
-            <a href={s.href} aria-label={s.label} target="_blank" rel="noopener">
+            <a href={s.href} aria-label={s.label} target={s.href.startsWith('http') ? '_blank' : undefined} rel="noopener">
               <Icon name={s.icon} size={18} />
             </a>
           ))

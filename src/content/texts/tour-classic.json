@@ -2,8 +2,6 @@
   "ru": {
     "tour__classic__title": "Классический Кыргызстан",
     "tour__classic__subtitle": "7 дней природы, культуры и кочевого наследия",
-    "tour__classic__sticky__from": "$1599 с человека",
-    "tour__classic__pricing__standardPrice": "$1599",
     "tour__classic__dates__date1": "15–21 июня 2026",
     "tour__classic__dates__date2": "1–7 июля 2026",
     "tour__classic__dates__date3": "20–26 июля 2026",
@@ -38,8 +36,6 @@
   "en": {
     "tour__classic__title": "Classic Kyrgyzstan",
     "tour__classic__subtitle": "7 Days of Nature, Culture & Nomadic Heritage",
-    "tour__classic__sticky__from": "$1599 per person",
-    "tour__classic__pricing__standardPrice": "$1599",
     "tour__classic__dates__date1": "Jun 15 – Jun 21, 2026",
     "tour__classic__dates__date2": "Jul 1 – Jul 7, 2026",
     "tour__classic__dates__date3": "Jul 20 – Jul 26, 2026",

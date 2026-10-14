@@ -1,7 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
-import { contacts } from '../data/site';
+import { bookingMailto, contacts } from '../data/site';
 import { languages, localize, useTranslations, type Lang } from '../i18n/utils';
 import { navItems, routes } from '../lib/routes';
 
@@ -14,9 +14,8 @@ interface Props {
 
 const { lang, active, path } = Astro.props;
 const t = useTranslations(lang);
-const bookHref = active === 'home' ? '#contact-form' : localize(routes.contact, lang);
+const bookHref = bookingMailto(`${t('btn.bookNow')} — I AM NOMAD`)
 const menuItems = [{ key: 'home', href: '/', label: 'nav.home' }, ...navItems];
-const pad = (n: number) => String(n).padStart(2, '0');
 ---
 
 <header class="hd" data-header>
@@ -51,7 +50,6 @@ const pad = (n: number) => String(n).padStart(2, '0');
         menuItems.map((item, i) => (
           <li style={`--i:${i}`}>
             <a href={localize(item.href, lang)} class="mn__link" aria-current={active === item.key ? 'page' : undefined}>
-              <span class="mn__num label num">({pad(i + 1)})</span>
               <span class="mn__title">{t(item.label)}</span>
               <span class="mn__arrow" aria-hidden="true">→</span>
             </a>
@@ -64,7 +62,6 @@ const pad = (n: number) => String(n).padStart(2, '0');
     <p class="label">{t('footer.contact')}</p>
     <ul class="mn__contacts">
       <li><a href={contacts.whatsapp} target="_blank" rel="noopener">WhatsApp — {contacts.phone}</a></li>
-      <li><a href={contacts.telegram} target="_blank" rel="noopener">Telegram — {contacts.telegramHandle}</a></li>
       <li><a href={`mailto:${contacts.email}`}>{contacts.email}</a></li>
     </ul>
     <button class="mn__theme label" type="button" data-theme-toggle>

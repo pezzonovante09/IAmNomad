@@ -13,7 +13,6 @@ const t = useTranslations(lang);
 
 const items = [
   { icon: 'whatsapp', label: t('footer.whatsapp'), value: contacts.phone, href: contacts.whatsapp },
-  { icon: 'telegram', label: t('footer.telegram'), value: contacts.telegramHandle, href: contacts.telegram },
   { icon: 'mail', label: t('footer.email'), value: contacts.email, href: `mailto:${contacts.email}` },
   { icon: 'phone', label: t('footer.phone'), value: contacts.phone, href: contacts.phoneHref },
 ] as const;

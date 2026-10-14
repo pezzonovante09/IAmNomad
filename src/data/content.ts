@@ -9,9 +9,6 @@ export const homeHero: { id: string; height: number } = photos.homeHero;
 /** Аватары отзывов по порядку (reviews.review1 … review9; на главной — первые три). */
 export const reviewAvatars: string[] = photos.reviewAvatars;
 
-// Посты блога (тексты — blog.postN.*). Пока есть одна полная статья.
-export const blogArticleSlug = 'top-10-places';
-export const blogPosts: Photo[] = photos.blogPosts;
 export const galleryPhotos: Photo[] = photos.galleryPhotos;
 export const instagramPhotos: Photo[] = photos.instagramPhotos;
 

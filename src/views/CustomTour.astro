@@ -22,7 +22,7 @@ const steps = [1, 2, 3, 4];
 ---
 
 <BaseLayout lang={lang} page="tour-custom" section="tours" path={routes.tour('custom')} image={unsplash(tour.cover.id, 1200, 630)}>
-  <PageHero kicker={t('home.builder.kicker')} meta={t('tour.custom.sticky.from')} title={t('tour.custom.title')} subtitle={t('tour.custom.subtitle')} photo={tour.cover} />
+  <PageHero kicker={t('home.builder.kicker')} title={t('tour.custom.title')} subtitle={t('tour.custom.subtitle')} photo={tour.cover} />
 
   <section class="intro">
     <h2 class="intro__title" data-reveal>{t('tour.custom.intro.title')}</h2>
@@ -33,7 +33,7 @@ const steps = [1, 2, 3, 4];
   </section>
 
   <section class="steps">
-    <SectionHeader kicker="(01)" title={t('tour.custom.steps.title')} subtitle={t('tour.custom.steps.subtitle')} />
+    <SectionHeader title={t('tour.custom.steps.title')} subtitle={t('tour.custom.steps.subtitle')} />
     <ol class="steps__grid">
       {
         steps.map((n, i) => (
@@ -48,12 +48,11 @@ const steps = [1, 2, 3, 4];
   </section>
 
   <section class="build" id="tour-builder">
-    <SectionHeader kicker="(02)" title={t('studio.title')} subtitle={t('studio.subtitle')} />
+    <SectionHeader title={t('studio.title')} subtitle={t('studio.subtitle')} />
     <TourStudio lang={lang} />
   </section>
 
   <CtaBanner
-    kicker="(03)"
     title={t('tour.custom.cta.title')}
     text={t('tour.custom.cta.text')}
     primary={{ href: contacts.whatsapp, label: t('tour.booking.whatsapp'), external: true }}

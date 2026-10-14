@@ -49,13 +49,23 @@
       "permanent": true
     },
     {
+      "source": "/blog/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/en/blog/:path*",
+      "destination": "/en/",
+      "permanent": true
+    },
+    {
       "source": "/blog.html",
-      "destination": "/blog/",
+      "destination": "/",
       "permanent": true
     },
     {
       "source": "/blog-single.html",
-      "destination": "/blog/top-10-places/",
+      "destination": "/",
       "permanent": true
     },
     {
