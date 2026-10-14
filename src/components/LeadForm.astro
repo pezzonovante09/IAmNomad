@@ -3,7 +3,8 @@
 import Icon from './Icon.astro';
 import { supabase, web3forms } from '../data/site';
 import { tours } from '../data/tours';
-import { useTranslations, type Lang } from '../i18n/utils';
+import { localize, useTranslations, type Lang } from '../i18n/utils';
+import { routes } from '../lib/routes';
 
 interface Props {
   lang: Lang;
@@ -26,6 +27,8 @@ const subjects = {
 };
 const eventTypes = ['group', 'vip', 'corporate', 'private', 'other'];
 const f = (name: string) => `${id}-${name}`;
+// «Отправляя заявку, вы соглашаетесь с {policy}…» — {policy} становится ссылкой на политику.
+const [consentBefore, consentAfter = ''] = t('legal.form.consent').split('{policy}');
 ---
 
 <form
@@ -151,6 +154,9 @@ const f = (name: string) => `${id}-${name}`;
     <span data-label>{submitLabel ?? (variant === 'corporate' ? t('btn.requestQuote') : t('btn.send'))}</span>
     <Icon name="arrow-right" />
   </button>
+  <p class="form__consent">
+    {consentBefore}<a href={localize(routes.privacy, lang)} target="_blank" rel="noopener">{t('legal.form.policy')}</a>{consentAfter}
+  </p>
   <p class="form__status" role="status" aria-live="polite" data-status></p>
 </form>
 
@@ -169,6 +175,19 @@ const f = (name: string) => `${id}-${name}`;
   .form__submit {
     justify-self: start;
     min-width: 200px;
+  }
+
+  .form__consent {
+    max-width: 640px;
+    font-size: 13px;
+    opacity: 0.75;
+    line-height: 1.55;
+  }
+
+  .form__consent a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   .form__status {

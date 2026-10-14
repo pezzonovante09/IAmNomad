@@ -1,0 +1,124 @@
+---
+// Политика конфиденциальности. Тексты — src/content/texts/legal.json (админка → Тексты → Политика конфиденциальности).
+// {email} и {phone} в текстах подставляются из контактов; строки с «•» — пункты списка.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import { contacts } from '../data/site';
+import { has, useTranslations, type Lang } from '../i18n/utils';
+import { routes } from '../lib/routes';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const fill = (s: string) => s.replaceAll('{email}', contacts.email).replaceAll('{phone}', contacts.phone);
+
+type Block = { type: 'p'; text: string } | { type: 'ul'; items: string[] };
+function blocks(text: string): Block[] {
+  // Абзацы разделяются пустой строкой; подряд идущие строки с «•» — список.
+  const out: Block[] = [];
+  for (const chunk of fill(text).split(/\n\s*\n/)) {
+    const lines = chunk.split('\n').map((l) => l.trim()).filter(Boolean);
+    let para: string[] = [];
+    let list: string[] = [];
+    const flush = () => {
+      if (para.length) out.push({ type: 'p', text: para.join(' ') });
+      if (list.length) out.push({ type: 'ul', items: list });
+      para = [];
+      list = [];
+    };
+    for (const line of lines) {
+      if (line.startsWith('•')) {
+        if (para.length) flush();
+        list.push(line.replace(/^•\s*/, ''));
+      } else {
+        if (list.length) flush();
+        para.push(line);
+      }
+    }
+    flush();
+  }
+  return out;
+}
+
+const sections: { title: string; blocks: Block[] }[] = [];
+for (let n = 1; has(lang, `legal.s${n}.title`); n++) {
+  sections.push({ title: t(`legal.s${n}.title`), blocks: blocks(t(`legal.s${n}.text`)) });
+}
+---
+
+<BaseLayout lang={lang} page="privacy" path={routes.privacy} title={t('legal.title')} description={t('legal.subtitle')}>
+  <PageHero kicker="(01)" meta={t('legal.updated')} title={t('legal.title')} subtitle={t('legal.subtitle')} />
+
+  <div class="pp">
+    {
+      sections.map((s, i) => (
+        <section class="pp__section">
+          <p class="pp__num label num">{String(i + 1).padStart(2, '0')}</p>
+          <div class="pp__body">
+            <h2 class="pp__title">{s.title}</h2>
+            {s.blocks.map((b) =>
+              b.type === 'ul' ? (
+                <ul class="pp__list">
+                  {b.items.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p>{b.text}</p>
+              ),
+            )}
+          </div>
+        </section>
+      ))
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .pp {
+    border-top: 1px solid var(--line);
+  }
+
+  .pp__section {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+    gap: 24px;
+    padding: 36px var(--gutter);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .pp__body {
+    display: grid;
+    gap: 14px;
+    max-width: 760px;
+    font-size: 17px;
+    line-height: 1.65;
+  }
+
+  .pp__title {
+    font-size: clamp(22px, 2.4vw, 32px);
+    line-height: 1.15;
+  }
+
+  .pp__list {
+    display: grid;
+    gap: 8px;
+    padding-left: 1.2em;
+    list-style: square;
+  }
+
+  .pp__list li::marker {
+    color: var(--accent);
+  }
+
+  @media (max-width: 760px) {
+    .pp__section {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 8px;
+    }
+  }
+</style>

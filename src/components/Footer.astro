@@ -79,7 +79,7 @@ const socials = [
   </div>
   <div class="ft__bottom label">
     <span>I AM NOMAD — Bishkek</span>
-    <span>{t('brand.slogan')}</span>
+    <a href={localize(routes.privacy, lang)} class="ft__legal">{t('legal.nav')}</a>
     <span>{t('footer.copyright')}</span>
   </div>
 </footer>
@@ -178,6 +178,10 @@ const socials = [
   .ft__contacts dd {
     margin: 2px 0 0;
     overflow-wrap: anywhere;
+  }
+
+  .ft__legal {
+    text-underline-offset: 4px;
   }
 
   .ft__bottom {

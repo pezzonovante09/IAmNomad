@@ -14,6 +14,7 @@ export const routes = {
   gallery: '/gallery/',
   faq: '/faq/',
   contact: '/contact/',
+  privacy: '/privacy/',
 };
 
 // Порядок по ТЗ: Главная → О нас → Туры → I AM NOMAD SHOW → Блог → Отзывы → Галерея → FAQ → Контакты.
