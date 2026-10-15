@@ -17,10 +17,9 @@ const items = [1, 2, 3, 4, 5, 6, 7].map((n) => ({ q: t(`faq.q${n}`), a: t(`faq.a
 ---
 
 <BaseLayout lang={lang} page="faq" path={routes.faq}>
-  <PageHero kicker="(01) FAQ" meta={`${String(items.length).padStart(2, '0')} ?`} title={t('faq.title')} subtitle={t('faq.subtitle')} />
+  <PageHero kicker="FAQ" meta={`${String(items.length).padStart(2, '0')} ?`} title={t('faq.title')} subtitle={t('faq.subtitle')} />
   <Faq items={items} openFirst />
   <CtaBanner
-    kicker="(02)"
     title={t('faq.cta.title')}
     text={t('faq.cta.text')}
     primary={{ href: contacts.whatsapp, label: t('tour.booking.whatsapp'), external: true }}

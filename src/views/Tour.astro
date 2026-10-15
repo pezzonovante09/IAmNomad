@@ -2,12 +2,10 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Faq from '../components/Faq.astro';
 import Icon from '../components/Icon.astro';
-import ReviewCard from '../components/ReviewCard.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import TourIndex from '../components/TourIndex.astro';
 import VideoEmbed from '../components/VideoEmbed.astro';
-import { reviewAvatars } from '../data/content';
-import { contacts, videos } from '../data/site';
+import { bookingMailto, contacts, videos } from '../data/site';
 import { tours, type Tour } from '../data/tours';
 import { bullets, localize, splitEmoji, useTranslations, type Lang } from '../i18n/utils';
 import { srcset, unsplash } from '../lib/img';
@@ -27,8 +25,7 @@ const range = (n: number) => Array.from({ length: n }, (_, i) => i + 1);
 const pad = (n: number) => String(n).padStart(2, '0');
 
 const isOpen = tour.status === 'open';
-const bookHref = `${L(routes.contact)}?tour=${tour.slug}`;
-const price = isOpen ? k('pricing.standardPrice') : t('tour.winter.comingSoon');
+const bookHref = bookingMailto(`${t('btn.bookTour')}: ${k('title')}`, `${k('title')}\n\n`);
 
 const days = range(tour.days).map((n) => {
   const title = k(`program.day${n}.title`);
@@ -41,7 +38,6 @@ const extras = range(tour.extras).map((n) => splitEmoji(k(`extras.item${n}`)));
 const dates = range(tour.dates).map((n) => k(`dates.date${n}`).replace(/(\d)[–-](\d)/g, '$1\u2060–\u2060$2'));
 const included = range(5).map((n) => t(`tour.included.item${n}`));
 const notIncluded = range(4).map((n) => t(`tour.notIncluded.item${n}`));
-const features = range(3).map((n) => t(`tour.pricing.standardFeature${n}`));
 const faq = range(3).map((n) => ({ q: t(`tour.faq.q${n}`), a: t(`tour.faq.a${n}`) }));
 const similar = tours.filter((x) => x.slug !== tour.slug);
 const video = videos.tours[tour.slug];
@@ -50,7 +46,6 @@ const facts = [
   { label: t('tour.facts.duration'), value: card('duration') },
   { label: t('tour.facts.route'), value: card('location') },
   { label: t('tour.facts.group'), value: t('tour.facts.groupValue') },
-  { label: t('tour.facts.price'), value: price },
 ];
 
 const sections = [
@@ -61,7 +56,6 @@ const sections = [
   { id: 'faq', label: t('tour.faq.title') },
 ];
 
-const numericPrice = Number(price.replace(/[^\d]/g, ''));
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'TouristTrip',
@@ -69,9 +63,6 @@ const jsonLd = {
   description: k('subtitle'),
   image: unsplash(tour.cover.id, 1200, 630),
   provider: { '@type': 'TravelAgency', name: 'I AM NOMAD', telephone: contacts.phone, email: contacts.email },
-  ...(isOpen && numericPrice
-    ? { offers: { '@type': 'Offer', price: numericPrice, priceCurrency: 'USD', availability: 'https://schema.org/InStock' } }
-    : {}),
 };
 ---
 
@@ -139,9 +130,9 @@ const jsonLd = {
   <!-- Подменю -->
   <nav class="subnav" aria-label={k('title')}>
     {
-      sections.map((s, i) => (
+      sections.map((s) => (
         <a href={`#${s.id}`} class="subnav__link">
-          <span class="num">({pad(i + 1)})</span> {s.label}
+          {s.label}
         </a>
       ))
     }
@@ -152,7 +143,6 @@ const jsonLd = {
       <!-- (01) Главное -->
       <section id="highlights" class="blk">
         <div class="blk__head" data-reveal>
-          <p class="label">(01)</p>
           <h2 class="blk__title">{k('highlights.title')}</h2>
         </div>
         <ul class="hl">
@@ -191,7 +181,6 @@ const jsonLd = {
       <!-- (02) Программа -->
       <section id="program" class="blk">
         <div class="blk__head" data-reveal>
-          <p class="label">(02)</p>
           <h2 class="blk__title">{t('tour.program.title')}</h2>
           <button type="button" class="btn btn--outline btn--sm blk__action" data-expand-all data-expand={t('ui.expandAll')} data-collapse={t('ui.collapseAll')}>
             {t('ui.expandAll')}
@@ -224,7 +213,6 @@ const jsonLd = {
       <!-- (03) Включено -->
       <section id="included" class="blk">
         <div class="blk__head" data-reveal>
-          <p class="label">(03)</p>
           <h2 class="blk__title">{t('tour.included.title')}</h2>
         </div>
         <div class="incl">
@@ -287,7 +275,6 @@ const jsonLd = {
       <!-- (04) Даты -->
       <section id="dates" class="blk">
         <div class="blk__head" data-reveal>
-          <p class="label">(04)</p>
           <h2 class="blk__title">{t('tour.dates.title')}</h2>
         </div>
         <ol class="dates">
@@ -310,7 +297,6 @@ const jsonLd = {
       <!-- (05) FAQ -->
       <section id="faq" class="blk blk--flush">
         <div class="blk__head" data-reveal>
-          <p class="label">(05)</p>
           <h2 class="blk__title">{t('tour.faq.title')}</h2>
         </div>
         <Faq items={faq} />
@@ -320,18 +306,8 @@ const jsonLd = {
     <!-- Бронирование -->
     <aside class="book" aria-label={t('tour.booking.title')}>
       <div class="book__inner">
-        <p class="label">{isOpen ? t('home.index.perGuest') : t('tour.facts.price')}</p>
-        <p class="book__price num">{price}</p>
+        <p class="book__price">{t('tour.booking.title')}</p>
         {!isOpen && <p class="book__note">{t('tour.winter.comingSoonText')}</p>}
-        {
-          isOpen && (
-            <ul class="book__list">
-              {features.map((f) => (
-                <li>{f}</li>
-              ))}
-            </ul>
-          )
-        }
         <div>
           <p class="label book__label">{t('tour.booking.dates')}</p>
           <ul class="book__list">
@@ -361,20 +337,6 @@ const jsonLd = {
     </aside>
   </div>
 
-  <!-- Отзывы -->
-  <section class="rev">
-    <SectionHeader kicker={t('home.reviews.kicker')} title={t('tour.reviews.title')}>
-      <a href={L(routes.reviews)} class="link-arrow">{t('btn.viewAll')} <Icon name="arrow-right" /></a>
-    </SectionHeader>
-    <div class="rev__grid">
-      {
-        [1, 2, 3].map((n, i) => (
-          <ReviewCard name={t(`home.reviews.review${n}.name`)} text={t(`home.reviews.review${n}.text`)} avatar={reviewAvatars[i]} index={i} />
-        ))
-      }
-    </div>
-  </section>
-
   <!-- Похожие туры -->
   <section class="sim">
     <SectionHeader kicker={t('home.index.kicker')} title={t('tour.similar.title')} />
@@ -385,7 +347,7 @@ const jsonLd = {
   <div class="bookbar" data-bookbar aria-hidden="true">
     <div class="bookbar__text">
       <p class="bookbar__title">{k('title')}</p>
-      <p class="bookbar__price label">{k('sticky.from')}</p>
+      <p class="bookbar__price label">{card('duration')}</p>
     </div>
     {
       isOpen ? (
@@ -927,10 +889,10 @@ const jsonLd = {
   }
 
   .book__price {
-    margin-top: -12px;
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: clamp(44px, 4vw, 64px);
+    text-transform: uppercase;
+    font-size: clamp(26px, 2.4vw, 36px);
     line-height: 1.05;
     letter-spacing: -0.02em;
     color: var(--accent);
@@ -977,34 +939,9 @@ const jsonLd = {
     }
   }
 
-  /* ---------- Отзывы и похожие ---------- */
-  .rev__grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    border-top: 1px solid var(--line);
-  }
-
-  .rev__grid > :global(*) {
-    border-right: 1px solid var(--line);
-  }
-
-  .rev__grid > :global(*:last-child) {
-    border-right: 0;
-  }
-
+  /* ---------- Похожие туры ---------- */
   .sim {
     border-top: 1px solid var(--line);
-  }
-
-  @media (max-width: 900px) {
-    .rev__grid {
-      grid-template-columns: minmax(0, 1fr);
-    }
-
-    .rev__grid > :global(*) {
-      border-right: 0;
-      border-bottom: 1px solid var(--line);
-    }
   }
 
   /* ---------- Нижняя панель ---------- */

@@ -2,7 +2,6 @@
   "ru": {
     "tour__custom__title": "Индивидуальные туры",
     "tour__custom__subtitle": "Соберите маршрут сами",
-    "tour__custom__sticky__from": "По запросу",
     "tour__custom__intro__title": "Вы выбираете — мы организуем",
     "tour__custom__intro__p2": "Юрта на Сон-Куле, конные прогулки, Иссык-Куль, горы, зима, бани, фотосессия — комбинируйте блоки как угодно. Мы подскажем, что сочетается лучше всего, и возьмём на себя логистику, гидов и бронирования.",
     "tour__custom__intro__p3": "Напишите, что вам интересно — получите маршрут и стоимость под ваш набор.",
@@ -23,7 +22,6 @@
   "en": {
     "tour__custom__title": "Custom Tours",
     "tour__custom__subtitle": "Build your own route",
-    "tour__custom__sticky__from": "On request",
     "tour__custom__intro__title": "You choose — we organize",
     "tour__custom__intro__p2": "A yurt at Song-Kul, horseback rides, Issyk-Kul, mountains, winter, spa, a photoshoot — combine blocks any way you like. We advise what works best together and handle logistics, guides and bookings.",
     "tour__custom__intro__p3": "Tell us what interests you — and get an itinerary and price for your selection.",

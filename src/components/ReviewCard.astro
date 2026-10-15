@@ -14,7 +14,7 @@ const { name, text, avatar, index = 0 } = Astro.props;
 
 <figure class="rc" data-reveal style={`--i:${index % 3}`}>
   <div class="rc__top">
-    <span class="label num">({String(index + 1).padStart(2, '0')})</span>
+    
     <span class="rc__stars" aria-label="5/5">
       {[0, 1, 2, 3, 4].map(() => <Icon name="star" size={14} />)}
     </span>

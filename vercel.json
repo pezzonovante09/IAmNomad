@@ -49,13 +49,23 @@
       "permanent": true
     },
     {
+      "source": "/blog/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/en/blog/:path*",
+      "destination": "/en/",
+      "permanent": true
+    },
+    {
       "source": "/blog.html",
-      "destination": "/blog/",
+      "destination": "/",
       "permanent": true
     },
     {
       "source": "/blog-single.html",
-      "destination": "/blog/top-10-places/",
+      "destination": "/",
       "permanent": true
     },
     {
@@ -77,6 +87,29 @@
       "source": "/contact.html",
       "destination": "/contact/",
       "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=()"
+        }
+      ]
     }
   ]
 }

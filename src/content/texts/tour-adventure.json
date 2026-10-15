@@ -2,8 +2,6 @@
   "ru": {
     "tour__adventure__title": "Приключения в Кыргызстане",
     "tour__adventure__subtitle": "7 дней приключений, гор и озера Иссык-Куль",
-    "tour__adventure__sticky__from": "$2499 с человека",
-    "tour__adventure__pricing__standardPrice": "$2499",
     "tour__adventure__dates__date1": "15–21 июня 2026",
     "tour__adventure__dates__date2": "1–7 июля 2026",
     "tour__adventure__dates__date3": "20–26 июля 2026",
@@ -37,8 +35,6 @@
   "en": {
     "tour__adventure__title": "Adventure Kyrgyzstan",
     "tour__adventure__subtitle": "7 Days of Adventure, Mountains & Lake Issyk-Kul",
-    "tour__adventure__sticky__from": "$2499 per person",
-    "tour__adventure__pricing__standardPrice": "$2499",
     "tour__adventure__dates__date1": "Jun 15 – Jun 21, 2026",
     "tour__adventure__dates__date2": "Jul 1 – Jul 7, 2026",
     "tour__adventure__dates__date3": "Jul 20 – Jul 26, 2026",

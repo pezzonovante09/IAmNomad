@@ -24,20 +24,20 @@ const services = [
 ---
 
 <BaseLayout lang={lang} page="mice" path={routes.mice}>
-  <PageHero kicker="(01) MICE" meta="B2B" title={t('mice.title')} subtitle={t('mice.subtitle')} photo={micePhoto} />
+  <PageHero kicker="MICE" meta="B2B" title={t('mice.title')} subtitle={t('mice.subtitle')} photo={micePhoto} />
 
   <section class="lead-block">
     <p class="lead-block__text" data-reveal>{t('mice.description')}</p>
   </section>
 
   <section>
-    <SectionHeader kicker="(02)" title={t('mice.services.title')} />
+    <SectionHeader title={t('mice.services.title')} />
     <ol class="svc">
       {
         services.map((s, i) => (
           <li class="svc__cell" data-reveal style={`--i:${i}`}>
             <div class="svc__top">
-              <span class="label num">({String(i + 1).padStart(2, '0')})</span>
+              
               <Icon name={s.icon} size={28} />
             </div>
             <h3 class="svc__title">{t(`mice.services.${s.key}`)}</h3>
@@ -49,7 +49,7 @@ const services = [
   </section>
 
   <section class="form-block" id="contact-form">
-    <SectionHeader kicker="(03)" title={t('mice.form.title')} subtitle={t('mice.form.subtitle')} />
+    <SectionHeader title={t('mice.form.title')} subtitle={t('mice.form.subtitle')} />
     <div class="form-block__grid">
       <div class="form-block__side">
         <p class="label">{t('home.form.aside')}</p>

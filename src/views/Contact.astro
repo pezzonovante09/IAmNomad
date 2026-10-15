@@ -24,13 +24,13 @@ const socials = [
 ---
 
 <BaseLayout lang={lang} page="contact" path={routes.contact}>
-  <PageHero kicker={`(01) ${t('contact.eyebrow')}`} meta="42°52′N 74°36′E" title={t('contact.title')} subtitle={t('contact.subtitle')} />
+  <PageHero kicker={`${t('contact.eyebrow')}`} meta="42°52′N 74°36′E" title={t('contact.title')} subtitle={t('contact.subtitle')} />
 
   <ContactCards lang={lang} layout="grid" />
 
   <section class="ct" id="contact-form">
     <div class="ct__form">
-      <SectionHeader kicker="(02)" title={t('contact.form.title')} subtitle={t('contact.form.subtitle')} />
+      <SectionHeader title={t('contact.form.title')} subtitle={t('contact.form.subtitle')} />
       <div class="ct__form-body" data-reveal>
         <LeadForm lang={lang} variant="contact" id="contact" />
       </div>

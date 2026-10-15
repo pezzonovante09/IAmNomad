@@ -1,8 +1,6 @@
 ---
 // Единый маршрутизатор: каждая страница строится для ru (без префикса) и en (/en/...).
 import About from '../views/About.astro';
-import Article from '../views/Article.astro';
-import Blog from '../views/Blog.astro';
 import Contact from '../views/Contact.astro';
 import CustomTour from '../views/CustomTour.astro';
 import Faq from '../views/Faq.astro';
@@ -18,7 +16,7 @@ import { tours, type TourSlug } from '../data/tours';
 import { languages, defaultLang, type Lang } from '../i18n/utils';
 import { routes } from '../lib/routes';
 
-type View = 'home' | 'about' | 'tours' | 'tour' | 'custom' | 'show' | 'mice' | 'blog' | 'article' | 'reviews' | 'gallery' | 'faq' | 'contact' | 'privacy';
+type View = 'home' | 'about' | 'tours' | 'tour' | 'custom' | 'show' | 'mice' | 'reviews' | 'gallery' | 'faq' | 'contact' | 'privacy';
 
 export function getStaticPaths() {
   const pages: { path: string; view: View; slug?: TourSlug }[] = [
@@ -32,8 +30,6 @@ export function getStaticPaths() {
     })),
     { path: routes.show, view: 'show' },
     { path: routes.mice, view: 'mice' },
-    { path: routes.blog, view: 'blog' },
-    { path: routes.article, view: 'article' },
     { path: routes.reviews, view: 'reviews' },
     { path: routes.gallery, view: 'gallery' },
     { path: routes.faq, view: 'faq' },
@@ -61,8 +57,6 @@ const tour = slug ? tours.find((x) => x.slug === slug) : undefined;
 {view === 'custom' && <CustomTour lang={lang} />}
 {view === 'show' && <Show lang={lang} />}
 {view === 'mice' && <Mice lang={lang} />}
-{view === 'blog' && <Blog lang={lang} />}
-{view === 'article' && <Article lang={lang} />}
 {view === 'reviews' && <Reviews lang={lang} />}
 {view === 'gallery' && <Gallery lang={lang} />}
 {view === 'faq' && <Faq lang={lang} />}

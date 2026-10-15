@@ -8,8 +8,10 @@
 /tour-winter.html  /tours/winter/  301
 /tour-custom.html  /tours/custom/  301
 /mice.html  /mice/  301
-/blog.html  /blog/  301
-/blog-single.html  /blog/top-10-places/  301
+/blog.html  /  301
+/blog-single.html  /  301
+/blog  /  301
+/blog/*  /  301
 /reviews.html  /reviews/  301
 /gallery.html  /gallery/  301
 /faq.html  /faq/  301
