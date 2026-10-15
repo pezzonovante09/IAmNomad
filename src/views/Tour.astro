@@ -5,7 +5,7 @@ import Icon from '../components/Icon.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import TourIndex from '../components/TourIndex.astro';
 import VideoEmbed from '../components/VideoEmbed.astro';
-import { bookingMailto, contacts, videos } from '../data/site';
+import { contacts, videos } from '../data/site';
 import { tours, type Tour } from '../data/tours';
 import { bullets, localize, splitEmoji, useTranslations, type Lang } from '../i18n/utils';
 import { srcset, unsplash } from '../lib/img';
@@ -25,7 +25,7 @@ const range = (n: number) => Array.from({ length: n }, (_, i) => i + 1);
 const pad = (n: number) => String(n).padStart(2, '0');
 
 const isOpen = tour.status === 'open';
-const bookHref = bookingMailto(`${t('btn.bookTour')}: ${k('title')}`, `${k('title')}\n\n`);
+const bookHref = `${L(routes.contact)}?tour=${tour.slug}`;
 
 const days = range(tour.days).map((n) => {
   const title = k(`program.day${n}.title`);

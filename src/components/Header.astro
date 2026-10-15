@@ -1,7 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
-import { bookingMailto, contacts } from '../data/site';
+import { contacts } from '../data/site';
 import { languages, localize, useTranslations, type Lang } from '../i18n/utils';
 import { navItems, routes } from '../lib/routes';
 
@@ -14,7 +14,7 @@ interface Props {
 
 const { lang, active, path } = Astro.props;
 const t = useTranslations(lang);
-const bookHref = bookingMailto(`${t('btn.bookNow')} — I AM NOMAD`)
+const bookHref = active === 'home' ? '#contact-form' : localize(routes.contact, lang);
 const menuItems = [{ key: 'home', href: '/', label: 'nav.home' }, ...navItems];
 ---
 
