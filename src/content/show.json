@@ -102,37 +102,5 @@
       "id": "1551632811-561732d1e306",
       "alt": "Guests"
     }
-  ],
-  "reviews": [
-    {
-      "key": "reviews.review1",
-      "avatar": "1494790108377-be9c29b29330",
-      "photo": "1761873177867-499c27dc4cd7",
-      "rating": 5
-    },
-    {
-      "key": "reviews.review2",
-      "avatar": "1507003211169-0a1dd7228f2d",
-      "photo": "1761872936161-9c2075a7ca11",
-      "rating": 5
-    },
-    {
-      "key": "reviews.review3",
-      "avatar": "1438761681033-6461ffad8d80",
-      "photo": "1758016860798-0b96354664b9",
-      "rating": 5
-    },
-    {
-      "key": "reviews.review4",
-      "avatar": "1472099645785-5658abf4ff4e",
-      "photo": "1760630149964-200517d8d437",
-      "rating": 5
-    },
-    {
-      "key": "reviews.review5",
-      "avatar": "1500648767791-00dcc994a43e",
-      "photo": "1689788648053-cd482d1acd9c",
-      "rating": 5
-    }
   ]
 }

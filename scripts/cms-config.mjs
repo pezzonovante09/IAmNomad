@@ -79,13 +79,6 @@ const photoList = (name, label, extra = {}) => ({
   fields: photo('_', '_').fields,
   ...extra,
 });
-const imageList = (name, label, extra = {}) => ({
-  name,
-  label,
-  widget: 'list',
-  field: { name: 'id', label: 'Фото', widget: 'image', choose_url: true },
-  ...extra,
-});
 const both = (name, label, widget = 'string') => ({
   name,
   label,
@@ -168,7 +161,6 @@ const settings = {
         photo('heroPhoto', 'Фото для страниц без своего фото'),
         photo('aboutPhoto', 'О нас'),
         photo('micePhoto', 'MICE'),
-        imageList('reviewAvatars', 'Аватары отзывов (по порядку отзывов)'),
         photoList('galleryPhotos', 'Галерея'),
         photoList('instagramPhotos', 'Блок Instagram на главной'),
       ],
@@ -267,19 +259,6 @@ const settings = {
           widget: 'list',
           summary: '{{fields.alt}}',
           fields: [...photo('_', '_').fields, video('video', 'Видео (если это видео)')],
-        },
-        {
-          name: 'reviews',
-          label: 'Отзывы',
-          widget: 'list',
-          summary: '{{fields.key}}',
-          fields: [
-            { name: 'key', label: 'Текст отзыва (ключ из «Тексты → Отзывы», напр. reviews.review1)', widget: 'string' },
-            { name: 'avatar', label: 'Аватар', widget: 'image', choose_url: true },
-            { name: 'photo', label: 'Фото', widget: 'image', choose_url: true },
-            { name: 'rating', label: 'Оценка', widget: 'number', value_type: 'int', min: 1, max: 5 },
-            video('video', 'Видеоотзыв'),
-          ],
         },
       ],
     },

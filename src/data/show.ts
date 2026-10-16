@@ -26,5 +26,3 @@ export const showTimeline: string[] = show.timeline;
 export const showStats: { value: number; suffix?: string; key: string }[] = show.stats;
 /** Галерея: фото открываются в полном размере, элементы с video — во всплывающем плеере. */
 export const showGallery: ShowMedia[] = show.gallery;
-/** Отзывы (тексты — ключи reviews.reviewN). Поле video — видеоотзыв с кнопкой Play. */
-export const showReviews: { key: string; avatar: string; photo: string; rating: number; video?: string }[] = show.reviews;

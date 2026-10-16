@@ -1,9 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CtaBanner from '../components/CtaBanner.astro';
+import Icon from '../components/Icon.astro';
 import PageHero from '../components/PageHero.astro';
 import ReviewCard from '../components/ReviewCard.astro';
-import { reviewAvatars } from '../data/content';
+import ReviewForm from '../components/ReviewForm.astro';
+import { supabase } from '../data/site';
 import { localize, useTranslations, type Lang } from '../i18n/utils';
 import { routes } from '../lib/routes';
 
@@ -13,14 +15,31 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const reviews = reviewAvatars.map((avatar, i) => ({ avatar, n: i + 1 }));
 ---
 
 <BaseLayout lang={lang} page="reviews" path={routes.reviews}>
-  <PageHero kicker={t('home.reviews.kicker')} meta={`${String(reviews.length).padStart(2, '0')} · ★★★★★`} title={t('reviews.title')} subtitle={t('reviews.subtitle')} />
-  <div class="grid-rev">
-    {reviews.map(({ avatar, n }, i) => <ReviewCard name={t(`reviews.review${n}.name`)} text={t(`reviews.review${n}.text`)} avatar={avatar} index={i} />)}
-  </div>
+  <PageHero kicker={t('reviews.kicker')} title={t('reviews.title')} subtitle={t('reviews.subtitle')} />
+
+  <section
+    class="rv"
+    data-reviews
+    data-endpoint={`${supabase.url}/rest/v1/reviews`}
+    data-key={supabase.key}
+    data-lang={lang}
+  >
+    <div class="rv__summary" data-summary hidden>
+      <span class="rv__avg num" data-avg></span>
+      <span class="rv__stars" aria-hidden="true">{[1, 2, 3, 4, 5].map(() => <Icon name="star" size={18} />)}</span>
+      <span class="label"><span data-count class="num"></span> · {t('reviews.average')}</span>
+    </div>
+    <div class="grid-rev" data-list></div>
+    <p class="rv__note" data-empty hidden>{t('reviews.empty')}</p>
+    <p class="rv__note rv__note--error" data-error hidden>{t('reviews.loadError')}</p>
+    <template data-card><ReviewCard /></template>
+  </section>
+
+  <ReviewForm lang={lang} />
+
   <CtaBanner
     kicker={t('home.form.kicker')}
     title={t('home.form.title')}
@@ -31,6 +50,46 @@ const reviews = reviewAvatars.map((avatar, i) => ({ avatar, n: i + 1 }));
 </BaseLayout>
 
 <style>
+  .rv__summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 16px;
+    padding: 20px var(--gutter);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .rv__summary[hidden] {
+    display: none;
+  }
+
+  .rv__avg {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1;
+  }
+
+  .rv__stars {
+    display: flex;
+    gap: 2px;
+    color: var(--gold);
+  }
+
+  .rv__note {
+    padding: 48px var(--gutter);
+    border-bottom: 1px solid var(--line);
+    font-size: 18px;
+  }
+
+  .rv__note[hidden] {
+    display: none;
+  }
+
+  .rv__note--error {
+    color: var(--danger);
+  }
+
   .grid-rev {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -55,3 +114,73 @@ const reviews = reviewAvatars.map((avatar, i) => ({ avatar, n: i + 1 }));
     }
   }
 </style>
+
+<script>
+  type Review = { name: string; avatar_url: string | null; rating: number; text: string; created_at: string };
+
+  document.querySelectorAll<HTMLElement>('[data-reviews]').forEach(async (root) => {
+    const q = <T extends HTMLElement = HTMLElement>(sel: string) => root.querySelector<T>(sel)!;
+    const list = q('[data-list]');
+    const tpl = q<HTMLTemplateElement>('template[data-card]');
+    const lang = root.dataset.lang ?? 'ru';
+
+    try {
+      const url = `${root.dataset.endpoint}?select=name,avatar_url,rating,text,created_at&status=eq.approved&order=created_at.desc&limit=100`;
+      const res = await fetch(url, { headers: { apikey: root.dataset.key! } });
+      if (!res.ok) throw new Error(String(res.status));
+      const reviews = (await res.json()) as Review[];
+
+      if (!reviews.length) {
+        q('[data-empty]').hidden = false;
+        return;
+      }
+
+      const fmt = new Intl.DateTimeFormat(lang === 'ru' ? 'ru-RU' : 'en-GB', { month: 'long', year: 'numeric' });
+      for (const r of reviews) {
+        const card = (tpl.content.firstElementChild as HTMLElement).cloneNode(true) as HTMLElement;
+        card.removeAttribute('data-reveal'); // карточки добавлены уже после загрузки — «выезд» им не нужен
+        card.querySelector('[data-rc-text]')!.textContent = r.text;
+        card.querySelector('[data-rc-name]')!.textContent = r.name;
+        card.querySelector('[data-rc-stars]')!.setAttribute('aria-label', `${r.rating}/5`);
+        card.querySelectorAll('.rc__star').forEach((s, i) => s.classList.toggle('is-off', i >= r.rating));
+        const date = card.querySelector<HTMLTimeElement>('[data-rc-date]')!;
+        date.textContent = fmt.format(new Date(r.created_at));
+        date.dateTime = r.created_at;
+        const img = card.querySelector<HTMLImageElement>('[data-rc-avatar]');
+        const initial = card.querySelector<HTMLElement>('[data-rc-initial]');
+        if (r.avatar_url?.startsWith('https://')) {
+          if (img) img.src = r.avatar_url;
+          else if (initial) {
+            const photo = document.createElement('img');
+            Object.assign(photo, { src: r.avatar_url, alt: '', width: 40, height: 40, referrerPolicy: 'no-referrer', loading: 'lazy' });
+            initial.replaceWith(photo);
+          }
+        } else {
+          img?.remove();
+          if (initial) initial.textContent = r.name.slice(0, 1);
+          else {
+            const fallback = document.createElement('span');
+            fallback.className = 'rc__initial';
+            fallback.textContent = r.name.slice(0, 1);
+            card.querySelector('.rc__author')!.prepend(fallback);
+          }
+        }
+        // Если фото Google не загрузилось — показываем первую букву имени.
+        card.querySelector<HTMLImageElement>('.rc__author img')?.addEventListener('error', (e) => {
+          const fallback = document.createElement('span');
+          fallback.className = 'rc__initial';
+          fallback.textContent = r.name.slice(0, 1);
+          (e.target as HTMLElement).replaceWith(fallback);
+        });
+        list.append(card);
+      }
+
+      const avg = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+      q('[data-avg]').textContent = avg.toFixed(1);
+      q('[data-count]').textContent = String(reviews.length);
+      q('[data-summary]').hidden = false;
+    } catch {
+      q('[data-error]').hidden = false;
+    }
+  });
+</script>

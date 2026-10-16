@@ -6,9 +6,6 @@ import photos from '../content/photos.json';
 /** Первый экран главной: фото и высота места над уровнем моря (подпись — region.sonkul.*). */
 export const homeHero: { id: string; height: number } = photos.homeHero;
 
-/** Аватары отзывов по порядку (reviews.review1 … review9; на главной — первые три). */
-export const reviewAvatars: string[] = photos.reviewAvatars;
-
 export const galleryPhotos: Photo[] = photos.galleryPhotos;
 export const instagramPhotos: Photo[] = photos.instagramPhotos;
 
