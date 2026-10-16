@@ -21,7 +21,8 @@
     "reviews__form__authError": "Не удалось войти через Google. Попробуйте ещё раз.",
     "reviews__form__tooShort": "Напишите хотя бы 10 символов.",
     "reviews__form__noRating": "Поставьте оценку от 1 до 5.",
-    "reviews__form__consent": "Отправляя отзыв, вы соглашаетесь с {policy}. Имя (в виде «Имя Ф.») и фото вашего аккаунта Google будут показаны рядом с отзывом."
+    "reviews__form__consent": "Отправляя отзыв, вы соглашаетесь с {policy}. Имя (в виде «Имя Ф.») и фото вашего аккаунта Google будут показаны рядом с отзывом.",
+    "reviews__soon": "Отзывы наших путешественников появятся здесь совсем скоро."
   },
   "en": {
     "reviews__kicker": "Reviews",
@@ -45,6 +46,7 @@
     "reviews__form__authError": "Couldn’t sign in with Google. Please try again.",
     "reviews__form__tooShort": "Please write at least 10 characters.",
     "reviews__form__noRating": "Please choose a rating from 1 to 5.",
-    "reviews__form__consent": "By sending a review you agree to the {policy}. Your name (as “First L.”) and Google account photo will be shown next to the review."
+    "reviews__form__consent": "By sending a review you agree to the {policy}. Your name (as “First L.”) and Google account photo will be shown next to the review.",
+    "reviews__soon": "Reviews from our travelers will appear here very soon."
   }
 }

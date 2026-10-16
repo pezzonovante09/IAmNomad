@@ -5,7 +5,7 @@ import Icon from '../components/Icon.astro';
 import PageHero from '../components/PageHero.astro';
 import ReviewCard from '../components/ReviewCard.astro';
 import ReviewForm from '../components/ReviewForm.astro';
-import { supabase } from '../data/site';
+import { googleClientId, supabase } from '../data/site';
 import { localize, useTranslations, type Lang } from '../i18n/utils';
 import { routes } from '../lib/routes';
 
@@ -33,7 +33,7 @@ const t = useTranslations(lang);
       <span class="label"><span data-count class="num"></span> · {t('reviews.average')}</span>
     </div>
     <div class="grid-rev" data-list></div>
-    <p class="rv__note" data-empty hidden>{t('reviews.empty')}</p>
+    <p class="rv__note" data-empty hidden>{googleClientId ? t('reviews.empty') : t('reviews.soon')}</p>
     <p class="rv__note rv__note--error" data-error hidden>{t('reviews.loadError')}</p>
     <template data-card><ReviewCard /></template>
   </section>
