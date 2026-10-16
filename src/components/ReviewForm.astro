@@ -1,0 +1,387 @@
+---
+// Форма отзыва: вход через Google (Google Identity Services) → Supabase Auth проверяет токен →
+// отзыв сохраняется в таблицу reviews со статусом «pending» и показывается на сайте после одобрения.
+// Пока PUBLIC_GOOGLE_CLIENT_ID не задан, компонент ничего не выводит.
+import Icon from './Icon.astro';
+import { googleClientId, supabase, web3forms } from '../data/site';
+import { localize, useTranslations, type Lang } from '../i18n/utils';
+import { routes } from '../lib/routes';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const [consentBefore, consentAfter = ''] = t('reviews.form.consent').split('{policy}');
+const texts = Object.fromEntries(
+  ['sending', 'success', 'error', 'duplicate', 'authError', 'tooShort', 'noRating', 'submit'].map((k) => [k, t(`reviews.form.${k}`)]),
+);
+---
+
+{
+  googleClientId && (
+    <section class="rf" id="review-form" aria-labelledby="rf-title">
+      <div class="rf__intro" data-reveal>
+        <h2 class="h2" id="rf-title">{t('reviews.form.title')}</h2>
+        <p class="lead">{t('reviews.form.subtitle')}</p>
+      </div>
+
+      <div
+        class="rf__body"
+        data-review-form
+        data-client-id={googleClientId}
+        data-supabase-url={supabase.url}
+        data-supabase-key={supabase.key}
+        data-mail-endpoint={web3forms.endpoint}
+        data-mail-key={web3forms.accessKey}
+        data-lang={lang}
+        data-texts={JSON.stringify(texts)}
+      >
+        <div class="rf__signin" data-signin>
+          <div data-google-button></div>
+        </div>
+
+        <form class="rf__form" data-form novalidate hidden>
+          <p class="rf__user">
+            <img data-user-photo alt="" width="40" height="40" referrerpolicy="no-referrer" hidden />
+            <span>
+              <span class="label">{t('reviews.form.signedAs')}</span>
+              <strong data-user-name />
+            </span>
+            <button type="button" class="rf__out label" data-signout>{t('reviews.form.signOut')}</button>
+          </p>
+
+          <fieldset class="rf__rating">
+            <legend class="field__label">{t('reviews.form.rating')}</legend>
+            <div class="rf__stars" role="radiogroup" aria-label={t('reviews.form.rating')}>
+              {
+                [1, 2, 3, 4, 5].map((n) => (
+                  <label class="rf__star">
+                    <input type="radio" name="rating" value={n} class="sr-only" />
+                    <Icon name="star" size={28} />
+                    <span class="sr-only">{n}</span>
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label class="field__label" for="rf-text">{t('reviews.form.text')}</label>
+            <textarea class="field__input" id="rf-text" name="text" rows="6" minlength="10" maxlength="1500" placeholder={t('reviews.form.placeholder')}></textarea>
+          </div>
+
+          <button type="submit" class="btn btn--accent rf__submit">
+            <span data-label>{t('reviews.form.submit')}</span>
+            <Icon name="arrow-right" />
+          </button>
+          <p class="rf__consent">
+            {consentBefore}<a href={localize(routes.privacy, lang)} target="_blank" rel="noopener">{t('legal.form.policy')}</a>{consentAfter}
+          </p>
+        </form>
+
+        <p class="rf__status" role="status" aria-live="polite" data-status></p>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .rf {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    border-top: 1px solid var(--line);
+    scroll-margin-top: var(--header-h);
+  }
+
+  .rf__intro {
+    display: grid;
+    align-content: start;
+    gap: 16px;
+    padding: 48px var(--gutter);
+    border-right: 1px solid var(--line);
+  }
+
+  .rf__body {
+    display: grid;
+    align-content: start;
+    gap: 18px;
+    padding: 48px var(--gutter);
+  }
+
+  .rf__signin {
+    min-height: 44px;
+  }
+
+  .rf__form {
+    display: grid;
+    gap: 22px;
+  }
+
+  .rf__form[hidden],
+  .rf__signin[hidden] {
+    display: none;
+  }
+
+  .rf__user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .rf__user img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+  }
+
+  .rf__user span {
+    display: grid;
+  }
+
+  .rf__out {
+    margin-left: auto;
+    padding: 8px 12px;
+    border: 1px solid var(--line);
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .rf__out:hover {
+    background: var(--surface);
+  }
+
+  .rf__rating {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .rf__stars {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+  }
+
+  .rf__star {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    color: var(--ink-mute);
+    opacity: 0.4;
+    cursor: pointer;
+    transition:
+      color 0.2s,
+      opacity 0.2s;
+  }
+
+  .rf__star.is-on {
+    color: var(--gold);
+    opacity: 1;
+  }
+
+  .rf__star:has(input:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .rf__submit {
+    justify-self: start;
+    min-width: 200px;
+  }
+
+  .rf__consent {
+    max-width: 640px;
+    font-size: 13px;
+    opacity: 0.75;
+    line-height: 1.55;
+  }
+
+  .rf__consent a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .rf__status {
+    min-height: 1.5em;
+    font-weight: 600;
+  }
+
+  .rf__status[data-type='success'] {
+    color: var(--success);
+  }
+
+  .rf__status[data-type='error'] {
+    color: var(--danger);
+  }
+
+  @media (max-width: 900px) {
+    .rf {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .rf__intro {
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+  }
+
+  @media (max-width: 520px) {
+    .rf__submit {
+      justify-self: stretch;
+    }
+  }
+</style>
+
+<script>
+  declare const google: any;
+
+  const root = document.querySelector<HTMLElement>('[data-review-form]');
+  if (root) {
+    const d = root.dataset;
+    const texts = JSON.parse(d.texts ?? '{}') as Record<string, string>;
+    const signin = root.querySelector<HTMLElement>('[data-signin]')!;
+    const form = root.querySelector<HTMLFormElement>('[data-form]')!;
+    const status = root.querySelector<HTMLElement>('[data-status]')!;
+    const button = form.querySelector<HTMLButtonElement>('[type="submit"]')!;
+    const label = button.querySelector<HTMLElement>('[data-label]')!;
+    const userName = form.querySelector<HTMLElement>('[data-user-name]')!;
+    const userPhoto = form.querySelector<HTMLImageElement>('[data-user-photo]')!;
+    const stars = Array.from(form.querySelectorAll<HTMLElement>('.rf__star'));
+
+    let session: { token: string; name: string } | null = null;
+
+    const setStatus = (text: string, type: 'success' | 'error' | '' = '') => {
+      status.textContent = text;
+      status.dataset.type = type;
+    };
+
+    // Звёзды: подсвечиваем всё до выбранной.
+    form.addEventListener('change', (e) => {
+      const input = e.target as HTMLInputElement;
+      if (input.name !== 'rating') return;
+      stars.forEach((s, i) => s.classList.toggle('is-on', i < Number(input.value)));
+    });
+
+    // nonce: в Google уходит SHA-256 от случайной строки, в Supabase — сама строка.
+    const nonce = Array.from(crypto.getRandomValues(new Uint8Array(16)), (b) => b.toString(16).padStart(2, '0')).join('');
+    async function sha256(value: string) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
+      return Array.from(new Uint8Array(buf), (b) => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function onCredential(response: { credential?: string }) {
+      setStatus('');
+      try {
+        const res = await fetch(`${d.supabaseUrl}/auth/v1/token?grant_type=id_token`, {
+          method: 'POST',
+          headers: { apikey: d.supabaseKey!, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ provider: 'google', id_token: response.credential, nonce }),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        const json = await res.json();
+        const meta = json.user?.user_metadata ?? {};
+        const name = String(meta.full_name || meta.name || '').trim();
+        session = { token: json.access_token, name };
+        userName.textContent = name || json.user?.email || '';
+        const photo = String(meta.avatar_url || meta.picture || '');
+        userPhoto.hidden = !photo.startsWith('https://');
+        if (!userPhoto.hidden) userPhoto.src = photo;
+        signin.hidden = true;
+        form.hidden = false;
+      } catch {
+        setStatus(texts.authError, 'error');
+      }
+    }
+
+    function signOut() {
+      session = null;
+      form.hidden = true;
+      signin.hidden = false;
+      setStatus('');
+      try {
+        google.accounts.id.disableAutoSelect();
+      } catch {}
+    }
+    form.querySelector('[data-signout]')!.addEventListener('click', signOut);
+
+    async function initGoogle() {
+      google.accounts.id.initialize({
+        client_id: d.clientId,
+        callback: onCredential,
+        nonce: await sha256(nonce),
+        auto_select: false,
+        use_fedcm_for_prompt: true,
+      });
+      google.accounts.id.renderButton(root!.querySelector('[data-google-button]'), {
+        theme: 'outline',
+        size: 'large',
+        text: 'signin_with',
+        shape: 'rectangular',
+        locale: d.lang,
+      });
+    }
+
+    const gsi = document.createElement('script');
+    gsi.src = 'https://accounts.google.com/gsi/client';
+    gsi.async = true;
+    gsi.onload = () => void initGoogle();
+    gsi.onerror = () => setStatus(texts.authError, 'error');
+    document.head.append(gsi);
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!session) return;
+      const rating = Number((form.querySelector('input[name="rating"]:checked') as HTMLInputElement | null)?.value);
+      const text = (form.elements.namedItem('text') as HTMLTextAreaElement).value.trim();
+      if (!rating) return setStatus(texts.noRating, 'error');
+      if (text.length < 10) return setStatus(texts.tooShort, 'error');
+
+      const original = label.textContent;
+      button.disabled = true;
+      label.textContent = texts.sending;
+      setStatus('');
+      try {
+        const res = await fetch(`${d.supabaseUrl}/rest/v1/reviews`, {
+          method: 'POST',
+          headers: {
+            apikey: d.supabaseKey!,
+            Authorization: `Bearer ${session.token}`,
+            'Content-Type': 'application/json',
+            Prefer: 'return=minimal',
+          },
+          body: JSON.stringify({ name: session.name, rating, text, lang: d.lang }),
+        });
+        if (res.status === 409) return setStatus(texts.duplicate, 'error');
+        if (!res.ok) throw new Error(String(res.status));
+        // Письмо владельцу: новый отзыв ждёт проверки (если не дошло — не страшно, отзыв уже в базе).
+        fetch(d.mailEndpoint!, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            access_key: d.mailKey,
+            subject: 'New review (pending) — I AM NOMAD',
+            name: session.name,
+            message: `${'★'.repeat(rating)}${'☆'.repeat(5 - rating)}\n\n${text}\n\nОдобрить: Supabase → Table Editor → reviews → status = approved`,
+          }),
+        }).catch(() => {});
+        form.reset();
+        stars.forEach((s) => s.classList.remove('is-on'));
+        form.hidden = true;
+        setStatus(texts.success, 'success');
+      } catch {
+        setStatus(texts.error, 'error');
+      } finally {
+        button.disabled = false;
+        label.textContent = original;
+      }
+    });
+  }
+</script>

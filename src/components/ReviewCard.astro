@@ -1,28 +1,31 @@
 ---
+// Карточка отзыва. Рендерится и на сервере, и (через <template>) в браузере из данных Supabase:
+// атрибуты data-rc-* — точки, куда скрипт на странице «Отзывы» подставляет значения.
 import Icon from './Icon.astro';
-import { unsplash } from '../lib/img';
 
 interface Props {
-  name: string;
-  text: string;
-  avatar: string;
+  name?: string;
+  text?: string;
+  /** Ссылка на фото аккаунта Google. */
+  avatar?: string;
+  rating?: number;
   index?: number;
 }
 
-const { name, text, avatar, index = 0 } = Astro.props;
+const { name = '', text = '', avatar = '', rating = 5, index = 0 } = Astro.props;
 ---
 
 <figure class="rc" data-reveal style={`--i:${index % 3}`}>
   <div class="rc__top">
-    
-    <span class="rc__stars" aria-label="5/5">
-      {[0, 1, 2, 3, 4].map(() => <Icon name="star" size={14} />)}
+    <span class="rc__stars" aria-label={`${rating}/5`} data-rc-stars>
+      {[1, 2, 3, 4, 5].map((n) => <span class:list={['rc__star', { 'is-off': n > rating }]}><Icon name="star" size={14} /></span>)}
     </span>
+    <time class="label num" data-rc-date></time>
   </div>
-  <blockquote class="rc__text">{text}</blockquote>
+  <blockquote class="rc__text" data-rc-text>{text}</blockquote>
   <figcaption class="rc__author">
-    <img src={unsplash(avatar, 96, 96)} alt="" width="40" height="40" loading="lazy" decoding="async" />
-    <span class="label">{name}</span>
+    {avatar ? <img src={avatar} alt="" width="40" height="40" loading="lazy" decoding="async" referrerpolicy="no-referrer" data-rc-avatar /> : <span class="rc__initial" aria-hidden="true" data-rc-initial>{name.slice(0, 1)}</span>}
+    <span class="label" data-rc-name>{name}</span>
   </figcaption>
 </figure>
 
@@ -47,6 +50,21 @@ const { name, text, avatar, index = 0 } = Astro.props;
     display: flex;
     gap: 2px;
     color: var(--gold);
+  }
+
+  .rc__star.is-off {
+    opacity: 0.25;
+  }
+
+  :global(.rc__initial) {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    background: var(--accent);
+    color: var(--on-accent);
+    font-weight: 700;
+    text-transform: uppercase;
   }
 
   .rc__text {
