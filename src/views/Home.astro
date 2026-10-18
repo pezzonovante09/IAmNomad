@@ -56,6 +56,7 @@ const features = ['feature1', 'feature2', 'feature3', 'feature4'];
         <span class="hero__l2" data-reveal="up" data-delay="420">{t('home.hero.line2')}</span>
       </h1>
       <div class="hero__side" data-reveal="up" data-delay="650">
+        <p class="hero__slogan label">{t('brand.slogan')}</p>
         <p class="hero__text">{t('home.hero.text')}</p>
         <div class="hero__ctas">
           <a href="#studio" class="hero__btn hero__btn--solid">{t('home.hero.ctaCustom')} <span aria-hidden="true">↗</span></a>
@@ -259,6 +260,11 @@ const features = ['feature1', 'feature2', 'feature3', 'feature4'];
     flex: 0 1 470px;
     min-width: 0;
     padding-bottom: 0.6em;
+  }
+
+  .hero__slogan {
+    margin-bottom: 14px;
+    letter-spacing: 0.18em;
   }
 
   .hero__text {
