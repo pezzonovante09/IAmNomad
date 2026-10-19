@@ -17,7 +17,7 @@
     "btn__bookTour": "Забронировать тур",
     "btn__readMore": "Читать далее",
     "btn__viewAll": "Смотреть все",
-    "btn__requestQuote": "Запросить расчёт",
+    "btn__requestQuote": "Получить предложение",
     "btn__prev": "Назад",
     "btn__next": "Далее",
     "theme__toggle": "Переключить тему",
@@ -56,7 +56,17 @@
     "region__issykkul__name": "Иссык-Куль",
     "region__issykkul__oblast": "Иссык-Кульская область",
     "unit__m": "м",
-    "nav__show": "I AM NOMAD SHOW"
+    "nav__show": "I AM NOMAD SHOW",
+    "form__workEmail": "Рабочий email",
+    "form__country": "Страна",
+    "form__eventType": "Тип мероприятия",
+    "form__budget": "Ориентировочный бюджет (необязательно)",
+    "form__eventDetails": "Расскажите о вашем мероприятии",
+    "form__corp__type__meeting": "Встреча / конференция",
+    "form__corp__type__incentive": "Incentive-поездка",
+    "form__corp__type__teambuilding": "Тимбилдинг",
+    "form__corp__type__cultural": "Культурное событие",
+    "form__corp__type__other": "Другое"
   },
   "en": {
     "brand__tagline": "Travel & Discover",
@@ -76,7 +86,7 @@
     "btn__bookTour": "Book This Tour",
     "btn__readMore": "Read More",
     "btn__viewAll": "View All",
-    "btn__requestQuote": "Request Quote",
+    "btn__requestQuote": "Request a Proposal",
     "btn__prev": "Previous",
     "btn__next": "Next",
     "theme__toggle": "Toggle theme",
@@ -115,6 +125,16 @@
     "region__issykkul__name": "Issyk-Kul",
     "region__issykkul__oblast": "Issyk-Kul region",
     "unit__m": "m",
-    "nav__show": "I AM NOMAD SHOW"
+    "nav__show": "I AM NOMAD SHOW",
+    "form__workEmail": "Work Email",
+    "form__country": "Country",
+    "form__eventType": "Event Type",
+    "form__budget": "Estimated Budget (optional)",
+    "form__eventDetails": "Tell us about your event",
+    "form__corp__type__meeting": "Meeting / conference",
+    "form__corp__type__incentive": "Incentive trip",
+    "form__corp__type__teambuilding": "Team building",
+    "form__corp__type__cultural": "Cultural event",
+    "form__corp__type__other": "Other"
   }
 }

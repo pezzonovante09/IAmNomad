@@ -26,6 +26,7 @@ const subjects = {
   show: 'Show booking — I AM NOMAD SHOW',
 };
 const eventTypes = ['group', 'vip', 'corporate', 'private', 'other'];
+const corpTypes = ['meeting', 'incentive', 'teambuilding', 'cultural', 'other'];
 const f = (name: string) => `${id}-${name}`;
 // «Отправляя заявку, вы соглашаетесь с {policy}…» — {policy} становится ссылкой на политику.
 const [consentBefore, consentAfter = ''] = t('legal.form.consent').split('{policy}');
@@ -101,8 +102,20 @@ const [consentBefore, consentAfter = ''] = t('legal.form.consent').split('{polic
             <input class="field__input" type="text" id={f('contact')} name="contact" autocomplete="name" required />
           </div>
           <div class="field">
-            <label class="field__label" for={f('email')}>{t('form.email')}</label>
+            <label class="field__label" for={f('email')}>{t('form.workEmail')}</label>
             <input class="field__input" type="email" id={f('email')} name="email" autocomplete="email" required />
+          </div>
+        </div>
+        <div class="form__row">
+          <div class="field">
+            <label class="field__label" for={f('country')}>{t('form.country')}</label>
+            <input class="field__input" type="text" id={f('country')} name="country" autocomplete="country-name" required />
+          </div>
+          <div class="field">
+            <label class="field__label" for={f('type')}>{t('form.eventType')}</label>
+            <select class="field__input" id={f('type')} name="event_type" required>
+              {corpTypes.map((k) => <option value={t(`form.corp.type.${k}`)}>{t(`form.corp.type.${k}`)}</option>)}
+            </select>
           </div>
         </div>
         <div class="form__row">
@@ -114,6 +127,10 @@ const [consentBefore, consentAfter = ''] = t('legal.form.consent').split('{polic
             <label class="field__label" for={f('dates')}>{t('form.dates')}</label>
             <input class="field__input" type="text" id={f('dates')} name="dates" />
           </div>
+        </div>
+        <div class="field">
+          <label class="field__label" for={f('budget')}>{t('form.budget')}</label>
+          <input class="field__input" type="text" id={f('budget')} name="budget" />
         </div>
       </>
     ) : (
@@ -146,7 +163,7 @@ const [consentBefore, consentAfter = ''] = t('legal.form.consent').split('{polic
   }
 
   <div class="field">
-    <label class="field__label" for={f('message')}>{variant === 'show' ? t('show.form.comment') : t('form.message')}</label>
+    <label class="field__label" for={f('message')}>{variant === 'show' ? t('show.form.comment') : variant === 'corporate' ? t('form.eventDetails') : t('form.message')}</label>
     <textarea class="field__input" id={f('message')} name="message" rows="5" data-field-message></textarea>
   </div>
 
