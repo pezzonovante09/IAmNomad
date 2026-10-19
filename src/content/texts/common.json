@@ -53,6 +53,8 @@
     "notFound__cta": "На главную",
     "region__sonkul__name": "Сон-Куль",
     "region__sonkul__oblast": "Нарын",
+    "region__issykkul__name": "Иссык-Куль",
+    "region__issykkul__oblast": "Иссык-Кульская область",
     "unit__m": "м",
     "nav__show": "I AM NOMAD SHOW"
   },
@@ -110,6 +112,8 @@
     "notFound__cta": "Back to home",
     "region__sonkul__name": "Son-Kul",
     "region__sonkul__oblast": "Naryn",
+    "region__issykkul__name": "Issyk-Kul",
+    "region__issykkul__oblast": "Issyk-Kul region",
     "unit__m": "m",
     "nav__show": "I AM NOMAD SHOW"
   }

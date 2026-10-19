@@ -5,34 +5,34 @@
   },
   "posters": {
     "hero": {
-      "id": "1761873177867-499c27dc4cd7",
-      "alt": "Horse show"
+      "id": "/uploads/show-hero.jpg",
+      "alt": "Riders with golden eagles"
     },
     "video": {
-      "id": "1761872936161-9c2075a7ca11",
-      "alt": "Eagle hunters"
+      "id": "/uploads/show-video.jpg",
+      "alt": "Horseman with a fire torch"
     }
   },
   "moments": [
     {
-      "id": "1758016860798-0b96354664b9",
+      "id": "/uploads/show-m1.jpg",
       "alt": "Welcome ceremony by the yurts"
     },
     {
-      "id": "1761873177867-499c27dc4cd7",
+      "id": "/uploads/show-m2.jpg",
       "alt": "Horse show"
     },
     {
-      "id": "1761872936161-9c2075a7ca11",
+      "id": "/uploads/show-m3.jpg",
       "alt": "Photos with golden eagles"
     },
     {
-      "id": "1760630149964-200517d8d437",
+      "id": "/uploads/show-m4.jpg",
       "alt": "National lunch"
     },
     {
-      "id": "1689788648053-cd482d1acd9c",
-      "alt": "Closing ceremony"
+      "id": "/uploads/show-m5.jpg",
+      "alt": "Group photo at the finale"
     }
   ],
   "timeline": [
@@ -71,36 +71,36 @@
   ],
   "gallery": [
     {
-      "id": "1761873177867-499c27dc4cd7",
-      "alt": "Horse show"
+      "id": "/uploads/show-g1.jpg",
+      "alt": "Golden eagle"
     },
     {
-      "id": "1761872936161-9c2075a7ca11",
-      "alt": "Eagle hunters"
+      "id": "/uploads/show-g2.jpg",
+      "alt": "Folk musicians"
     },
     {
-      "id": "1758016860798-0b96354664b9",
-      "alt": "Yurt camp"
+      "id": "/uploads/show-g3.jpg",
+      "alt": "Children dancing"
     },
     {
-      "id": "1760630149964-200517d8d437",
-      "alt": "Pasture"
+      "id": "/uploads/show-g4.jpg",
+      "alt": "Eagle riders"
     },
     {
-      "id": "1506905925346-21bda4d32df4",
-      "alt": "Mountains"
+      "id": "/uploads/show-g5.jpg",
+      "alt": "Fire torch"
     },
     {
-      "id": "1689788648053-cd482d1acd9c",
-      "alt": "Issyk-Kul"
+      "id": "/uploads/show-g6.jpg",
+      "alt": "Horse trick"
     },
     {
-      "id": "1464822759023-fed622ff2c3b",
-      "alt": "Trail"
+      "id": "/uploads/show-g7.jpg",
+      "alt": "Autumn alley"
     },
     {
-      "id": "1551632811-561732d1e306",
-      "alt": "Guests"
+      "id": "/uploads/show-g8.jpg",
+      "alt": "Eagle hunters on the beach"
     }
   ]
 }

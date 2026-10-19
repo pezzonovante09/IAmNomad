@@ -72,7 +72,7 @@ const abs = (p: string) => (site ? new URL(p, site).href : p);
     {!noindex && <meta property="og:url" content={abs(localize(path, lang))} />}
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={desc} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:image" content={abs(ogImage)} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#f5f5f3" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)" />

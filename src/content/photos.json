@@ -1,94 +1,94 @@
 {
   "homeHero": {
-    "id": "1760630149964-200517d8d437",
-    "height": 3016
+    "id": "/uploads/home-hero.jpg",
+    "height": 1607
   },
   "heroPhoto": {
-    "id": "1689788648053-cd482d1acd9c",
-    "alt": "Issyk-Kul lake and mountains, Kyrgyzstan"
+    "id": "/uploads/hero-eagle-hunters.jpg",
+    "alt": "Eagle hunters on horseback on the Issyk-Kul shore"
   },
   "aboutPhoto": {
-    "id": "1506905925346-21bda4d32df4",
-    "alt": "Kyrgyzstan mountain landscape"
+    "id": "/uploads/about-eagle.jpg",
+    "alt": "Golden eagle and its handler"
   },
   "micePhoto": {
-    "id": "1528605248644-14dd04022da1",
-    "alt": "Corporate meeting in mountain resort"
+    "id": "/uploads/mice-group.jpg",
+    "alt": "Group of guests at a nomad show on Issyk-Kul"
   },
   "galleryPhotos": [
     {
-      "id": "1689788648053-cd482d1acd9c",
-      "alt": "Issyk-Kul lake"
+      "id": "/uploads/gallery-01.jpg",
+      "alt": "Girls in national dress with traditional treats"
     },
     {
-      "id": "1758016860798-0b96354664b9",
-      "alt": "Yurts at Tash Rabat"
+      "id": "/uploads/gallery-02.jpg",
+      "alt": "Folk musicians in national costumes"
     },
     {
-      "id": "1761873177867-499c27dc4cd7",
-      "alt": "Horse trekking"
+      "id": "/uploads/gallery-03.jpg",
+      "alt": "Children dancing a national dance"
     },
     {
-      "id": "1760630149964-200517d8d437",
-      "alt": "Song-Kul pasture"
+      "id": "/uploads/gallery-04.jpg",
+      "alt": "Horse rider performing a trick"
     },
     {
-      "id": "1761872936161-9c2075a7ca11",
-      "alt": "Eagle hunting"
+      "id": "/uploads/gallery-05.jpg",
+      "alt": "Horseman with a fire torch"
     },
     {
-      "id": "1506905925346-21bda4d32df4",
-      "alt": "Mountain peaks"
+      "id": "/uploads/gallery-06.jpg",
+      "alt": "Horsewoman in national dress"
     },
     {
-      "id": "1464822759023-fed622ff2c3b",
-      "alt": "Alpine trekking"
+      "id": "/uploads/gallery-07.jpg",
+      "alt": "Performers by the yurt"
     },
     {
-      "id": "1519834785169-98be25ec3f84",
-      "alt": "Winter mountains"
+      "id": "/uploads/gallery-08.jpg",
+      "alt": "Welcome with traditional food"
     },
     {
-      "id": "1551632811-561732d1e306",
-      "alt": "Group hiking"
+      "id": "/uploads/gallery-09.jpg",
+      "alt": "Autumn alley with eagle hunters"
     },
     {
-      "id": "1551524559-8af4e6624178",
-      "alt": "Ski slopes"
+      "id": "/uploads/gallery-10.jpg",
+      "alt": "Eagle hunters lined up on the beach"
     },
     {
-      "id": "1483664852095-d6cc467e59a0",
-      "alt": "Snowy landscape"
+      "id": "/uploads/gallery-11.jpg",
+      "alt": "Eagle hunters riding along the lake"
     },
     {
-      "id": "1418985991508-e47343d2c7a4",
-      "alt": "Winter mountain cabin"
+      "id": "/uploads/gallery-12.jpg",
+      "alt": "Singers in white by the yurts"
     }
   ],
   "instagramPhotos": [
     {
-      "id": "1689788648053-cd482d1acd9c",
-      "alt": "Issyk-Kul lake"
+      "id": "/uploads/insta-01.jpg",
+      "alt": "Rider with the Kyrgyz flag"
     },
     {
-      "id": "1758016860798-0b96354664b9",
-      "alt": "Yurts in Kyrgyzstan"
+      "id": "/uploads/insta-02.jpg",
+      "alt": "Guest with a golden eagle"
     },
     {
-      "id": "1761873177867-499c27dc4cd7",
-      "alt": "Horse trekking in mountains"
+      "id": "/uploads/insta-03.jpg",
+      "alt": "Eagle hunter in autumn"
     },
     {
-      "id": "1760630149964-200517d8d437",
-      "alt": "Song-Kul pasture landscape"
+      "id": "/uploads/insta-04.jpg",
+      "alt": "Traditional food"
     },
     {
-      "id": "1761872936161-9c2075a7ca11",
-      "alt": "Eagle hunting tradition"
+      "id": "/uploads/insta-05.jpg",
+      "alt": "Eagle riders"
     },
     {
-      "id": "1506905925346-21bda4d32df4",
-      "alt": "Mountain peaks above clouds"
+      "id": "/uploads/insta-06.jpg",
+      "alt": "Singers by the yurts"
     }
   ]
 }
