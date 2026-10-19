@@ -9,7 +9,7 @@
         "en": "Son-Kul"
       },
       "alt": 3016,
-      "photo": "1760630149964-200517d8d437"
+      "photo": "/uploads/studio-sonkul.jpg"
     },
     {
       "key": "issykkul",
@@ -18,7 +18,7 @@
         "en": "Issyk-Kul"
       },
       "alt": 1607,
-      "photo": "1689788648053-cd482d1acd9c"
+      "photo": "/uploads/studio-issykkul.jpg"
     },
     {
       "key": "karakol",
@@ -27,7 +27,7 @@
         "en": "Karakol"
       },
       "alt": 1770,
-      "photo": "1519834785169-98be25ec3f84"
+      "photo": "/uploads/studio-karakol.jpg"
     },
     {
       "key": "tashrabat",
@@ -36,7 +36,7 @@
         "en": "Tash-Rabat"
       },
       "alt": 3530,
-      "photo": "1758016860798-0b96354664b9"
+      "photo": "/uploads/studio-tashrabat.jpg"
     },
     {
       "key": "alakul",
@@ -45,7 +45,7 @@
         "en": "Ala-Kul"
       },
       "alt": 3532,
-      "photo": "1551632811-561732d1e306"
+      "photo": "/uploads/studio-alakul.jpg"
     },
     {
       "key": "khantengri",
@@ -54,7 +54,7 @@
         "en": "Khan-Tengri"
       },
       "alt": 7010,
-      "photo": "1506905925346-21bda4d32df4"
+      "photo": "/uploads/studio-khantengri.jpg"
     }
   ],
   "days": {
