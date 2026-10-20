@@ -10,13 +10,16 @@
     "youtube": "https://www.youtube.com/@iamnomad_kg"
   },
   "videos": {
-    "home": "",
+    "home": "https://www.youtube.com/embed/7yq3JwI6X1M?rel=0",
     "tours": {
       "classic": "",
       "adventure": "",
       "winter": "",
       "custom": ""
     },
-    "gallery": []
+    "gallery": [
+      "https://www.youtube.com/embed/NoeSzrqSEqQ?rel=0",
+      "https://www.youtube.com/embed/7yq3JwI6X1M?rel=0"
+    ]
   }
 }
