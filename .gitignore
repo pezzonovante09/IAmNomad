@@ -19,3 +19,6 @@ dist/
 public/admin/config.yml
 public/admin/sveltia-cms.js
 public/admin/chunks/
+
+# Исходные видео (большие оригиналы, не коммитим)
+video-source/

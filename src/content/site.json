@@ -10,7 +10,7 @@
     "youtube": "https://www.youtube.com/@iamnomad_kg"
   },
   "videos": {
-    "home": "https://www.youtube.com/embed/7yq3JwI6X1M?rel=0",
+    "home": "/video/show-2.mp4",
     "tours": {
       "classic": "",
       "adventure": "",
@@ -18,8 +18,8 @@
       "custom": ""
     },
     "gallery": [
-      "https://www.youtube.com/embed/NoeSzrqSEqQ?rel=0",
-      "https://www.youtube.com/embed/7yq3JwI6X1M?rel=0"
+      "/video/show-1.mp4",
+      "/video/show-2.mp4"
     ]
   }
 }
