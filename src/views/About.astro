@@ -25,9 +25,7 @@ const t = useTranslations(lang);
   </PageHero>
 
   <CtaBanner
-    kicker={`${t('about.mission.title')}`}
     title={t('about.cta.title')}
-    text={t('about.mission.text')}
     primary={{ href: localize(routes.tours, lang), label: t('home.hero.cta') }}
     secondary={{ href: contacts.whatsapp, label: t('tour.booking.whatsapp'), external: true, icon: 'whatsapp' }}
   />

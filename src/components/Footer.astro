@@ -31,7 +31,6 @@ const socials = [
   <div class="ft__grid">
     <div class="ft__cell ft__brand">
       <Logo lang={lang} />
-      <p class="ft__mission">{t('about.mission.text')}</p>
       <div class="ft__social">
         {
           socials.map((s) => (
@@ -106,12 +105,6 @@ const socials = [
 
   .ft__cell:last-child {
     border-right: 0;
-  }
-
-  .ft__mission {
-    max-width: 38ch;
-    margin-top: 20px;
-    color: var(--ink-soft);
   }
 
   .ft__social {
