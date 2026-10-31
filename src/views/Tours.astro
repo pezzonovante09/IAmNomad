@@ -4,7 +4,7 @@ import CtaBanner from '../components/CtaBanner.astro';
 import PageHero from '../components/PageHero.astro';
 import TourIndex from '../components/TourIndex.astro';
 import { contacts } from '../data/site';
-import { tourCategories, tours } from '../data/tours';
+import { customTourEnabled, tourCategories, tours } from '../data/tours';
 import { localize, useTranslations, type Lang } from '../i18n/utils';
 import { routes } from '../lib/routes';
 
@@ -37,13 +37,17 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
   <TourIndex lang={lang} tours={tours} />
 
-  <CtaBanner
-    kicker={t('home.builder.kicker')}
-    title={t('tour.custom.intro.title')}
-    text={t('tour.custom.intro.p3')}
-    primary={{ href: localize(routes.tour('custom'), lang), label: t('tour.custom.cta.button') }}
-    secondary={{ href: contacts.whatsapp, label: t('tour.booking.whatsapp'), external: true, icon: 'whatsapp' }}
-  />
+  {
+    customTourEnabled && (
+      <CtaBanner
+        kicker={t('home.builder.kicker')}
+        title={t('tour.custom.intro.title')}
+        text={t('tour.custom.intro.p3')}
+        primary={{ href: localize(routes.tour('custom'), lang), label: t('tour.custom.cta.button') }}
+        secondary={{ href: contacts.whatsapp, label: t('tour.booking.whatsapp'), external: true, icon: 'whatsapp' }}
+      />
+    )
+  }
 </BaseLayout>
 
 <style>

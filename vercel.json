@@ -40,8 +40,18 @@
     },
     {
       "source": "/tour-custom.html",
-      "destination": "/tours/custom/",
-      "permanent": true
+      "destination": "/tours/",
+      "permanent": false
+    },
+    {
+      "source": "/tours/custom/",
+      "destination": "/tours/",
+      "permanent": false
+    },
+    {
+      "source": "/en/tours/custom/",
+      "destination": "/en/tours/",
+      "permanent": false
     },
     {
       "source": "/mice.html",

@@ -21,14 +21,24 @@ export interface Tour {
   highlights: number;
   extras: number;
   dates: number;
+  /** Скрыт с сайта: нет ни страницы, ни карточки (данные и тексты сохраняются). */
+  hidden?: boolean;
 }
 
-export const tours = data.tours as Tour[];
+const allTours = data.tours as Tour[];
 
-export const tourCategories = ['all', 'classic', 'adventure', 'winter', 'individual'] as const;
+/** Туры, видимые на сайте, в порядке из tours.json. */
+export const tours = allTours.filter((t) => !t.hidden);
+
+/** Индивидуальный тур и конструктор («Build your tour») показываются, только пока тур custom не скрыт. */
+export const customTourEnabled = tours.some((t) => t.slug === 'custom');
+
+export const tourCategories = (['all', 'classic', 'adventure', 'winter', 'individual'] as const).filter(
+  (cat) => cat === 'all' || tours.some((t) => t.category === cat),
+);
 
 export function getTour(slug: TourSlug): Tour {
-  const tour = tours.find((t) => t.slug === slug);
+  const tour = allTours.find((t) => t.slug === slug);
   if (!tour) throw new Error(`Unknown tour: ${slug}`);
   return tour;
 }

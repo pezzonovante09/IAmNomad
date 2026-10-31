@@ -6,7 +6,9 @@
 /tour-single.html  /tours/classic/  301
 /tour-adventure.html  /tours/adventure/  301
 /tour-winter.html  /tours/winter/  301
-/tour-custom.html  /tours/custom/  301
+/tour-custom.html  /tours/  302
+/tours/custom/  /tours/  302
+/en/tours/custom/  /en/tours/  302
 /mice.html  /mice/  301
 /blog.html  /  301
 /blog-single.html  /  301

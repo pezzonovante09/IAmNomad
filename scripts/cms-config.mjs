@@ -176,10 +176,18 @@ const settings = {
           label_singular: 'Тур',
           widget: 'list',
           ...fixed,
+          allow_reorder: true,
           summary: '{{fields.slug}} · {{fields.status}}',
-          hint: 'Тексты туров — в «Тексты → Тур: …». Число пунктов ниже = сколько пунктов из текстов показывать.',
+          hint: 'Тексты туров — в «Тексты → Тур: …». Число пунктов ниже = сколько пунктов из текстов показывать. Порядок в списке = порядок на сайте (перетаскивайте).',
           fields: [
             { name: 'slug', label: 'Код тура (не менять)', widget: 'string' },
+            {
+              name: 'hidden',
+              label: 'Скрыть с сайта',
+              widget: 'boolean',
+              required: false,
+              hint: 'Тур пропадает со всех страниц, тексты и фото сохраняются. Для custom заодно скрывается конструктор «Build your tour».',
+            },
             { name: 'card', label: 'Ключ карточки в текстах (не менять)', widget: 'string' },
             {
               name: 'category',
