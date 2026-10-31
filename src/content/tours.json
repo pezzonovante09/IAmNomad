@@ -6,51 +6,10 @@
       "category": "winter",
       "status": "open",
       "cover": {
-        "id": "/uploads/winter-01.jpg",
-        "alt": "Ski slopes at sunset above the valley"
+        "id": "",
+        "alt": ""
       },
-      "gallery": [
-        {
-          "id": "/uploads/winter-01.jpg",
-          "alt": "Ski slopes at sunset above the valley"
-        },
-        {
-          "id": "/uploads/winter-02.jpg",
-          "alt": "Steaming hot springs among snowy fir trees"
-        },
-        {
-          "id": "/uploads/winter-03.jpg",
-          "alt": "Chairlift through a snowy forest"
-        },
-        {
-          "id": "/uploads/winter-04.jpg",
-          "alt": "BBQ grill on a winter evening"
-        },
-        {
-          "id": "/uploads/winter-05.jpg",
-          "alt": "Wooden hot tub after a ski day"
-        },
-        {
-          "id": "/uploads/winter-06.jpg",
-          "alt": "Snowboarder above the night-lit slopes"
-        },
-        {
-          "id": "/uploads/winter-07.jpg",
-          "alt": "Ski resort signpost under a blue sky"
-        },
-        {
-          "id": "/uploads/winter-08.jpg",
-          "alt": "Mountain road and river from above"
-        },
-        {
-          "id": "/uploads/winter-09.jpg",
-          "alt": "Snow angel in fresh powder"
-        },
-        {
-          "id": "/uploads/winter-10.jpg",
-          "alt": "Evening ride through the snowy forest"
-        }
-      ],
+      "gallery": [],
       "mapQuery": "Karakol+Ski+Base+Kyrgyzstan",
       "days": 7,
       "highlights": 8,

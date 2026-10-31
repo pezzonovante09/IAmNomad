@@ -64,12 +64,12 @@ const jsonLd = {
   '@type': 'TouristTrip',
   name: k('title'),
   description: k('subtitle'),
-  image: unsplash(tour.cover.id, 1200, 630),
+  ...(tour.cover.id && { image: unsplash(tour.cover.id, 1200, 630) }),
   provider: { '@type': 'TravelAgency', name: 'I AM NOMAD', telephone: contacts.phone, email: contacts.email },
 };
 ---
 
-<BaseLayout lang={lang} page={`tour-${tour.slug}`} section="tours" path={routes.tour(tour.slug)} image={unsplash(tour.cover.id, 1200, 630)}>
+<BaseLayout lang={lang} page={`tour-${tour.slug}`} section="tours" path={routes.tour(tour.slug)} image={tour.cover.id ? unsplash(tour.cover.id, 1200, 630) : undefined}>
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)} />
 
   <!-- Заголовок -->
@@ -101,7 +101,8 @@ const jsonLd = {
     </dl>
   </section>
 
-  <!-- Галерея -->
+  <!-- Галерея (нет фото — блока нет) -->
+  {tour.gallery.length > 0 && (
   <section class="gm" aria-label="Gallery">
     {
       tour.gallery.map((photo, i) => (
@@ -129,6 +130,7 @@ const jsonLd = {
       ))
     }
   </section>
+  )}
 
   <!-- Подменю -->
   <nav class="subnav" aria-label={k('title')}>
