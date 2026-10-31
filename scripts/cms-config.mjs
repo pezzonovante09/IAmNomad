@@ -216,7 +216,7 @@ const settings = {
             { name: 'days', label: 'Дней (программа по дням)', widget: 'number', value_type: 'int' },
             { name: 'highlights', label: 'Пунктов «Что включено»', widget: 'number', value_type: 'int' },
             { name: 'extras', label: 'Дополнительных опций', widget: 'number', value_type: 'int' },
-            { name: 'dates', label: 'Дат заездов', widget: 'number', value_type: 'int' },
+            { name: 'dates', label: 'Дат заездов (0 — блок с датами не показывается)', widget: 'number', value_type: 'int' },
           ],
         },
       ],

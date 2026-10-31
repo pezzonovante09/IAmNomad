@@ -1,6 +1,64 @@
 {
   "tours": [
     {
+      "slug": "winter",
+      "card": "tours.card3",
+      "category": "winter",
+      "status": "open",
+      "cover": {
+        "id": "/uploads/winter-01.jpg",
+        "alt": "Ski slopes at sunset above the valley"
+      },
+      "gallery": [
+        {
+          "id": "/uploads/winter-01.jpg",
+          "alt": "Ski slopes at sunset above the valley"
+        },
+        {
+          "id": "/uploads/winter-02.jpg",
+          "alt": "Steaming hot springs among snowy fir trees"
+        },
+        {
+          "id": "/uploads/winter-03.jpg",
+          "alt": "Chairlift through a snowy forest"
+        },
+        {
+          "id": "/uploads/winter-04.jpg",
+          "alt": "BBQ grill on a winter evening"
+        },
+        {
+          "id": "/uploads/winter-05.jpg",
+          "alt": "Wooden hot tub after a ski day"
+        },
+        {
+          "id": "/uploads/winter-06.jpg",
+          "alt": "Snowboarder above the night-lit slopes"
+        },
+        {
+          "id": "/uploads/winter-07.jpg",
+          "alt": "Ski resort signpost under a blue sky"
+        },
+        {
+          "id": "/uploads/winter-08.jpg",
+          "alt": "Mountain road and river from above"
+        },
+        {
+          "id": "/uploads/winter-09.jpg",
+          "alt": "Snow angel in fresh powder"
+        },
+        {
+          "id": "/uploads/winter-10.jpg",
+          "alt": "Evening ride through the snowy forest"
+        }
+      ],
+      "mapQuery": "Karakol+Ski+Base+Kyrgyzstan",
+      "days": 7,
+      "highlights": 8,
+      "extras": 0,
+      "dates": 0,
+      "hidden": false
+    },
+    {
       "slug": "classic",
       "card": "tours.card1",
       "category": "classic",
@@ -39,7 +97,8 @@
       "days": 7,
       "highlights": 10,
       "extras": 0,
-      "dates": 5
+      "dates": 0,
+      "hidden": false
     },
     {
       "slug": "adventure",
@@ -80,48 +139,8 @@
       "days": 7,
       "highlights": 9,
       "extras": 0,
-      "dates": 5
-    },
-    {
-      "slug": "winter",
-      "card": "tours.card3",
-      "category": "winter",
-      "status": "soon",
-      "cover": {
-        "id": "1519834785169-98be25ec3f84",
-        "alt": "White Peaks of Kyrgyzstan"
-      },
-      "gallery": [
-        {
-          "id": "1519834785169-98be25ec3f84",
-          "alt": "Snow peaks in Tian Shan"
-        },
-        {
-          "id": "1551524559-8af4e6624178",
-          "alt": "Ski resort slopes"
-        },
-        {
-          "id": "1605540436563-5bca919ae766",
-          "alt": "Skiing in the mountains"
-        },
-        {
-          "id": "1483664852095-d6cc467e59a0",
-          "alt": "Snowy mountain landscape"
-        },
-        {
-          "id": "1506905925346-21bda4d32df4",
-          "alt": "Mountain peaks above clouds"
-        },
-        {
-          "id": "1418985991508-e47343d2c7a4",
-          "alt": "Winter mountain cabin"
-        }
-      ],
-      "mapQuery": "Karakol+Ski+Base+Kyrgyzstan",
-      "days": 7,
-      "highlights": 8,
-      "extras": 6,
-      "dates": 5
+      "dates": 0,
+      "hidden": false
     },
     {
       "slug": "custom",
@@ -136,7 +155,8 @@
       "days": 0,
       "highlights": 0,
       "extras": 0,
-      "dates": 0
+      "dates": 0,
+      "hidden": true
     }
   ]
 }

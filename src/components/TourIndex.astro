@@ -32,7 +32,6 @@ const rows = tours.map((tour, i) => {
     days: tour.days ? pad(tour.days) : '—',
     desc: tour.slug === 'custom' ? t('tour.custom.intro.p2') : t(`tour.${tour.slug}.subtitle`),
     excerpt: k('excerpt'),
-    nextDate: tour.dates ? t(`tour.${tour.slug}.dates.date1`) : null,
     category: t(`tours.tab.${tour.category}`),
     pageHref,
     cta,
@@ -96,12 +95,6 @@ const rows = tours.map((tour, i) => {
                   <dd>{row.route}</dd>
                   <dt>{t('tour.facts.group')}</dt>
                   <dd>{t('tour.facts.groupValue')}</dd>
-                  {row.nextDate && (
-                    <>
-                      <dt>{t('home.index.nextDate')}</dt>
-                      <dd>{row.nextDate}</dd>
-                    </>
-                  )}
                 </dl>
                 <div class="ti__actions">
                   <a href={row.pageHref} class="link-arrow">
