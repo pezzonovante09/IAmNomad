@@ -54,6 +54,8 @@ const abs = (p: string) => (site ? new URL(p, site).href : p);
     </script>
     <title>{fullTitle}</title>
     <meta name="description" content={desc} />
+    {/* Подтверждение сайта в Google Search Console (аккаунт iamnomadkgz@gmail.com). Не удалять: Google перепроверяет. */}
+    <meta name="google-site-verification" content="4Pji7w-sDP1tHBUd2CtEPg2tXpfCRkI_xr6TSdd_QbI" />
     {noindex && <meta name="robots" content="noindex, follow" />}
     {
       !noindex && (
