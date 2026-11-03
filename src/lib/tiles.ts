@@ -34,6 +34,8 @@ export function bigTiles(n: number, cols = 4): number[] {
   const target = Math.max(1, Math.round(n / 3));
   for (const k of [target, target - 1, target + 1, target - 2, target + 2, 1, 0]) {
     if (k < 1 || k > n) continue;
+    // Крупная плитка занимает 4 клетки вместо 1: ровно сетка закроется, только если клеток кратно числу колонок.
+    if ((n + 3 * k) % cols !== 0) continue;
     // Сначала пробуем «разреженные» наборы (крупные плитки не подряд).
     let best: number[] | null = null;
     for (const c of combos(rest, k - 1)) {
