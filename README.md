@@ -144,7 +144,7 @@ scripts/
 
 Задаются в настройках Vercel, см. `.env.example`:
 
-- `PUBLIC_WEB3FORMS_KEY` — ключ Web3Forms (без него используется ключ по умолчанию из `src/data/site.ts`);
+- ключ Web3Forms задан в `src/data/site.ts` (привязан к почте компании). Переменная `PUBLIC_WEB3FORMS_KEY` больше не читается; старую можно удалить из Vercel;
 - `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_KEY` — проект Supabase и его публичный ключ для записи заявок (по умолчанию проект `iamnomad`, см. `src/data/site.ts`);
 - `PUBLIC_GOOGLE_CLIENT_ID` — заменяет Google OAuth Client ID из `src/data/site.ts` (для входа в форме отзывов);
 - `SITE_URL` — адрес сайта для canonical, hreflang, sitemap и превью в соцсетях (по умолчанию `https://www.iamnomadkg.com`).

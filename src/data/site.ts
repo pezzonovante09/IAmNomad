@@ -4,10 +4,11 @@ import site from '../content/site.json';
 
 export const contacts = site.contacts;
 
-// Web3Forms: публичный ключ формы (он всё равно виден в HTML). Можно переопределить PUBLIC_WEB3FORMS_KEY.
+// Web3Forms: публичный ключ формы (он всё равно виден в HTML), привязан к почте компании.
+// Задан только здесь: старая переменная PUBLIC_WEB3FORMS_KEY в Vercel не используется.
 export const web3forms = {
   endpoint: 'https://api.web3forms.com/submit',
-  accessKey: import.meta.env.PUBLIC_WEB3FORMS_KEY || '710dde02-1feb-4dd8-8240-ac3e7889bb2a',
+  accessKey: '710dde02-1feb-4dd8-8240-ac3e7889bb2a',
 };
 
 // Supabase: заявки со всех форм сохраняются в таблицу leads (вдобавок к письму через Web3Forms).
