@@ -7,7 +7,7 @@ export const contacts = site.contacts;
 // Web3Forms: публичный ключ формы (он всё равно виден в HTML). Можно переопределить PUBLIC_WEB3FORMS_KEY.
 export const web3forms = {
   endpoint: 'https://api.web3forms.com/submit',
-  accessKey: import.meta.env.PUBLIC_WEB3FORMS_KEY || 'dad1bfa4-4f13-490a-a5ee-119e176d6b78',
+  accessKey: import.meta.env.PUBLIC_WEB3FORMS_KEY || '710dde02-1feb-4dd8-8240-ac3e7889bb2a',
 };
 
 // Supabase: заявки со всех форм сохраняются в таблицу leads (вдобавок к письму через Web3Forms).
