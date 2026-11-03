@@ -78,7 +78,7 @@
 
 **Что видят посетители.** Имя в виде «Имя Ф.» и фото аккаунта Google берутся из токена Google, а не из формы, поэтому подделать их нельзя. Один аккаунт — один отзыв. Чтобы удалить отзыв по просьбе человека, удалите строку в таблице.
 
-**Включение входа через Google.** Форма отзыва появляется на сайте, только когда задана переменная `PUBLIC_GOOGLE_CLIENT_ID` (Google OAuth Client ID, тип Web). Пока её нет, показывается только список отзывов. Настройка: Google Cloud Console → OAuth Client ID (Authorized JavaScript origins: `https://www.iamnomadkg.com`, `https://iamnomadkg.com`); Supabase → Authentication → Providers → Google (вставить Client ID и Client Secret); Vercel → Environment Variables → `PUBLIC_GOOGLE_CLIENT_ID`, затем Redeploy.
+**Включение входа через Google.** Форма отзыва появляется на сайте, только когда задана переменная `PUBLIC_GOOGLE_CLIENT_ID` (Google OAuth Client ID, тип Web). Пока её нет, на странице «Отзывы» только заглушка, поэтому пункта «Отзывы» нет в меню и подвале, а сама страница закрыта от поисковиков и не попадает в карту сайта. После включения всё это возвращается само. Настройка: Google Cloud Console → OAuth Client ID (Authorized JavaScript origins: `https://www.iamnomadkg.com`, `https://iamnomadkg.com`); Supabase → Authentication → Providers → Google (вставить Client ID и Client Secret); Vercel → Environment Variables → `PUBLIC_GOOGLE_CLIENT_ID`, затем Redeploy.
 
 ### Аналитика
 

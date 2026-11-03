@@ -17,7 +17,7 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 ---
 
-<BaseLayout lang={lang} page="reviews" path={routes.reviews}>
+<BaseLayout lang={lang} page="reviews" path={routes.reviews} noindex={!googleClientId}>
   <PageHero kicker={t('reviews.kicker')} title={t('reviews.title')} subtitle={t('reviews.subtitle')} />
 
   <section
