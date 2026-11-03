@@ -60,13 +60,26 @@ const rows = tours.map((tour, i) => {
     rows.map((row, i) => (
       <article class:list={['ti__row', { 'is-open': i === open }]} data-row data-category={row.tour.category} data-reveal>
         <h3 class="ti__summary-h">
-          <button type="button" class="ti__summary" aria-expanded={i === open ? 'true' : 'false'} aria-controls={`ti-${row.tour.slug}`} data-row-toggle>
-            <span class="ti__c-num num">{row.num}</span>
-            <span class="ti__c-title ti__title">{row.title}</span>
-            <span class="ti__c-route">{row.route}</span>
-            <span class="ti__c-days num">{row.days}</span>
-            <span class="ti__c-price" aria-hidden="true">→</span>
-          </button>
+          {/* У тура со страницей строка — ссылка: закрытую первый клик раскрывает, открытую — ведёт на страницу тура. */}
+          {
+            row.pageHref ? (
+              <a href={row.pageHref} class="ti__summary" aria-expanded={i === open ? 'true' : 'false'} aria-controls={`ti-${row.tour.slug}`} data-row-toggle>
+                <span class="ti__c-num num">{row.num}</span>
+                <span class="ti__c-title ti__title">{row.title}</span>
+                <span class="ti__c-route">{row.route}</span>
+                <span class="ti__c-days num">{row.days}</span>
+                <span class="ti__c-price" aria-hidden="true">→</span>
+              </a>
+            ) : (
+              <button type="button" class="ti__summary" aria-expanded={i === open ? 'true' : 'false'} aria-controls={`ti-${row.tour.slug}`} data-row-toggle>
+                <span class="ti__c-num num">{row.num}</span>
+                <span class="ti__c-title ti__title">{row.title}</span>
+                <span class="ti__c-route">{row.route}</span>
+                <span class="ti__c-days num">{row.days}</span>
+                <span class="ti__c-price" aria-hidden="true">→</span>
+              </button>
+            )
+          }
         </h3>
         <div class="ti__body" id={`ti-${row.tour.slug}`} inert={i !== open}>
           <div class="ti__inner">
@@ -101,7 +114,7 @@ const rows = tours.map((tour, i) => {
                   {row.pageHref && <span class="ti__disc-label">{t('home.index.explore')}</span>}
                 </span>
               </a>
-              <div class="ti__info">
+              <div class="ti__info" data-row-href={row.pageHref || undefined}>
                 <p class="ti__desc">{row.desc}</p>
                 {
                   row.pageHref ? (
@@ -210,7 +223,9 @@ const rows = tours.map((tour, i) => {
     padding-block: 20px;
     border: 0;
     background: none;
+    color: inherit;
     text-align: left;
+    text-decoration: none;
     font-size: 14px;
     cursor: pointer;
   }
@@ -371,6 +386,15 @@ const rows = tours.map((tour, i) => {
     border-left: 1px solid var(--line);
   }
 
+  /* Описание и характеристики тоже ведут на страницу тура (кнопки внутри работают как обычно). */
+  .ti__info[data-row-href] {
+    cursor: pointer;
+  }
+
+  .ti__info[data-row-href]:hover .ti__desc {
+    color: var(--accent);
+  }
+
   .ti__price {
     font-family: var(--font-display);
     font-weight: 700;
@@ -482,9 +506,17 @@ const rows = tours.map((tour, i) => {
     }
 
     rows.forEach((row) => {
-      const toggle = row.querySelector<HTMLButtonElement>('[data-row-toggle]')!;
-      toggle.addEventListener('click', () => {
+      const toggle = row.querySelector<HTMLElement>('[data-row-toggle]')!;
+      toggle.addEventListener('click', (e) => {
         clearTimeout(timer);
+        // Ссылка на страницу тура: закрытую строку сначала раскрываем, открытая — ведёт на страницу.
+        if (toggle instanceof HTMLAnchorElement) {
+          if (!row.classList.contains('is-open')) {
+            e.preventDefault();
+            openRow(row);
+          }
+          return;
+        }
         if (row.classList.contains('is-open') && !canHover) {
           row.classList.remove('is-open');
           toggle.setAttribute('aria-expanded', 'false');
@@ -498,6 +530,13 @@ const rows = tours.map((tour, i) => {
         });
         row.addEventListener('mouseleave', () => clearTimeout(timer));
       }
+
+      // Клик по описанию и характеристикам открывает страницу тура (кроме кнопок и выделения текста).
+      const info = row.querySelector<HTMLElement>('[data-row-href]');
+      info?.addEventListener('click', (e) => {
+        if ((e.target as HTMLElement).closest('a, button') || getSelection()?.toString()) return;
+        location.href = info.dataset.rowHref!;
+      });
 
       // Диск следует за курсором
       const area = row.querySelector<HTMLElement>('[data-disc-area]');
