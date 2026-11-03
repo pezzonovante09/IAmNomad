@@ -155,8 +155,8 @@ const jsonLd = {
           {
             highlights.map((h, i) => (
               <li class="hl__item" data-reveal style={`--i:${i % 4}`}>
-                <span class="hl__icon" aria-hidden="true">
-                  {h.icon || '✦'}
+                <span class="hl__icon label num" aria-hidden="true">
+                  {pad(i + 1)}
                 </span>
                 <span>{h.text}</span>
               </li>
@@ -172,8 +172,8 @@ const jsonLd = {
               <ul class="hl">
                 {extras.map((h, i) => (
                   <li class="hl__item" data-reveal style={`--i:${i % 4}`}>
-                    <span class="hl__icon" aria-hidden="true">
-                      {h.icon || '✦'}
+                    <span class="hl__icon label num" aria-hidden="true">
+                      {pad(i + 1)}
                     </span>
                     <span>{h.text}</span>
                   </li>
@@ -640,6 +640,7 @@ const jsonLd = {
     border-bottom: 0;
   }
 
+  /* Номер пункта вместо эмодзи: эмодзи по-разному выглядят на разных устройствах и спорят со стилем сайта. */
   .hl__icon {
     display: grid;
     place-items: center;
@@ -647,7 +648,8 @@ const jsonLd = {
     width: 44px;
     height: 44px;
     border: 1px solid var(--line);
-    font-size: 1.25rem;
+    color: var(--accent);
+    font-weight: 600;
   }
 
   @media (max-width: 700px) {
