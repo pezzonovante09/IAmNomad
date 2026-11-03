@@ -17,9 +17,10 @@ export const supabase = {
   key: import.meta.env.PUBLIC_SUPABASE_KEY || 'sb_publishable_55O5Jzs9UtFttpZMWRrCWg_jHn_uj0i',
 };
 
-// Вход через Google для отзывов (Google Identity Services). Это публичный Client ID (OAuth, тип Web).
-// Пока он не задан, форма отзыва скрыта, а список одобренных отзывов работает. Задаётся PUBLIC_GOOGLE_CLIENT_ID.
-export const googleClientId: string = import.meta.env.PUBLIC_GOOGLE_CLIENT_ID || '';
+// Вход через Google для отзывов (Google Identity Services). Это публичный Client ID (OAuth, тип Web),
+// проект в Google Cloud на iamnomadkgz@gmail.com. Можно переопределить PUBLIC_GOOGLE_CLIENT_ID.
+export const googleClientId: string =
+  import.meta.env.PUBLIC_GOOGLE_CLIENT_ID || '891134816179-u3kn4oi8irdqka5l3jo43gellu7ce8dp.apps.googleusercontent.com';
 
 // Видео (ссылка для встраивания YouTube, напр. https://www.youtube.com/embed/XXXX, или файл /video/x.mp4).
 // Пустое значение — блок с видео не показывается.

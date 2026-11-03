@@ -78,7 +78,7 @@
 
 **Что видят посетители.** Имя в виде «Имя Ф.» и фото аккаунта Google берутся из токена Google, а не из формы, поэтому подделать их нельзя. Один аккаунт — один отзыв. Чтобы удалить отзыв по просьбе человека, удалите строку в таблице.
 
-**Включение входа через Google.** Форма отзыва появляется на сайте, только когда задана переменная `PUBLIC_GOOGLE_CLIENT_ID` (Google OAuth Client ID, тип Web). Пока её нет, на странице «Отзывы» только заглушка, поэтому пункта «Отзывы» нет в меню и подвале, а сама страница закрыта от поисковиков и не попадает в карту сайта. После включения всё это возвращается само. Настройка: Google Cloud Console → OAuth Client ID (Authorized JavaScript origins: `https://www.iamnomadkg.com`, `https://iamnomadkg.com`); Supabase → Authentication → Providers → Google (вставить Client ID и Client Secret); Vercel → Environment Variables → `PUBLIC_GOOGLE_CLIENT_ID`, затем Redeploy.
+**Вход через Google.** Google OAuth Client ID (тип Web) записан в `src/data/site.ts`. Проект — в Google Cloud на iamnomadkgz@gmail.com, опубликован (In production), Authorized JavaScript origins: `https://www.iamnomadkg.com`, `https://iamnomadkg.com`. В Supabase → Authentication → Providers → Google вставлены тот же Client ID и Client Secret. Непустая переменная `PUBLIC_GOOGLE_CLIENT_ID` в Vercel заменяет ID из кода. Если ID убрать совсем, форма отзыва пропадёт, «Отзывы» исчезнут из меню и подвала, а страница закроется от поисковиков.
 
 ### Аналитика
 
@@ -146,7 +146,7 @@ scripts/
 
 - `PUBLIC_WEB3FORMS_KEY` — ключ Web3Forms (без него используется ключ по умолчанию из `src/data/site.ts`);
 - `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_KEY` — проект Supabase и его публичный ключ для записи заявок (по умолчанию проект `iamnomad`, см. `src/data/site.ts`);
-- `PUBLIC_GOOGLE_CLIENT_ID` — Google OAuth Client ID для входа в форме отзывов (пусто — форма скрыта);
+- `PUBLIC_GOOGLE_CLIENT_ID` — заменяет Google OAuth Client ID из `src/data/site.ts` (для входа в форме отзывов);
 - `SITE_URL` — адрес сайта для canonical, hreflang, sitemap и превью в соцсетях (по умолчанию `https://www.iamnomadkg.com`).
 
 ### Публикация
