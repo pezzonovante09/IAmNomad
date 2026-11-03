@@ -136,10 +136,31 @@
       "category": "workation",
       "status": "open",
       "cover": {
-        "id": "",
-        "alt": ""
+        "id": "/uploads/nomad-01.jpg",
+        "alt": "Yurt on the Issyk-Kul shore"
       },
-      "gallery": [],
+      "gallery": [
+        {
+          "id": "/uploads/nomad-01.jpg",
+          "alt": "Yurt on the Issyk-Kul shore"
+        },
+        {
+          "id": "/uploads/nomad-02.jpg",
+          "alt": "Travellers in a mountain gorge"
+        },
+        {
+          "id": "/uploads/nomad-03.jpg",
+          "alt": "Golden eagle landing on a hunter's glove"
+        },
+        {
+          "id": "/uploads/nomad-04.jpg",
+          "alt": "Rider galloping along Issyk-Kul"
+        },
+        {
+          "id": "/uploads/nomad-05.jpg",
+          "alt": "Dinner with an I AM NOMAD group"
+        }
+      ],
       "mapQuery": "Cholpon-Ata+Kyrgyzstan",
       "days": 18,
       "highlights": 10,
@@ -153,10 +174,31 @@
       "category": "adventure",
       "status": "open",
       "cover": {
-        "id": "",
-        "alt": ""
+        "id": "/uploads/grand-01.jpg",
+        "alt": "Horsemen with banners below the hills"
       },
-      "gallery": [],
+      "gallery": [
+        {
+          "id": "/uploads/grand-01.jpg",
+          "alt": "Horsemen with banners below the hills"
+        },
+        {
+          "id": "/uploads/grand-02.jpg",
+          "alt": "Eagle hunters with golden eagles"
+        },
+        {
+          "id": "/uploads/grand-03.jpg",
+          "alt": "Horseback archer at full gallop"
+        },
+        {
+          "id": "/uploads/grand-04.jpg",
+          "alt": "Yurt camp by the lake"
+        },
+        {
+          "id": "/uploads/grand-05.jpg",
+          "alt": "Komuz players on the shore"
+        }
+      ],
       "mapQuery": "Tash+Rabat+Kyrgyzstan",
       "days": 11,
       "highlights": 9,
@@ -170,10 +212,31 @@
       "category": "family",
       "status": "open",
       "cover": {
-        "id": "",
-        "alt": ""
+        "id": "/uploads/family-01.jpg",
+        "alt": "Girls dancing in national dresses"
       },
-      "gallery": [],
+      "gallery": [
+        {
+          "id": "/uploads/family-01.jpg",
+          "alt": "Girls dancing in national dresses"
+        },
+        {
+          "id": "/uploads/family-02.jpg",
+          "alt": "Young musicians with komuz"
+        },
+        {
+          "id": "/uploads/family-03.jpg",
+          "alt": "Golden eagle and a horse"
+        },
+        {
+          "id": "/uploads/family-04.jpg",
+          "alt": "Eagle hunters with a taigan hound"
+        },
+        {
+          "id": "/uploads/family-05.jpg",
+          "alt": "Traditional tug-of-stick game"
+        }
+      ],
       "mapQuery": "Issyk-Kul+Lake+Kyrgyzstan",
       "days": 9,
       "highlights": 9,
@@ -187,10 +250,31 @@
       "category": "culture",
       "status": "open",
       "cover": {
-        "id": "",
-        "alt": ""
+        "id": "/uploads/craft-01.jpg",
+        "alt": "Craftswoman spinning wool by a yurt lattice"
       },
-      "gallery": [],
+      "gallery": [
+        {
+          "id": "/uploads/craft-01.jpg",
+          "alt": "Craftswoman spinning wool by a yurt lattice"
+        },
+        {
+          "id": "/uploads/craft-02.jpg",
+          "alt": "Yurt crown (tunduk) seen from inside"
+        },
+        {
+          "id": "/uploads/craft-03.jpg",
+          "alt": "Girl in national dress by a felt applique panel"
+        },
+        {
+          "id": "/uploads/craft-04.jpg",
+          "alt": "Yurt with felt patterns on the lake shore"
+        },
+        {
+          "id": "/uploads/craft-05.jpg",
+          "alt": "Craftswoman by embroidered felt hangings"
+        }
+      ],
       "mapQuery": "Kochkor+Kyrgyzstan",
       "days": 9,
       "highlights": 9,
@@ -204,8 +288,8 @@
       "category": "retreat",
       "status": "soon",
       "cover": {
-        "id": "",
-        "alt": ""
+        "id": "/uploads/retreat-01.jpg",
+        "alt": "Yurts on a quiet lake shore"
       },
       "gallery": [],
       "days": 0,
@@ -220,8 +304,8 @@
       "category": "sport",
       "status": "soon",
       "cover": {
-        "id": "",
-        "alt": ""
+        "id": "/uploads/sport-01.jpg",
+        "alt": "Archers shooting in mid-leap"
       },
       "gallery": [],
       "days": 0,
