@@ -4,8 +4,8 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
-    "dev": "node scripts/cms-config.mjs && astro dev",
-    "build": "node scripts/cms-config.mjs && astro build",
+    "dev": "node scripts/cms-config.mjs && node scripts/image-variants.mjs && astro dev",
+    "build": "node scripts/cms-config.mjs && node scripts/image-variants.mjs && astro build",
     "preview": "astro preview",
     "check": "astro check",
     "check:text": "node scripts/check-text-fit.mjs"

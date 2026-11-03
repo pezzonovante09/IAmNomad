@@ -126,8 +126,11 @@ supabase/migrations/ ← SQL таблицы заявок, прав доступ�
 .github/workflows/   ← supabase-keepalive.yml: «будит» базу два раза в неделю
 scripts/
   cms-config.mjs      ← генерирует public/admin/config.yml и копирует редактор
+  image-variants.mjs  ← уменьшенные WebP-копии фото из uploads для телефонов
   check-text-fit.mjs  ← проверка, что текст помещается
 ```
+
+**Фото для телефонов.** Перед каждым `dev` и `build` `scripts/image-variants.mjs` делает из каждого фото в `public/uploads/` копии шириной 480, 960 и 1440 px в WebP (`public/uploads/_w/`) и список `src/data/image-variants.json`. По нему `srcset()` в `src/lib/img.ts` даёт браузеру выбор, и телефон грузит лёгкую копию вместо оригинала. Копии и список в git не хранятся, готовые копии повторно не пересчитываются.
 
 **Тексты.** Ключи в коде записаны с точками (`t('home.hero.line1')`). В JSON точки заменены на `__` (`home__hero__line1`), потому что в админке точка в имени поля означает вложенность. Если ключа нет в текущем языке, берётся русский вариант, а если нет и его — сам ключ.
 

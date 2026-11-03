@@ -22,3 +22,7 @@ public/admin/chunks/
 
 # Исходные видео (большие оригиналы, не коммитим)
 video-source/
+
+# Уменьшенные копии фото, генерирует scripts/image-variants.mjs
+public/uploads/_w/
+src/data/image-variants.json
