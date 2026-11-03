@@ -175,6 +175,17 @@ const [consentBefore, consentAfter = ''] = t('legal.form.consent').split('{polic
     {consentBefore}<a href={localize(routes.privacy, lang)} target="_blank" rel="noopener">{t('legal.form.policy')}</a>{consentAfter}
   </p>
   <p class="form__status" role="status" aria-live="polite" data-status></p>
+
+  <!-- После успешной отправки форма прячется, а на её месте появляется этот блок. -->
+  <div class="form__done" data-done hidden tabindex="-1">
+    <span class="form__done-icon"><Icon name="check" /></span>
+    <p class="form__done-title">{t('misc.formSuccessTitle')}</p>
+    <p class="form__done-text" role="status" aria-live="polite" data-done-text></p>
+    <button type="button" class="btn btn--outline form__again" data-again>
+      <span>{t('misc.formAgain')}</span>
+      <Icon name="arrow-right" />
+    </button>
+  </div>
 </form>
 
 <style>
@@ -220,9 +231,80 @@ const [consentBefore, consentAfter = ''] = t('legal.form.consent').split('{polic
     color: var(--danger);
   }
 
+  /* Заявка отправлена: поля скрыты, виден только блок с благодарностью. */
+  .form.is-done > :not([data-done]) {
+    display: none;
+  }
+
+  .form__done {
+    display: grid;
+    justify-items: start;
+    gap: 16px;
+    padding: clamp(28px, 4vw, 48px);
+    border: 1px solid var(--line-soft);
+    border-left: 3px solid var(--success);
+    background: var(--accent-soft);
+    outline: none;
+  }
+
+  .form__done[hidden] {
+    display: none;
+  }
+
+  .form__done-icon {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--success);
+    color: var(--on-accent);
+  }
+
+  .form__done-icon :global(svg) {
+    width: 26px;
+    height: 26px;
+  }
+
+  .form__done-title {
+    font-family: var(--font-display);
+    font-size: clamp(22px, 2.2vw, 30px);
+    font-weight: 600;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .form__done-text {
+    max-width: 520px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+
+  .form__again {
+    margin-top: 8px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .form__done:not([hidden]) {
+      animation: form-done-in 0.5s var(--ease) both;
+    }
+  }
+
+  @keyframes form-done-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
+
   @media (max-width: 520px) {
-    .form__submit {
+    .form__submit,
+    .form__again {
       justify-self: stretch;
+    }
+
+    .form__again {
+      white-space: normal;
     }
   }
 </style>
@@ -299,6 +381,30 @@ const [consentBefore, consentAfter = ''] = t('legal.form.consent').split('{polic
       status.dataset.type = type;
     }
 
+    const done = form.querySelector<HTMLElement>('[data-done]');
+    const doneText = form.querySelector<HTMLElement>('[data-done-text]');
+
+    // Вместо полей — блок «Заявка отправлена»; прокручиваем к нему, если он ушёл за экран.
+    function showDone() {
+      if (!done) return setStatus(form.dataset.success ?? '', 'success');
+      form.classList.add('is-done');
+      done.hidden = false;
+      if (doneText) doneText.textContent = form.dataset.success ?? '';
+      done.focus({ preventScroll: true });
+      const box = done.getBoundingClientRect();
+      if (box.top < 80 || box.bottom > innerHeight) {
+        const smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+        done.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'center' });
+      }
+    }
+
+    form.querySelector('[data-again]')?.addEventListener('click', () => {
+      form.classList.remove('is-done');
+      if (done) done.hidden = true;
+      if (doneText) doneText.textContent = '';
+      form.querySelector<HTMLElement>('input:not([type="hidden"]):not(.sr-only), textarea')?.focus();
+    });
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (!button || !label) return;
@@ -315,7 +421,7 @@ const [consentBefore, consentAfter = ''] = t('legal.form.consent').split('{polic
         const ok = (r: PromiseSettledResult<boolean>) => r.status === 'fulfilled' && r.value;
         if (ok(mail) || ok(db)) {
           form.reset();
-          setStatus(form.dataset.success ?? '', 'success');
+          showDone();
         } else {
           setStatus(form.dataset.error ?? '', 'error');
         }
