@@ -36,8 +36,8 @@ const highlights = range(tour.highlights).map((n) => splitEmoji(k(`highlights.it
 const extras = range(tour.extras).map((n) => splitEmoji(k(`extras.item${n}`)));
 // \u2060 — «склейка», чтобы диапазон «20–26» не переносился по тире.
 const dates = range(tour.dates).map((n) => k(`dates.date${n}`).replace(/(\d)[–-](\d)/g, '$1\u2060–\u2060$2'));
-// У тура могут быть свои списки «Что входит / не входит» (tour.<slug>.included — пункты через «•») и свой FAQ;
-// если их нет, берутся общие.
+// У тура могут быть свои списки «Что входит / не входит» (tour.<slug>.included — пункты через «•»), свой FAQ
+// и своя «Группа»; если их нет, берутся общие. «Сезон» (tour.<slug>.season) показывается, только если задан.
 const own = (key: string) => has(lang, `tour.${tour.slug}.${key}`) || has(defaultLang, `tour.${tour.slug}.${key}`);
 const included = own('included') ? bullets(k('included')) : range(5).map((n) => t(`tour.included.item${n}`));
 const notIncluded = own('notIncluded') ? bullets(k('notIncluded')) : range(4).map((n) => t(`tour.notIncluded.item${n}`));
@@ -48,7 +48,8 @@ const video = videos.tours[tour.slug];
 const facts = [
   { label: t('tour.facts.duration'), value: card('duration') },
   { label: t('tour.facts.route'), value: card('location') },
-  { label: t('tour.facts.group'), value: t('tour.facts.groupValue') },
+  { label: t('tour.facts.group'), value: own('group') ? k('group') : t('tour.facts.groupValue') },
+  ...(own('season') ? [{ label: t('tour.facts.season'), value: k('season') }] : []),
 ];
 
 const sections = [
@@ -314,7 +315,7 @@ const jsonLd = {
     <aside class="book" aria-label={t('tour.booking.title')}>
       <div class="book__inner">
         <p class="book__price">{t('tour.booking.title')}</p>
-        {!isOpen && <p class="book__note">{t('tour.winter.comingSoonText')}</p>}
+        {!isOpen && <p class="book__note">{own('comingSoonText') ? k('comingSoonText') : t('tours.soon.text')}</p>}
         <div class="book__actions">
           {
             isOpen ? (

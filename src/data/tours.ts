@@ -5,14 +5,25 @@ import data from '../content/tours.json';
 // структура (фото, дни, количество пунктов, статус) — в src/content/tours.json.
 // И то и другое редактируется в админке (/admin).
 
-export type TourSlug = 'classic' | 'adventure' | 'winter' | 'custom';
+export type TourSlug =
+  | 'classic'
+  | 'adventure'
+  | 'winter'
+  | 'digital-nomad'
+  | 'grand-tour'
+  | 'family'
+  | 'handicraft'
+  | 'retreat'
+  | 'sport-camp'
+  | 'custom';
 export type TourStatus = 'open' | 'soon' | 'request';
+export type TourCategory = 'classic' | 'adventure' | 'winter' | 'culture' | 'family' | 'workation' | 'retreat' | 'sport' | 'individual';
 
 export interface Tour {
   slug: TourSlug;
   /** Префикс ключей карточки: tours.card1 и т.п. */
   card: string;
-  category: 'classic' | 'adventure' | 'winter' | 'individual';
+  category: TourCategory;
   status: TourStatus;
   cover: Photo;
   gallery: Photo[];
@@ -30,12 +41,14 @@ const allTours = data.tours as Tour[];
 /** Туры, видимые на сайте, в порядке из tours.json. */
 export const tours = allTours.filter((t) => !t.hidden);
 
+/** У тура «Скоро» без программы (0 дней) нет своей страницы — только строка в каталоге с коротким описанием. */
+export const hasPage = (tour: Tour) => tour.status !== 'soon' || tour.days > 0;
+
 /** Индивидуальный тур и конструктор («Build your tour») показываются, только пока тур custom не скрыт. */
 export const customTourEnabled = tours.some((t) => t.slug === 'custom');
 
-export const tourCategories = (['all', 'classic', 'adventure', 'winter', 'individual'] as const).filter(
-  (cat) => cat === 'all' || tours.some((t) => t.category === cat),
-);
+/** Вкладки фильтра на странице туров: «Все» и категории в том порядке, в каком идут туры. */
+export const tourCategories = ['all', ...new Set(tours.map((t) => t.category))];
 
 export function getTour(slug: TourSlug): Tour {
   const tour = allTours.find((t) => t.slug === slug);

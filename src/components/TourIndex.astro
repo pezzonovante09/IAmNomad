@@ -3,8 +3,8 @@
 // Над кадром за курсором едет вращающийся тюндюк («Смотреть»).
 import Icon from './Icon.astro';
 import Ornament from './Ornament.astro';
-import type { Tour } from '../data/tours';
-import { localize, useTranslations, type Lang } from '../i18n/utils';
+import { hasPage, type Tour } from '../data/tours';
+import { defaultLang, has, localize, useTranslations, type Lang } from '../i18n/utils';
 import { srcset, unsplash } from '../lib/img';
 import { routes } from '../lib/routes';
 
@@ -21,7 +21,13 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
 const rows = tours.map((tour, i) => {
   const k = (f: string) => t(`${tour.card}.${f}`);
-  const pageHref = localize(routes.tour(tour.slug), lang);
+  // Свои «Группа» и «Сезон» тура (tour.<slug>.group / .season), если заданы.
+  const own = (f: string) => {
+    const key = `tour.${tour.slug}.${f}`;
+    return has(lang, key) || has(defaultLang, key) ? t(key) : '';
+  };
+  // У тура «Скоро» без страницы карточка ведёт на заявку.
+  const pageHref = hasPage(tour) ? localize(routes.tour(tour.slug), lang) : '';
   const cta = { href: `${localize(routes.contact, lang)}?tour=${tour.slug}`, label: t('home.index.contact') };
   return {
     tour,
@@ -33,6 +39,8 @@ const rows = tours.map((tour, i) => {
     desc: tour.slug === 'custom' ? t('tour.custom.intro.p2') : t(`tour.${tour.slug}.subtitle`),
     excerpt: k('excerpt'),
     category: t(`tours.tab.${tour.category}`),
+    group: own('group') || t('tour.facts.groupValue'),
+    season: own('season'),
     pageHref,
     cta,
   };
@@ -63,7 +71,12 @@ const rows = tours.map((tour, i) => {
         <div class="ti__body" id={`ti-${row.tour.slug}`} inert={i !== open}>
           <div class="ti__inner">
             <div class="ti__card">
-              <a href={row.pageHref} class="ti__media" data-disc-area aria-label={`${t('home.index.explore')}: ${row.title}`}>
+              <a
+                href={row.pageHref || row.cta.href}
+                class="ti__media"
+                data-disc-area={row.pageHref ? '' : undefined}
+                aria-label={`${row.pageHref ? t('home.index.explore') : row.cta.label}: ${row.title}`}
+              >
                 {row.tour.cover.id && (
                   <img
                     src={unsplash(row.tour.cover.id, 1400, 900)}
@@ -79,30 +92,44 @@ const rows = tours.map((tour, i) => {
                 <span class="ti__badges">
                   <span class="badge badge--gold">{row.category}</span>
                   {row.tour.status === 'soon' && <span class="badge">{t('btn.comingSoon')}</span>}
-                  <span class="badge">{row.duration}</span>
+                  {row.duration && <span class="badge">{row.duration}</span>}
                 </span>
                 <span class="ti__disc" data-disc aria-hidden="true">
                   <span class="ti__disc-ring">
                     <Ornament variant="tunduk" stroke="#C5A059" class="ti__tunduk" />
                   </span>
-                  <span class="ti__disc-label">{t('home.index.explore')}</span>
+                  {row.pageHref && <span class="ti__disc-label">{t('home.index.explore')}</span>}
                 </span>
               </a>
               <div class="ti__info">
                 <p class="ti__desc">{row.desc}</p>
-                <dl class="ti__specs">
-                  <dt>{t('tour.facts.duration')}</dt>
-                  <dd>{row.duration}</dd>
-                  <dt>{t('tour.facts.route')}</dt>
-                  <dd>{row.route}</dd>
-                  <dt>{t('tour.facts.group')}</dt>
-                  <dd>{t('tour.facts.groupValue')}</dd>
-                </dl>
+                {
+                  row.pageHref ? (
+                    <dl class="ti__specs">
+                      <dt>{t('tour.facts.duration')}</dt>
+                      <dd>{row.duration}</dd>
+                      <dt>{t('tour.facts.route')}</dt>
+                      <dd>{row.route}</dd>
+                      <dt>{t('tour.facts.group')}</dt>
+                      <dd>{row.group}</dd>
+                      {row.season && (
+                        <>
+                          <dt>{t('tour.facts.season')}</dt>
+                          <dd>{row.season}</dd>
+                        </>
+                      )}
+                    </dl>
+                  ) : (
+                    <p class="ti__desc muted">{t('tours.soon.text')}</p>
+                  )
+                }
                 <div class="ti__actions">
-                  <a href={row.pageHref} class="link-arrow">
-                    {t('btn.viewDetails')}
-                    <Icon name="arrow-right" />
-                  </a>
+                  {row.pageHref && (
+                    <a href={row.pageHref} class="link-arrow">
+                      {t('btn.viewDetails')}
+                      <Icon name="arrow-right" />
+                    </a>
+                  )}
                   <a href={row.cta.href} class="btn btn--accent btn--block">
                     {row.cta.label}
                     <span aria-hidden="true">→</span>
@@ -328,8 +355,9 @@ const rows = tours.map((tour, i) => {
     white-space: nowrap;
   }
 
+  /* Курсор прячется там, где за ним едет диск («Смотреть»); у тура «Скоро» без страницы диск стоит на месте. */
   @media (hover: hover) and (pointer: fine) {
-    .ti__media {
+    .ti__media[data-disc-area] {
       cursor: none;
     }
   }

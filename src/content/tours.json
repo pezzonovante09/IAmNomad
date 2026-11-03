@@ -6,10 +6,39 @@
       "category": "winter",
       "status": "open",
       "cover": {
-        "id": "",
-        "alt": ""
+        "id": "/uploads/winter-05.jpg",
+        "alt": "Ski slope among spruce trees above a mountain valley"
       },
-      "gallery": [],
+      "gallery": [
+        {
+          "id": "/uploads/winter-05.jpg",
+          "alt": "Ski slope among spruce trees above a mountain valley"
+        },
+        {
+          "id": "/uploads/winter-06.jpg",
+          "alt": "Snowboarder in fresh powder"
+        },
+        {
+          "id": "/uploads/winter-03.jpg",
+          "alt": "Steaming wooden hot tub among spruce trees"
+        },
+        {
+          "id": "/uploads/winter-10.jpg",
+          "alt": "Evening by the fire in the snowy mountains"
+        },
+        {
+          "id": "/uploads/winter-02.jpg",
+          "alt": "Skier on the slope at sunrise"
+        },
+        {
+          "id": "/uploads/winter-08.jpg",
+          "alt": "Snowboarder above the night-lit slopes"
+        },
+        {
+          "id": "/uploads/winter-07.jpg",
+          "alt": "Chairlift through a snowy spruce forest"
+        }
+      ],
       "mapQuery": "Karakol+Ski+Base+Kyrgyzstan",
       "days": 7,
       "highlights": 8,
@@ -97,6 +126,106 @@
       "mapQuery": "Issyk-Kul+Lake+Kyrgyzstan",
       "days": 7,
       "highlights": 9,
+      "extras": 0,
+      "dates": 0,
+      "hidden": false
+    },
+    {
+      "slug": "digital-nomad",
+      "card": "tours.card5",
+      "category": "workation",
+      "status": "open",
+      "cover": {
+        "id": "",
+        "alt": ""
+      },
+      "gallery": [],
+      "mapQuery": "Cholpon-Ata+Kyrgyzstan",
+      "days": 18,
+      "highlights": 10,
+      "extras": 0,
+      "dates": 0,
+      "hidden": false
+    },
+    {
+      "slug": "grand-tour",
+      "card": "tours.card6",
+      "category": "adventure",
+      "status": "open",
+      "cover": {
+        "id": "",
+        "alt": ""
+      },
+      "gallery": [],
+      "mapQuery": "Tash+Rabat+Kyrgyzstan",
+      "days": 11,
+      "highlights": 9,
+      "extras": 0,
+      "dates": 0,
+      "hidden": false
+    },
+    {
+      "slug": "family",
+      "card": "tours.card7",
+      "category": "family",
+      "status": "open",
+      "cover": {
+        "id": "",
+        "alt": ""
+      },
+      "gallery": [],
+      "mapQuery": "Issyk-Kul+Lake+Kyrgyzstan",
+      "days": 9,
+      "highlights": 9,
+      "extras": 0,
+      "dates": 0,
+      "hidden": false
+    },
+    {
+      "slug": "handicraft",
+      "card": "tours.card8",
+      "category": "culture",
+      "status": "open",
+      "cover": {
+        "id": "",
+        "alt": ""
+      },
+      "gallery": [],
+      "mapQuery": "Kochkor+Kyrgyzstan",
+      "days": 9,
+      "highlights": 9,
+      "extras": 0,
+      "dates": 0,
+      "hidden": false
+    },
+    {
+      "slug": "retreat",
+      "card": "tours.card9",
+      "category": "retreat",
+      "status": "soon",
+      "cover": {
+        "id": "",
+        "alt": ""
+      },
+      "gallery": [],
+      "days": 0,
+      "highlights": 0,
+      "extras": 0,
+      "dates": 0,
+      "hidden": false
+    },
+    {
+      "slug": "sport-camp",
+      "card": "tours.card10",
+      "category": "sport",
+      "status": "soon",
+      "cover": {
+        "id": "",
+        "alt": ""
+      },
+      "gallery": [],
+      "days": 0,
+      "highlights": 0,
       "extras": 0,
       "dates": 0,
       "hidden": false

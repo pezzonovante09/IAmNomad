@@ -12,7 +12,7 @@ import Reviews from '../views/Reviews.astro';
 import Show from '../views/Show.astro';
 import Tour from '../views/Tour.astro';
 import Tours from '../views/Tours.astro';
-import { tours, type TourSlug } from '../data/tours';
+import { hasPage, tours, type TourSlug } from '../data/tours';
 import { languages, defaultLang, type Lang } from '../i18n/utils';
 import { routes } from '../lib/routes';
 
@@ -23,7 +23,7 @@ export function getStaticPaths() {
     { path: routes.home, view: 'home' },
     { path: routes.about, view: 'about' },
     { path: routes.tours, view: 'tours' },
-    ...tours.map((tour) => ({
+    ...tours.filter(hasPage).map((tour) => ({
       path: routes.tour(tour.slug),
       view: (tour.slug === 'custom' ? 'custom' : 'tour') as View,
       slug: tour.slug,

@@ -2,7 +2,7 @@
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
 import { contacts } from '../data/site';
-import { tours } from '../data/tours';
+import { hasPage, tours } from '../data/tours';
 import { localize, useTranslations, type Lang } from '../i18n/utils';
 import { navItems, routes } from '../lib/routes';
 
@@ -53,7 +53,7 @@ const socials = [
     <div class="ft__cell">
       <h2 class="label ft__title">{t('nav.tours')}</h2>
       <ul class="ft__links">
-        {tours.map((tour) => <li><a href={localize(routes.tour(tour.slug), lang)}>{t(`${tour.card}.title`)}</a></li>)}
+        {tours.filter(hasPage).map((tour) => <li><a href={localize(routes.tour(tour.slug), lang)}>{t(`${tour.card}.title`)}</a></li>)}
       </ul>
     </div>
 
