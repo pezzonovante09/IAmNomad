@@ -125,7 +125,7 @@ const settings = {
             { name: 'instagram', label: 'Instagram (ссылка)', widget: 'string' },
             { name: 'instagramHandle', label: 'Instagram (@ник)', widget: 'string' },
             { name: 'facebook', label: 'Facebook (ссылка)', widget: 'string' },
-            { name: 'youtube', label: 'YouTube (ссылка на канал)', widget: 'string' },
+            { name: 'youtube', label: 'YouTube (ссылка на канал)', widget: 'string', required: false, hint: 'Пусто — значка YouTube на сайте нет.' },
           ],
         },
         {

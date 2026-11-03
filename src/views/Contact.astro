@@ -16,11 +16,14 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 
-const socials = [
-  { icon: 'instagram', label: 'Instagram', href: contacts.instagram },
-  { icon: 'facebook', label: 'Facebook', href: contacts.facebook },
-  { icon: 'youtube', label: 'YouTube', href: contacts.youtube },
-] as const;
+// Пустая ссылка в админке — значка на сайте нет.
+const socials = (
+  [
+    { icon: 'instagram', label: 'Instagram', href: contacts.instagram },
+    { icon: 'facebook', label: 'Facebook', href: contacts.facebook },
+    { icon: 'youtube', label: 'YouTube', href: contacts.youtube },
+  ] as const
+).filter((s) => s.href);
 ---
 
 <BaseLayout lang={lang} page="contact" path={routes.contact}>

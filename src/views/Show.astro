@@ -129,7 +129,7 @@ const jsonLd = {
   <section class="block">
     <SectionHeader kicker={t('show.video.kicker')} title={t('show.video.title')} />
     <a
-      href={contacts.youtube}
+      href={contacts.youtube || showVideos.main}
       class="vid"
       data-video={showVideos.main}
       target="_blank"
