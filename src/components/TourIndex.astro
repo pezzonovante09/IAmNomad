@@ -13,9 +13,11 @@ interface Props {
   tours: Tour[];
   /** Номер раскрытой строки по умолчанию (−1 — все свёрнуты). */
   open?: number;
+  /** Каталог в начале страницы: фото раскрытой строки грузится сразу, а не лениво. */
+  priority?: boolean;
 }
 
-const { lang, tours, open = 0 } = Astro.props;
+const { lang, tours, open = 0, priority = false } = Astro.props;
 const t = useTranslations(lang);
 const pad = (n: number) => String(n).padStart(2, '0');
 
@@ -98,7 +100,8 @@ const rows = tours.map((tour, i) => {
                     alt={row.tour.cover.alt}
                     width="1400"
                     height="900"
-                    loading="lazy"
+                    loading={priority && i === open ? 'eager' : 'lazy'}
+                    fetchpriority={priority && i === open ? 'high' : undefined}
                     decoding="async"
                   />
                 )}
