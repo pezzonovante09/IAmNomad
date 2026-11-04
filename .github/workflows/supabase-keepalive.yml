@@ -1,10 +1,10 @@
-# Бесплатный проект Supabase засыпает после 7 дней без запросов.
-# Два раза в неделю дёргаем безобидную функцию keepalive(), чтобы база с заявками не уснула.
+# Бесплатный проект Supabase засыпает, если за неделю к базе мало запросов: нужно несколько в день.
+# Двух пингов в неделю не хватило: судя по сбоям, в конце октября 2026 база уснула. Поэтому дёргаем её четыре раза в сутки.
 name: Supabase keepalive
 
 on:
   schedule:
-    - cron: '17 6 * * 1,4' # понедельник и четверг, 06:17 UTC
+    - cron: '17 */6 * * *' # каждые 6 часов
   workflow_dispatch:
 
 jobs:
@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Ping Supabase
         env:
-          # Публичный ключ (тот же, что на сайте): им можно только добавлять заявки и вызывать keepalive().
+          # Публичный ключ (тот же, что на сайте): им можно добавлять заявки, читать одобренные отзывы и вызывать keepalive().
           SUPABASE_URL: https://yqamuqihlrccpbcgzqsc.supabase.co
           SUPABASE_KEY: sb_publishable_55O5Jzs9UtFttpZMWRrCWg_jHn_uj0i
         run: |
@@ -23,3 +23,7 @@ jobs:
             -H "apikey: $SUPABASE_KEY" \
             -H "Content-Type: application/json" \
             -d '{}'
+          # keepalive() таблиц не трогает, поэтому ещё читаем из настоящей таблицы.
+          curl --fail-with-body --silent --show-error --retry 3 --retry-delay 10 \
+            "$SUPABASE_URL/rest/v1/reviews?select=id&limit=1" \
+            -H "apikey: $SUPABASE_KEY"

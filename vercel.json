@@ -59,12 +59,12 @@
       "permanent": true
     },
     {
-      "source": "/blog/:path*",
+      "source": "/blog/:path*/",
       "destination": "/",
       "permanent": true
     },
     {
-      "source": "/en/blog/:path*",
+      "source": "/en/blog/:path*/",
       "destination": "/en/",
       "permanent": true
     },
@@ -118,6 +118,24 @@
         {
           "key": "Permissions-Policy",
           "value": "camera=(), microphone=(), geolocation=(), payment=()"
+        }
+      ]
+    },
+    {
+      "source": "/uploads/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
+        }
+      ]
+    },
+    {
+      "source": "/video/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
         }
       ]
     }

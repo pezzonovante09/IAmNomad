@@ -125,7 +125,8 @@ const t = useTranslations(lang);
     const lang = root.dataset.lang ?? 'ru';
 
     try {
-      const url = `${root.dataset.endpoint}?select=name,avatar_url,rating,text,created_at&status=eq.approved&order=created_at.desc&limit=100`;
+      // Только одобренные отзывы отдаёт сама база (RLS). Фильтр по status здесь не нужен: публичному ключу эта колонка закрыта, и запрос вернул бы 401.
+      const url = `${root.dataset.endpoint}?select=name,avatar_url,rating,text,created_at&order=created_at.desc&limit=100`;
       const res = await fetch(url, { headers: { apikey: root.dataset.key! } });
       if (!res.ok) throw new Error(String(res.status));
       const reviews = (await res.json()) as Review[];
