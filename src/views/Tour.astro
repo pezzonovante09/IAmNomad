@@ -958,12 +958,17 @@ const jsonLd = {
     padding: 12px var(--gutter);
   }
 
+  /* Длинное название переносится на вторую строку, а не обрезается на узких экранах. */
   .bookbar__title {
+    display: -webkit-box;
     overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
     font-family: var(--font-display);
     font-weight: 600;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    line-height: 1.25;
+    overflow-wrap: break-word;
   }
 
   .bookbar__price {
@@ -987,6 +992,30 @@ const jsonLd = {
   @media (max-width: 1024px) {
     .bookbar {
       display: flex;
+    }
+  }
+
+  /* Узкие телефоны: кнопка компактнее, чтобы названию тура хватало места. */
+  @media (max-width: 420px) {
+    .bookbar__text {
+      padding: 10px 12px 10px var(--gutter);
+    }
+
+    .bookbar__title {
+      font-size: 14px;
+    }
+
+    .bookbar__btn {
+      padding: 0 14px;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+    }
+  }
+
+  @media (max-width: 359px) {
+    .bookbar__title {
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
     }
   }
 </style>
