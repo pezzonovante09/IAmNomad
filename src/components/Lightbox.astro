@@ -10,7 +10,7 @@ interface Props {
 const t = useTranslations(Astro.props.lang);
 ---
 
-<dialog class="lb" data-lb aria-label="Photo">
+<dialog class="lb" data-lb aria-label={t('ui.photo')}>
   <figure class="lb__figure">
     <img class="lb__img" alt="" data-lb-img />
     <figcaption class="lb__caption"><span data-lb-count></span></figcaption>

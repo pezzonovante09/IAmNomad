@@ -39,7 +39,8 @@
     "tour__family__faq__q2": "Что важно знать о Сон-Куле?",
     "tour__family__faq__a2": "Сон-Куль находится на высоте около 3016 м, и ночи там бывают холодными даже летом — возьмите тёплые вещи для всей семьи.",
     "tour__family__faq__q3": "Когда проходит тур и сколько он стоит?",
-    "tour__family__faq__a3": "Тур проводится с июня по сентябрь. Цена — по запросу; детали проживания и итоговый список услуг подтверждаем при бронировании."
+    "tour__family__faq__a3": "Тур проводится с июня по сентябрь. Цена — по запросу; детали проживания и итоговый список услуг подтверждаем при бронировании.",
+    "tour__family__safety": "• Часть маршрута проходит на высоте около 3000 м (Сон-Куль). На такой высоте возможны головная боль, слабость и плохой сон.\n• При болезнях сердца и лёгких, при беременности посоветуйтесь с врачом до поездки.\n• Ночи на Сон-Куле холодные даже летом: возьмите тёплые вещи.\n• Возраст детей и ограничения по катанию на лошадях уточните у менеджера до бронирования.\n• Итоговый список услуг и условия проживания подтверждаем при бронировании."
   },
   "en": {
     "tour__family__title": "Family Adventure in Kyrgyzstan",
@@ -53,7 +54,7 @@
     "tour__family__program__day3__title": "Day 3. Chon-Kemin — Issyk-Kul Lake",
     "tour__family__program__day3__text": "• Drive to the northern shore of Issyk-Kul.\n• Children make a felt souvenir with a local craftsperson.\n• Free time by the lake for swimming and beach games.\n• Overnight at a guesthouse in Tamchy.",
     "tour__family__program__day4__title": "Day 4. Cholpon-Ata — Karakol",
-    "tour__family__program__day4__text": "• The ancient petroglyph field near Cholpon-Ata.\n• Children search for animals and hunters among the rock carvings.\n• In Karakol: the wooden Dungan Mosque and the Holy Trinity Orthodox Church.\n• An evening activity for children.\n• Overnight in Karakol.",
+    "tour__family__program__day4__text": "• The ancient petroglyph field near Cholpon-Ata.\n• Children search for animals and hunters among the rock carvings.\n• In Karakol: the wooden Dungan Mosque and the Holy Trinity Orthodox Cathedral.\n• An evening activity for children.\n• Overnight in Karakol.",
     "tour__family__program__day5__title": "Day 5. Karakol — Jeti-Oguz — Barskoon",
     "tour__family__program__day5__text": "• The striking red rocks of Jeti-Oguz — children count the Seven Bulls.\n• Drive along the southern shore of Issyk-Kul.\n• A short walk to the Barskoon waterfalls and a picnic.\n• A cooking workshop focused on Kyrgyz dishes.\n• Overnight at a guesthouse in Barskoon.",
     "tour__family__program__day6__title": "Day 6. Skazka Canyon — Bokonbaevo",
@@ -81,6 +82,7 @@
     "tour__family__faq__q2": "What should we know about Song-Kul?",
     "tour__family__faq__a2": "Song-Kul lies at about 3,016 m, and nights can be cold even in summer — pack warm clothes for the whole family.",
     "tour__family__faq__q3": "When does the tour run, and how much does it cost?",
-    "tour__family__faq__a3": "The tour runs from June to September. Price available on request; accommodation details and the final list of inclusions are confirmed at booking."
+    "tour__family__faq__a3": "The tour runs from June to September. Price available on request; accommodation details and the final list of inclusions are confirmed at booking.",
+    "tour__family__safety": "• Part of the route runs at about 3,000 m (Song-Kul). At this altitude headaches, weakness and poor sleep are possible.\n• If you have heart or lung conditions, or are pregnant, talk to your doctor before the trip.\n• Nights at Song-Kul are cold even in summer: bring warm clothes.\n• Please check the age limits for children and horse riding with our manager before booking.\n• We confirm the final list of services and accommodation details when you book."
   }
 }

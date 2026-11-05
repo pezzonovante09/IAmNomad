@@ -1,6 +1,6 @@
 ---
 import Icon from './Icon.astro';
-import { contacts } from '../data/site';
+import { contacts, whatsappLink } from '../data/site';
 import { useTranslations, type Lang } from '../i18n/utils';
 
 interface Props {
@@ -12,7 +12,7 @@ const { lang, layout = 'grid' } = Astro.props;
 const t = useTranslations(lang);
 
 const items = [
-  { icon: 'whatsapp', label: t('footer.whatsapp'), value: contacts.phone, href: contacts.whatsapp },
+  { icon: 'whatsapp', label: t('footer.whatsapp'), value: contacts.phone, href: whatsappLink(t('whatsapp.text')) },
   { icon: 'mail', label: t('footer.email'), value: contacts.email, href: `mailto:${contacts.email}` },
   { icon: 'phone', label: t('footer.phone'), value: contacts.phone, href: contacts.phoneHref },
 ] as const;

@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import CtaBanner from '../components/CtaBanner.astro';
 import Faq from '../components/Faq.astro';
 import PageHero from '../components/PageHero.astro';
-import { contacts } from '../data/site';
+import { whatsappLink } from '../data/site';
 import { localize, useTranslations, type Lang } from '../i18n/utils';
 import { routes } from '../lib/routes';
 
@@ -22,7 +22,7 @@ const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => ({ q: t(`faq.q${n}`), a
   <CtaBanner
     title={t('faq.cta.title')}
     text={t('faq.cta.text')}
-    primary={{ href: contacts.whatsapp, label: t('tour.booking.whatsapp'), external: true }}
+    primary={{ href: whatsappLink(t('whatsapp.text')), label: t('tour.booking.whatsapp'), external: true }}
     secondary={{ href: localize(routes.contact, lang), label: t('nav.contact') }}
   />
 </BaseLayout>

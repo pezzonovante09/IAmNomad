@@ -14,8 +14,9 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const [consentBefore, consentAfter = ''] = t('reviews.form.consent').split('{policy}');
+const [noteBefore, noteAfter = ''] = t('reviews.form.signinNote').split('{policy}');
 const texts = Object.fromEntries(
-  ['sending', 'success', 'error', 'duplicate', 'authError', 'tooShort', 'noRating', 'submit'].map((k) => [k, t(`reviews.form.${k}`)]),
+  ['sending', 'success', 'error', 'duplicate', 'authError', 'expired', 'tooShort', 'noRating', 'submit'].map((k) => [k, t(`reviews.form.${k}`)]),
 );
 ---
 
@@ -39,7 +40,15 @@ const texts = Object.fromEntries(
         data-texts={JSON.stringify(texts)}
       >
         <div class="rf__signin" data-signin>
+          <button type="button" class="btn btn--accent" data-signin-start>
+            <span>{t('reviews.form.start')}</span>
+            <Icon name="arrow-right" />
+          </button>
           <div data-google-button></div>
+          <p class="rf__inapp" data-inapp hidden>{t('reviews.form.inapp')}</p>
+          <p class="rf__consent">
+            {noteBefore}<a href={localize(routes.privacy, lang)} target="_blank" rel="noopener">{t('legal.form.policyIn')}</a>{noteAfter}
+          </p>
         </div>
 
         <form class="rf__form" data-form novalidate hidden>
@@ -111,7 +120,19 @@ const texts = Object.fromEntries(
   }
 
   .rf__signin {
+    display: grid;
+    justify-items: start;
+    gap: 16px;
     min-height: 44px;
+  }
+
+  .rf__inapp {
+    max-width: 640px;
+    font-weight: 600;
+  }
+
+  .rf__inapp[hidden] {
+    display: none;
   }
 
   .rf__form {
@@ -198,8 +219,8 @@ const texts = Object.fromEntries(
 
   .rf__consent {
     max-width: 640px;
-    font-size: 13px;
-    opacity: 0.75;
+    font-size: 14px;
+    color: var(--ink-mute);
     line-height: 1.55;
   }
 
@@ -258,6 +279,13 @@ const texts = Object.fromEntries(
 
     let session: { token: string; name: string } | null = null;
 
+    // Запрос не держит форму дольше 15 секунд.
+    function timedFetch(url: string, init: RequestInit) {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 15000);
+      return fetch(url, { ...init, signal: ctrl.signal }).finally(() => clearTimeout(timer));
+    }
+
     const setStatus = (text: string, type: 'success' | 'error' | '' = '') => {
       status.textContent = text;
       status.dataset.type = type;
@@ -280,7 +308,7 @@ const texts = Object.fromEntries(
     async function onCredential(response: { credential?: string }) {
       setStatus('');
       try {
-        const res = await fetch(`${d.supabaseUrl}/auth/v1/token?grant_type=id_token`, {
+        const res = await timedFetch(`${d.supabaseUrl}/auth/v1/token?grant_type=id_token`, {
           method: 'POST',
           headers: { apikey: d.supabaseKey!, 'Content-Type': 'application/json' },
           body: JSON.stringify({ provider: 'google', id_token: response.credential, nonce }),
@@ -329,12 +357,27 @@ const texts = Object.fromEntries(
       });
     }
 
-    const gsi = document.createElement('script');
-    gsi.src = 'https://accounts.google.com/gsi/client';
-    gsi.async = true;
-    gsi.onload = () => void initGoogle();
-    gsi.onerror = () => setStatus(texts.authError, 'error');
-    document.head.append(gsi);
+    // Во встроенных браузерах Instagram и Facebook Google часто запрещает вход: предупреждаем заранее.
+    root.querySelector<HTMLElement>('[data-inapp]')!.hidden = !/FBAN|FBAV|FB_IAB|Instagram/i.test(navigator.userAgent);
+
+    // Скрипт Google загружается только по нажатию: до этого страница к Google не обращается.
+    const start = root.querySelector<HTMLButtonElement>('[data-signin-start]')!;
+    start.addEventListener('click', () => {
+      start.disabled = true;
+      const gsi = document.createElement('script');
+      gsi.src = 'https://accounts.google.com/gsi/client';
+      gsi.async = true;
+      gsi.onload = () => {
+        start.hidden = true;
+        void initGoogle();
+      };
+      gsi.onerror = () => {
+        start.disabled = false;
+        gsi.remove();
+        setStatus(texts.authError, 'error');
+      };
+      document.head.append(gsi);
+    });
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -349,7 +392,7 @@ const texts = Object.fromEntries(
       label.textContent = texts.sending;
       setStatus('');
       try {
-        const res = await fetch(`${d.supabaseUrl}/rest/v1/reviews`, {
+        const res = await timedFetch(`${d.supabaseUrl}/rest/v1/reviews`, {
           method: 'POST',
           headers: {
             apikey: d.supabaseKey!,
@@ -360,6 +403,11 @@ const texts = Object.fromEntries(
           body: JSON.stringify({ name: session.name, rating, text, lang: d.lang }),
         });
         if (res.status === 409) return setStatus(texts.duplicate, 'error');
+        // Вход действует час. Текст остаётся в поле, после повторного входа его можно отправить.
+        if (res.status === 401) {
+          signOut();
+          return setStatus(texts.expired, 'error');
+        }
         if (!res.ok) throw new Error(String(res.status));
         // Письмо владельцу: новый отзыв ждёт проверки (если не дошло — не страшно, отзыв уже в базе).
         fetch(d.mailEndpoint!, {
@@ -367,7 +415,8 @@ const texts = Object.fromEntries(
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body: JSON.stringify({
             access_key: d.mailKey,
-            subject: 'New review (pending) — I AM NOMAD',
+            subject: 'Новый отзыв ждёт проверки — I AM NOMAD',
+            from_name: 'Отзыв с сайта I AM NOMAD',
             name: session.name,
             message: `${'★'.repeat(rating)}${'☆'.repeat(5 - rating)}\n\n${text}\n\nОдобрить: Supabase → Table Editor → reviews → status = approved`,
           }),

@@ -6,33 +6,40 @@
   "posters": {
     "hero": {
       "id": "/uploads/show-hero.jpg",
-      "alt": "Riders with golden eagles"
+      "alt": "Riders with golden eagles",
+      "altRu": "Всадники с беркутами"
     },
     "video": {
       "id": "/uploads/show-video.jpg",
-      "alt": "Horseman with a fire torch"
+      "alt": "Horseman with a fire torch",
+      "altRu": "Всадник с горящим факелом"
     }
   },
   "moments": [
     {
       "id": "/uploads/show-m1.jpg",
-      "alt": "Welcome ceremony by the yurts"
+      "alt": "Welcome ceremony by the yurts",
+      "altRu": "Церемония встречи у юрт"
     },
     {
       "id": "/uploads/show-m2.jpg",
-      "alt": "Horse show"
+      "alt": "Horse show",
+      "altRu": "Конное шоу"
     },
     {
       "id": "/uploads/show-m3.jpg",
-      "alt": "Photos with golden eagles"
+      "alt": "Photos with golden eagles",
+      "altRu": "Фото с беркутами"
     },
     {
       "id": "/uploads/show-m4.jpg",
-      "alt": "National lunch"
+      "alt": "National lunch",
+      "altRu": "Национальный обед"
     },
     {
       "id": "/uploads/show-m5.jpg",
-      "alt": "Group photo at the finale"
+      "alt": "Group photo at the finale",
+      "altRu": "Общее фото в финале"
     }
   ],
   "timeline": [
@@ -72,35 +79,43 @@
   "gallery": [
     {
       "id": "/uploads/show-g1.jpg",
-      "alt": "Golden eagle"
+      "alt": "Golden eagle",
+      "altRu": "Беркут"
     },
     {
       "id": "/uploads/show-g2.jpg",
-      "alt": "Folk musicians"
+      "alt": "Folk musicians",
+      "altRu": "Народные музыканты"
     },
     {
       "id": "/uploads/show-g3.jpg",
-      "alt": "Children dancing"
+      "alt": "Children dancing",
+      "altRu": "Танцующие дети"
     },
     {
       "id": "/uploads/show-g4.jpg",
-      "alt": "Eagle riders"
+      "alt": "Eagle riders",
+      "altRu": "Всадники с беркутами"
     },
     {
       "id": "/uploads/show-g5.jpg",
-      "alt": "Fire torch"
+      "alt": "Fire torch",
+      "altRu": "Огненный факел"
     },
     {
       "id": "/uploads/show-g6.jpg",
-      "alt": "Horse trick"
+      "alt": "Horse trick",
+      "altRu": "Трюк на лошади"
     },
     {
       "id": "/uploads/show-g7.jpg",
-      "alt": "Autumn alley"
+      "alt": "Autumn alley",
+      "altRu": "Осенняя аллея"
     },
     {
       "id": "/uploads/show-g8.jpg",
-      "alt": "Eagle hunters on the beach"
+      "alt": "Eagle hunters on the beach",
+      "altRu": "Беркутчи на пляже"
     }
   ]
 }

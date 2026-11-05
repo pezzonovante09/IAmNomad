@@ -32,6 +32,7 @@ const t = useTranslations(lang);
       <span class="rv__stars" aria-hidden="true">{[1, 2, 3, 4, 5].map(() => <Icon name="star" size={18} />)}</span>
       <span class="label"><span data-count class="num"></span> · {t('reviews.average')}</span>
     </div>
+    <p class="rv__note" data-loading hidden>{t('reviews.loading')}</p>
     <div class="grid-rev" data-list></div>
     <p class="rv__note" data-empty hidden>{googleClientId ? t('reviews.empty') : t('reviews.soon')}</p>
     <p class="rv__note rv__note--error" data-error hidden>{t('reviews.loadError')}</p>
@@ -123,11 +124,15 @@ const t = useTranslations(lang);
     const list = q('[data-list]');
     const tpl = q<HTMLTemplateElement>('template[data-card]');
     const lang = root.dataset.lang ?? 'ru';
+    const loading = q('[data-loading]');
+    loading.hidden = false;
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 10000);
 
     try {
       // Только одобренные отзывы отдаёт сама база (RLS). Фильтр по status здесь не нужен: публичному ключу эта колонка закрыта, и запрос вернул бы 401.
       const url = `${root.dataset.endpoint}?select=name,avatar_url,rating,text,created_at&order=created_at.desc&limit=100`;
-      const res = await fetch(url, { headers: { apikey: root.dataset.key! } });
+      const res = await fetch(url, { headers: { apikey: root.dataset.key! }, signal: ctrl.signal });
       if (!res.ok) throw new Error(String(res.status));
       const reviews = (await res.json()) as Review[];
 
@@ -149,7 +154,7 @@ const t = useTranslations(lang);
         date.dateTime = r.created_at;
         const img = card.querySelector<HTMLImageElement>('[data-rc-avatar]');
         const initial = card.querySelector<HTMLElement>('[data-rc-initial]');
-        if (r.avatar_url?.startsWith('https://')) {
+        if (r.avatar_url?.startsWith('https://lh3.googleusercontent.com/')) {
           if (img) img.src = r.avatar_url;
           else if (initial) {
             const photo = document.createElement('img');
@@ -182,6 +187,9 @@ const t = useTranslations(lang);
       q('[data-summary]').hidden = false;
     } catch {
       q('[data-error]').hidden = false;
+    } finally {
+      clearTimeout(timer);
+      loading.hidden = true;
     }
   });
 </script>

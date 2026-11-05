@@ -1,0 +1,86 @@
+---
+// Карта Google по нажатию: пока посетитель сам не откроет карту, страница не обращается к серверам Google.
+import Icon from './Icon.astro';
+import { useTranslations, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  /** Запрос для карты, напр. 'Bishkek+Kyrgyzstan'. */
+  query: string;
+  title: string;
+}
+
+const { lang, query, title } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<div class="mapx" data-map data-src={`https://maps.google.com/maps?q=${query}&output=embed`} data-title={title}>
+  <button type="button" class="btn btn--outline" data-map-load>
+    <Icon name="pin" size={16} />
+    {t('ui.mapShow')}
+  </button>
+  <p class="mapx__note">
+    {t('ui.mapNote')}{' '}
+    <a href={`https://www.google.com/maps/search/?api=1&query=${query}`} target="_blank" rel="noopener">{t('ui.mapOpen')}</a>
+  </p>
+</div>
+
+<style>
+  .mapx {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 12px;
+    width: 100%;
+    height: 100%;
+    min-height: 260px;
+    padding: 24px var(--gutter);
+    background: var(--surface);
+    text-align: center;
+  }
+
+  .mapx__note {
+    max-width: 44ch;
+    font-size: 14px;
+    color: var(--ink-mute);
+  }
+
+  .mapx__note a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .mapx.is-open {
+    display: block;
+    padding: 0;
+  }
+
+  /* Рамка создаётся скриптом, поэтому стиль задан глобально. */
+  .mapx :global(iframe) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 260px;
+    border: 0;
+    filter: grayscale(0.6);
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-map]').forEach((box) => {
+    box.querySelector('[data-map-load]')?.addEventListener(
+      'click',
+      () => {
+        const frame = document.createElement('iframe');
+        frame.src = box.dataset.src!;
+        frame.title = box.dataset.title ?? '';
+        frame.referrerPolicy = 'no-referrer-when-downgrade';
+        frame.allowFullscreen = true;
+        box.classList.add('is-open');
+        box.replaceChildren(frame);
+      },
+      { once: true },
+    );
+  });
+</script>

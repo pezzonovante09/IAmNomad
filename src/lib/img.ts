@@ -2,7 +2,12 @@
 // своя ссылка https://… или загруженный файл /uploads/… — отдаём как есть.
 // Для /uploads/… srcset собирается из уменьшенных WebP-копий (scripts/image-variants.mjs).
 
-export type Photo = { id: string; alt: string };
+export type Photo = { id: string; alt: string; altRu?: string };
+
+/** Описание фото на языке страницы; если русского нет, берём основное (английское). */
+export function altOf(photo: Photo, lang: 'ru' | 'en'): string {
+  return (lang === 'ru' && photo.altRu) || photo.alt;
+}
 
 // Список копий создаётся перед dev/build; если его нет, у своих фото srcset пустой и грузится оригинал.
 type Variants = Record<string, { w: number; sizes: number[] }>;
@@ -18,11 +23,11 @@ export function unsplash(id: string, w: number, h?: number): string {
 /** srcset для заданных ширин; ratio = высота/ширина, чтобы кадрирование совпадало. */
 export function srcset(id: string, widths: number[], ratio?: number): string {
   if (id.startsWith('/')) {
-    // Свои фото: готовые копии 480/960/1440 px и сам оригинал; ширины берутся из списка копий.
+    // Свои фото: готовые WebP-копии 480/960/1440 px и копия во всю ширину; ширины берутся из списка копий.
     const v = variants[id];
     if (!v) return '';
     const base = id.replace(/^\/uploads\//, '/uploads/_w/').replace(/\.[^.]+$/, '');
-    return [...v.sizes.map((w) => `${encodeURI(`${base}-${w}.webp`)} ${w}w`), `${encodeURI(id)} ${v.w}w`].join(', ');
+    return v.sizes.map((w) => `${encodeURI(`${base}-${w}.webp`)} ${w}w`).join(', ');
   }
   if (/^https?:/.test(id)) return '';
   return widths

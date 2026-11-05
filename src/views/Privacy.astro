@@ -1,9 +1,9 @@
 ---
 // Политика конфиденциальности. Тексты — src/content/texts/legal.json (админка → Тексты → Политика конфиденциальности).
-// {email} и {phone} в текстах подставляются из контактов; строки с «•» — пункты списка.
+// {company}, {email} и {phone} в текстах подставляются из настроек; строки с «•» — пункты списка.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
-import { contacts } from '../data/site';
+import { company, companyDetails, contacts } from '../data/site';
 import { has, useTranslations, type Lang } from '../i18n/utils';
 import { routes } from '../lib/routes';
 
@@ -14,7 +14,7 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 
-const fill = (s: string) => s.replaceAll('{email}', contacts.email).replaceAll('{phone}', contacts.phone);
+const fill = (s: string) => s.replaceAll('{company}', company.name || 'I AM NOMAD').replaceAll('{email}', contacts.email).replaceAll('{phone}', contacts.phone);
 
 type Block = { type: 'p'; text: string } | { type: 'ul'; items: string[] };
 function blocks(text: string): Block[] {
@@ -48,6 +48,9 @@ const sections: { title: string; blocks: Block[] }[] = [];
 for (let n = 1; has(lang, `legal.s${n}.title`); n++) {
   sections.push({ title: t(`legal.s${n}.title`), blocks: blocks(t(`legal.s${n}.text`)) });
 }
+// Реквизиты из админки: пока они пустые, строки нет.
+const details = companyDetails(t('footer.taxId'));
+if (details) sections[0].blocks.push({ type: 'p', text: details });
 ---
 
 <BaseLayout lang={lang} page="privacy" path={routes.privacy} title={t('legal.title')} description={t('legal.subtitle')}>

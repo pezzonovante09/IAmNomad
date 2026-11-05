@@ -1,7 +1,8 @@
 ---
 // Шапка внутренней страницы: строка меток, огромный заголовок капсом, подзаголовок справа,
 // по желанию — кадр на всю ширину с «занавесом».
-import { srcset, unsplash, type Photo } from '../lib/img';
+import type { Lang } from '../i18n/utils';
+import { altOf, srcset, unsplash, type Photo } from '../lib/img';
 
 interface Props {
   title: string;
@@ -11,9 +12,11 @@ interface Props {
   photo?: Photo;
   /** Акцентная (зелёная) вторая часть заголовка. */
   accent?: string;
+  /** Язык страницы: от него зависит описание фото. */
+  lang?: Lang;
 }
 
-const { title, subtitle, kicker: label, meta, photo, accent } = Astro.props;
+const { title, subtitle, kicker: label, meta, photo, accent, lang = 'ru' } = Astro.props;
 ---
 
 <section class="ph">
@@ -40,7 +43,7 @@ const { title, subtitle, kicker: label, meta, photo, accent } = Astro.props;
           src={unsplash(photo.id, 1800, 800)}
           srcset={srcset(photo.id, [800, 1200, 1800, 2400], 0.44)}
           sizes="100vw"
-          alt={photo.alt}
+          alt={altOf(photo, lang)}
           width="1800"
           height="800"
           fetchpriority="high"
@@ -123,7 +126,14 @@ const { title, subtitle, kicker: label, meta, photo, accent } = Astro.props;
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgb(0 0 0 / 0.78), rgb(0 0 0 / 0.25) 70%, rgb(0 0 0 / 0.1));
+    background: linear-gradient(to top, rgb(0 0 0 / 0.8), rgb(0 0 0 / 0.55) 70%, rgb(0 0 0 / 0.3));
+  }
+
+  /* На телефоне текст занимает почти весь кадр, поэтому затемняем фото целиком. */
+  @media (max-width: 900px) {
+    .ph__media--text::after {
+      background: linear-gradient(to top, rgb(0 0 0 / 0.82), rgb(0 0 0 / 0.66));
+    }
   }
 
   .ph__overlay {

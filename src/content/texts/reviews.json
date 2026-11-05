@@ -22,12 +22,17 @@
     "reviews__form__tooShort": "Напишите хотя бы 10 символов.",
     "reviews__form__noRating": "Поставьте оценку от 1 до 5.",
     "reviews__form__consent": "Отправляя отзыв, вы соглашаетесь с {policy}. Имя (в виде «Имя Ф.») и фото вашего аккаунта Google будут показаны рядом с отзывом.",
-    "reviews__soon": "Отзывы наших путешественников появятся здесь совсем скоро."
+    "reviews__soon": "Отзывы наших путешественников появятся здесь совсем скоро.",
+    "reviews__loading": "Загружаем отзывы…",
+    "reviews__form__start": "Оставить отзыв",
+    "reviews__form__signinNote": "Для отзыва нужен вход через Google: так меньше подделок. Мы получим имя, фото и адрес почты вашего аккаунта, подробнее в {policy}.",
+    "reviews__form__inapp": "Вход через Google может не работать во встроенном браузере Instagram и Facebook. Откройте эту страницу в Safari или Chrome.",
+    "reviews__form__expired": "Вход устарел. Войдите снова: ваш текст сохранён."
   },
   "en": {
     "reviews__kicker": "Reviews",
     "reviews__title": "Reviews",
-    "reviews__subtitle": "What travelers say about their trips with I AM NOMAD",
+    "reviews__subtitle": "What travellers say about their trips with I AM NOMAD",
     "reviews__empty": "No reviews here yet. Be the first!",
     "reviews__loadError": "Couldn’t load reviews. Please refresh the page a little later.",
     "reviews__average": "Average rating",
@@ -47,6 +52,11 @@
     "reviews__form__tooShort": "Please write at least 10 characters.",
     "reviews__form__noRating": "Please choose a rating from 1 to 5.",
     "reviews__form__consent": "By sending a review you agree to the {policy}. Your name (as “First L.”) and Google account photo will be shown next to the review.",
-    "reviews__soon": "Reviews from our travelers will appear here very soon."
+    "reviews__soon": "Reviews from our travellers will appear here very soon.",
+    "reviews__loading": "Loading reviews…",
+    "reviews__form__start": "Leave a review",
+    "reviews__form__signinNote": "A review needs a Google sign-in, which helps keep reviews genuine. We receive your account name, photo and email address: see our {policy}.",
+    "reviews__form__inapp": "Google sign-in may not work in the Instagram and Facebook in-app browsers. Please open this page in Safari or Chrome.",
+    "reviews__form__expired": "Your sign-in has expired. Please sign in again: your text is saved."
   }
 }

@@ -31,7 +31,7 @@
     "tour__winter__highlights__item4": "Вечер барбекю с музыкой.",
     "tour__winter__highlights__item5": "Каньон Сказка и пикник на природе.",
     "tour__winter__highlights__item6": "Культурный центр «Рух Ордо» на Иссык-Куле.",
-    "tour__winter__highlights__item7": "Зимние пейзажи Иссык-Куля и Ала-Арчи.",
+    "tour__winter__highlights__item7": "Зимние пейзажи Иссык-Куля.",
     "tour__winter__highlights__item8": "Завтраки, обеды и ужины включены.",
     "tour__winter__included": "• Все трансферы\n• Проживание на протяжении всего тура\n• Все завтраки, обеды и ужины (в лыжные дни вместо обеда — ланч-бокс)\n• Ски-пассы\n• Гиды\n• Баня\n• Горячие источники\n• Барбекю",
     "tour__winter__notIncluded": "• Перелёты\n• Индивидуальные занятия с инструктором по лыжам или сноуборду",
@@ -40,7 +40,8 @@
     "tour__winter__faq__q2": "Как забронировать и какие условия отмены?",
     "tour__winter__faq__a2": "Для подтверждения брони нужна предоплата 30%, остаток оплачивается по прибытии. Забронировать можно через WhatsApp, по почте или на сайте. При отмене предоплата не возвращается. Цена — по запросу.",
     "tour__winter__faq__q3": "Какие рейсы выбрать?",
-    "tour__winter__faq__a3": "Рекомендуем прилёт с 00:00 до 08:00 и вылет после 23:00 в последний день тура."
+    "tour__winter__faq__a3": "Рекомендуем прилёт с 00:00 до 08:00 и вылет после 23:00 в последний день тура.",
+    "tour__winter__safety": "• Лыжи и сноуборд связаны с риском травм: выбирайте трассы по своим силам и соблюдайте правила катания.\n• Если катаетесь впервые, скажите об этом менеджеру заранее.\n• Погода в горах меняется быстро, поэтому программа дня может измениться.\n• Условия страховки уточните у менеджера до поездки."
   },
   "en": {
     "tour__winter__title": "Kyrgyzstan Winter Escape",
@@ -62,7 +63,7 @@
     "tour__winter__program__day4__title": "Day 4. Ski Day & BBQ Evening",
     "tour__winter__program__day4__text": "• Breakfast and transfer to the ski area.\n• Skiing or snowboarding for different ability levels, depending on the group.\n• Lunch break and more time on the slopes.\n• Return to the hotel and relax.\n• BBQ dinner with music and group activities.",
     "tour__winter__program__day5__title": "Day 5. Final Ski Day & Traditional Banya",
-    "tour__winter__program__day5__text": "• Breakfast and transfer to the ski area.\n• Final day of skiing or snowboarding.\n• Lunch break or time to regroup.\n• Return to the hotel and relax.\n• Dinner with the group.\n• Traditional banya experience, subject to final booking arrangements.",
+    "tour__winter__program__day5__text": "• Breakfast and transfer to the ski area.\n• Final day of skiing or snowboarding.\n• Lunch break.\n• Return to the hotel and relax.\n• Dinner with the group.\n• Traditional banya experience, subject to final booking arrangements.",
     "tour__winter__program__day6__title": "Day 6. Skazka Canyon & Return to Bishkek",
     "tour__winter__program__day6__text": "• Breakfast and check-out from the hotel in Karakol.\n• Scenic drive along the southern shore of Issyk-Kul Lake.\n• Explore Skazka (Fairy-Tale) Canyon.\n• Outdoor picnic lunch, weather permitting.\n• Continue to Bishkek, followed by dinner and hotel check-in.",
     "tour__winter__program__day7__title": "Day 7. Departure",
@@ -74,15 +75,16 @@
     "tour__winter__highlights__item4": "BBQ evening with music.",
     "tour__winter__highlights__item5": "Skazka Canyon and an outdoor picnic.",
     "tour__winter__highlights__item6": "Rukh Ordo Cultural Centre on Issyk-Kul.",
-    "tour__winter__highlights__item7": "Winter landscapes of Issyk-Kul and Ala-Archa.",
+    "tour__winter__highlights__item7": "Winter landscapes of Issyk-Kul.",
     "tour__winter__highlights__item8": "Breakfasts, lunches and dinners included.",
-    "tour__winter__included": "• All transfers\n• Accommodation throughout the tour\n• All breakfasts, lunches and dinners (on ski days, lunch is replaced with a packed snack box)\n• Ski passes\n• Guides\n• Banya session\n• Hot springs\n• BBQ",
+    "tour__winter__included": "• All transfers\n• Accommodation throughout the tour\n• All breakfasts, lunches and dinners (on ski days, lunch is replaced with a packed lunch box)\n• Ski passes\n• Guides\n• Banya session\n• Hot springs\n• BBQ",
     "tour__winter__notIncluded": "• Flights\n• Private ski or snowboard lessons",
     "tour__winter__faq__q1": "What should I pack?",
     "tour__winter__faq__a1": "Snowboard or skis, including poles; a ski outfit — a warm jacket and trousers, preferably waterproof; a warm hat, gloves or mittens, and a balaclava or helmet liner; ski goggles and a helmet (mandatory); protective gear and knee pads (mandatory for beginners); warm socks; thermal base layers; swimwear and rubber sandals for the banya. Some equipment is available to rent.",
     "tour__winter__faq__q2": "How do I book, and what is the cancellation policy?",
     "tour__winter__faq__a2": "A 30% deposit is required to confirm your booking; the remaining balance is payable upon arrival. Book via WhatsApp, email or our website. The deposit is non-refundable if you cancel. Price available on request.",
     "tour__winter__faq__q3": "Which flights should I choose?",
-    "tour__winter__faq__a3": "We recommend arriving between 00:00 and 08:00 and departing after 23:00 on the final day."
+    "tour__winter__faq__a3": "We recommend arriving between 00:00 and 08:00 and departing after 23:00 on the final day.",
+    "tour__winter__safety": "• Skiing and snowboarding carry a risk of injury: choose slopes that match your ability and follow the rules on the slope.\n• If you are a beginner, please tell our manager in advance.\n• Mountain weather changes quickly, so the plan for the day may change.\n• Please check the insurance terms with our manager before the trip."
   }
 }

@@ -3,8 +3,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import CtaBanner from '../components/CtaBanner.astro';
 import PageHero from '../components/PageHero.astro';
 import TourIndex from '../components/TourIndex.astro';
-import { contacts } from '../data/site';
-import { customTourEnabled, tourCategories, tours } from '../data/tours';
+import { whatsappLink } from '../data/site';
+import { customTourEnabled, hasPage, tourCategories, tours } from '../data/tours';
 import { localize, useTranslations, type Lang } from '../i18n/utils';
 import { routes } from '../lib/routes';
 
@@ -20,11 +20,12 @@ const pad = (n: number) => String(n).padStart(2, '0');
 <BaseLayout lang={lang} page="tours" path={routes.tours}>
   <PageHero
     kicker={t('home.index.kicker')}
-    meta={`${pad(tours.length)} ${t('home.index.count')} · 2026`}
+    meta={`${pad(tours.filter(hasPage).length)} ${t('home.index.count')}`}
     title={t('tours.title')}
     subtitle={t('tours.subtitle')}
   />
 
+  <h2 class="sr-only">{t('tours.title')}</h2>
   <div class="filters" role="group" aria-label={t('tours.title')} data-filters>
     {
       tourCategories.map((cat, i) => (
@@ -44,7 +45,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
         title={t('tour.custom.intro.title')}
         text={t('tour.custom.intro.p3')}
         primary={{ href: localize(routes.tour('custom'), lang), label: t('tour.custom.cta.button') }}
-        secondary={{ href: contacts.whatsapp, label: t('tour.booking.whatsapp'), external: true, icon: 'whatsapp' }}
+        secondary={{ href: whatsappLink(t('whatsapp.text')), label: t('tour.booking.whatsapp'), external: true, icon: 'whatsapp' }}
       />
     )
   }
@@ -59,6 +60,21 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
   .filters::-webkit-scrollbar {
     display: none;
+  }
+
+  /* На телефоне кнопки переносятся: иначе видно только первые три из девяти. */
+  @media (max-width: 700px) {
+    .filters {
+      flex-wrap: wrap;
+      overflow: visible;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .filters__btn {
+      flex: 1 1 auto;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+    }
   }
 
   .filters__btn {

@@ -10,27 +10,28 @@
     "tour__adventure__program__day1__title": "День 1. Добро пожаловать в Бишкек",
     "tour__adventure__program__day1__text": "• Встреча в аэропорту и трансфер в отель.\n• Отдых после перелёта.\n• Обзорная экскурсия по Бишкеку.\n• Приветственный ужин с национальной кухней.\n• Ночь в Бишкеке.",
     "tour__adventure__program__day2__title": "День 2. Джети-Огуз и квадроциклы",
-    "tour__adventure__program__day2__text": "• Завтрак.\n• Переезд к ущелью Джети-Огуз.\n• Заселение в отель.\n• Тур на квадроциклах по горным тропам, красным скалам и панорамным площадкам.\n• Свободное время для прогулок и фотографий.\n• Ужин.\n• Ночь в Джети-Огуз.",
+    "tour__adventure__program__day2__text": "• Завтрак.\n• Переезд к ущелью Джети-Огуз.\n• Заселение в отель.\n• Тур на квадроциклах по горным тропам, красным скалам и панорамным площадкам.\n• Свободное время для прогулок и фотографий.\n• Ужин.\n• Ночь в Джети-Огузе.",
     "tour__adventure__program__day3__title": "День 3. Верховая езда и северный берег Иссык-Куля",
     "tour__adventure__program__day3__text": "• Завтрак.\n• Конная прогулка по живописным горным маршрутам.\n• Переезд на северный берег Иссык-Куля.\n• Заселение в отель.\n• Свободное время на пляже.\n• Ужин на берегу озера.\n• Ночь на северном берегу Иссык-Куля.",
-    "tour__adventure__program__day4__title": "День 4. Wakeboard и круиз по Иссык-Кулю",
-    "tour__adventure__program__day4__text": "• Завтрак.\n• Wakeboard с профессиональным инструктором.\n• SUP-board и водные развлечения.\n• Свободное время на пляже.\n• Вечерний круиз на теплоходе по озеру Иссык-Куль.\n• Ужин на борту во время заката.\n• Ночь на северном берегу Иссык-Куля.",
+    "tour__adventure__program__day4__title": "День 4. Вейкборд и круиз по Иссык-Кулю",
+    "tour__adventure__program__day4__text": "• Завтрак.\n• Вейкборд с профессиональным инструктором.\n• Сап-борд и водные развлечения.\n• Свободное время на пляже.\n• Вечерний круиз на теплоходе по озеру Иссык-Куль.\n• Ужин на борту во время заката.\n• Ночь на северном берегу Иссык-Куля.",
     "tour__adventure__program__day5__title": "День 5. Рафтинг и возвращение в Бишкек",
     "tour__adventure__program__day5__text": "• Завтрак.\n• Переезд к месту проведения рафтинга.\n• Инструктаж и сплав по горной реке.\n• Обед после рафтинга.\n• Возвращение в Бишкек.\n• Прощальный ужин.\n• Ночь в Бишкеке.",
     "tour__adventure__program__day6__title": "День 6. Свободный день и дополнительные приключения",
-    "tour__adventure__program__day6__text": "• Завтрак.\n• Свободное время в Бишкеке.\n• По желанию: полёт на параплане; багги; вертолётная экскурсия; SPA и массаж; шопинг и сувениры.\n• Вечер в городе.\n• Ночь в Бишкеке.",
+    "tour__adventure__program__day6__text": "• Завтрак.\n• Свободное время в Бишкеке.\n• По желанию: полёт на параплане; багги; вертолётная экскурсия; спа и массаж; шопинг и сувениры.\n• Вечер в городе.\n• Ночь в Бишкеке.",
     "tour__adventure__program__day7__title": "День 7. До новых встреч!",
     "tour__adventure__program__day7__text": "• Завтрак.\n• Свободное время.\n• Трансфер в аэропорт.",
     "tour__adventure__highlights__title": "Основные впечатления тура",
     "tour__adventure__highlights__item1": "Тур на квадроциклах в Джети-Огузе.",
     "tour__adventure__highlights__item2": "Конная прогулка по горным тропам.",
-    "tour__adventure__highlights__item3": "Wakeboard на Иссык-Куле.",
+    "tour__adventure__highlights__item3": "Вейкборд на Иссык-Куле.",
     "tour__adventure__highlights__item4": "Вечерний круиз с ужином на теплоходе.",
     "tour__adventure__highlights__item5": "Рафтинг по горной реке.",
-    "tour__adventure__highlights__item6": "Лучшие горные пейзажи Кыргызстана.",
+    "tour__adventure__highlights__item6": "Горные пейзажи Кыргызстана.",
     "tour__adventure__highlights__item7": "Отдых на северном побережье Иссык-Куля.",
     "tour__adventure__highlights__item8": "Национальная и европейская кухня.",
-    "tour__adventure__highlights__item9": "Комфортное размещение в отелях."
+    "tour__adventure__highlights__item9": "Комфортное размещение в отелях.",
+    "tour__adventure__safety": "• Квадроциклы, верховая езда, вейкборд и рафтинг имеют ограничения по возрасту, весу и здоровью: уточните их у менеджера до бронирования.\n• Если вы не умеете плавать, скажите об этом заранее.\n• Какие активности входят в тур, а какие оплачиваются отдельно, подтверждаем при бронировании."
   },
   "en": {
     "tour__adventure__title": "Adventure Kyrgyzstan",
@@ -60,9 +61,10 @@
     "tour__adventure__highlights__item3": "Wakeboarding on Issyk-Kul.",
     "tour__adventure__highlights__item4": "Evening cruise with dinner on a boat.",
     "tour__adventure__highlights__item5": "Rafting on a mountain river.",
-    "tour__adventure__highlights__item6": "Best mountain landscapes of Kyrgyzstan.",
+    "tour__adventure__highlights__item6": "Mountain landscapes of Kyrgyzstan.",
     "tour__adventure__highlights__item7": "Relax on the north shore of Issyk-Kul.",
     "tour__adventure__highlights__item8": "National and European cuisine.",
-    "tour__adventure__highlights__item9": "Comfortable hotel accommodation."
+    "tour__adventure__highlights__item9": "Comfortable hotel accommodation.",
+    "tour__adventure__safety": "• ATVs, horse riding, wakeboarding and rafting have age, weight and health limits: please check them with our manager before booking.\n• If you cannot swim, please tell us in advance.\n• We confirm which activities are included and which are paid separately when you book."
   }
 }

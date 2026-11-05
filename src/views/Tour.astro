@@ -1,14 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import MapEmbed from '../components/MapEmbed.astro';
 import Faq from '../components/Faq.astro';
 import Icon from '../components/Icon.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import TourIndex from '../components/TourIndex.astro';
 import VideoEmbed from '../components/VideoEmbed.astro';
-import { contacts, videos } from '../data/site';
+import { contacts, videos, whatsappLink } from '../data/site';
 import { tours, type Tour } from '../data/tours';
 import { bullets, defaultLang, has, localize, splitEmoji, useTranslations, type Lang } from '../i18n/utils';
-import { srcset, unsplash } from '../lib/img';
+import { altOf, srcset, unsplash } from '../lib/img';
 import { routes } from '../lib/routes';
 
 interface Props {
@@ -25,7 +26,9 @@ const range = (n: number) => Array.from({ length: n }, (_, i) => i + 1);
 const pad = (n: number) => String(n).padStart(2, '0');
 
 const isOpen = tour.status === 'open';
-const bookHref = `${L(routes.contact)}?tour=${tour.slug}`;
+const bookHref = `${L(routes.contact)}?tour=${tour.slug}#contact-form`;
+const waText = t('whatsapp.textTour').replace('{tour}', k('title'));
+const waHref = whatsappLink(waText);
 
 const days = range(tour.days).map((n) => {
   const title = k(`program.day${n}.title`);
@@ -60,23 +63,35 @@ const sections = [
   { id: 'faq', label: t('tour.faq.title') },
 ];
 
+const abs = (p: string) => (Astro.site ? new URL(p, Astro.site).href : p);
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'TouristTrip',
   name: k('title'),
   description: k('subtitle'),
-  ...(tour.cover.id && { image: unsplash(tour.cover.id, 1200, 630) }),
-  provider: { '@type': 'TravelAgency', name: 'I AM NOMAD', telephone: contacts.phone, email: contacts.email },
+  url: abs(L(routes.tour(tour.slug))),
+  ...(tour.cover.id && { image: abs(unsplash(tour.cover.id, 1200, 630)) }),
+  provider: { '@type': 'TravelAgency', name: 'I AM NOMAD', url: abs(L('/')), telephone: contacts.phone, email: contacts.email },
+};
+const breadcrumbs = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: t('nav.home'), item: abs(L('/')) },
+    { '@type': 'ListItem', position: 2, name: t('nav.tours'), item: abs(L(routes.tours)) },
+    { '@type': 'ListItem', position: 3, name: k('title'), item: abs(L(routes.tour(tour.slug))) },
+  ],
 };
 ---
 
-<BaseLayout lang={lang} page={`tour-${tour.slug}`} section="tours" path={routes.tour(tour.slug)} image={tour.cover.id ? unsplash(tour.cover.id, 1200, 630) : undefined}>
+<BaseLayout lang={lang} page={`tour-${tour.slug}`} section="tours" path={routes.tour(tour.slug)} image={tour.cover.id ? unsplash(tour.cover.id, 1200, 630) : undefined} whatsappText={waText}>
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(breadcrumbs)} />
 
   <!-- Заголовок -->
-  <section class="th" data-bookbar-trigger>
-    <div class="th__meta label" data-reveal="fade" data-delay="100">
-      <nav aria-label="Breadcrumb" class="th__crumbs">
+  <section class="th">
+    <div class="th__meta label">
+      <nav aria-label={t('ui.breadcrumb')} class="th__crumbs">
         <a href={L('/')}>{t('nav.home')}</a>
         <span aria-hidden="true">/</span>
         <a href={L(routes.tours)}>{t('nav.tours')}</a>
@@ -87,13 +102,13 @@ const jsonLd = {
       </span>
     </div>
     <div class="th__head">
-      <h1 class="h1 th__title" data-reveal="up" data-delay="200">{k('title')}</h1>
-      <p class="th__subtitle" data-reveal="fade" data-delay="600">{k('subtitle')}</p>
+      <h1 class="h1 th__title">{k('title')}</h1>
+      <p class="th__subtitle">{k('subtitle')}</p>
     </div>
     <dl class="th__facts">
       {
-        facts.map((f, i) => (
-          <div class="th__fact" data-reveal="fade" data-delay={700 + i * 100}>
+        facts.map((f) => (
+          <div class="th__fact">
             <dt class="label">{f.label}</dt>
             <dd>{f.value}</dd>
           </div>
@@ -104,7 +119,7 @@ const jsonLd = {
 
   <!-- Галерея (нет фото — блока нет) -->
   {tour.gallery.length > 0 && (
-  <section class="gm" aria-label="Gallery">
+  <section class="gm" aria-label={t('ui.gallery')}>
     {
       tour.gallery.map((photo, i) => (
         <button
@@ -112,7 +127,7 @@ const jsonLd = {
           class="gm__item"
           data-lightbox={`tour-${tour.slug}`}
           data-full={unsplash(photo.id, 1800)}
-          aria-label={photo.alt}
+          aria-label={altOf(photo, lang)}
           data-reveal={i === 0 ? 'curtain' : 'fade'}
           data-delay={i === 0 ? '300' : String(500 + i * 100)}
         >
@@ -120,7 +135,7 @@ const jsonLd = {
             src={unsplash(photo.id, i === 0 ? 1400 : 700, i === 0 ? 1000 : 500)}
             srcset={srcset(photo.id, i === 0 ? [700, 1000, 1400, 1900] : [350, 700, 1000], i === 0 ? 0.71 : 0.71)}
             sizes={i === 0 ? '(max-width: 800px) 100vw, 50vw' : '(max-width: 800px) 50vw, 25vw'}
-            alt={photo.alt}
+            alt={altOf(photo, lang)}
             width={i === 0 ? 1400 : 700}
             height={i === 0 ? 1000 : 500}
             loading={i === 0 ? 'eager' : 'lazy'}
@@ -266,13 +281,7 @@ const jsonLd = {
               <h2 class="blk__title">{t('tour.map.title')}</h2>
             </div>
             <div class="map" data-reveal="curtain">
-              <iframe
-                src={`https://maps.google.com/maps?q=${tour.mapQuery}&output=embed`}
-                title={t('tour.map.title')}
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
-                allowfullscreen
-              />
+              <MapEmbed lang={lang} query={tour.mapQuery} title={t('tour.map.title')} />
             </div>
           </section>
         )
@@ -302,6 +311,22 @@ const jsonLd = {
         )
       }
 
+      <!-- Что важно знать: высота, активности, здоровье -->
+      {
+        own('safety') && (
+          <section id="safety" class="blk">
+            <div class="blk__head" data-reveal>
+              <h2 class="blk__title">{t('tour.safety.title')}</h2>
+            </div>
+            <ul class="safety" data-reveal>
+              {bullets(k('safety')).map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
       <!-- (05) FAQ -->
       <section id="faq" class="blk blk--flush">
         <div class="blk__head" data-reveal>
@@ -312,7 +337,7 @@ const jsonLd = {
     </div>
 
     <!-- Бронирование -->
-    <aside class="book" aria-label={t('tour.booking.title')}>
+    <aside class="book" aria-label={t('tour.booking.title')} data-book>
       <div class="book__inner">
         <p class="book__price">{t('tour.booking.title')}</p>
         {!isOpen && <p class="book__note">{own('comingSoonText') ? k('comingSoonText') : t('tours.soon.text')}</p>}
@@ -329,7 +354,7 @@ const jsonLd = {
               </span>
             )
           }
-          <a href={contacts.whatsapp} class="btn btn--whatsapp btn--block" target="_blank" rel="noopener">
+          <a href={waHref} class="btn btn--whatsapp btn--block" target="_blank" rel="noopener">
             {t('tour.booking.whatsapp')}
             <Icon name="whatsapp" />
           </a>
@@ -346,18 +371,18 @@ const jsonLd = {
   </section>
 
   <!-- Нижняя панель бронирования (мобильные) -->
-  <div class="bookbar" data-bookbar aria-hidden="true">
+  <div class="bookbar" data-bookbar>
     <div class="bookbar__text">
       <p class="bookbar__title">{k('title')}</p>
       <p class="bookbar__price label">{card('duration')}</p>
     </div>
     {
       isOpen ? (
-        <a href={bookHref} class="bookbar__btn" tabindex="-1">
+        <a href={bookHref} class="bookbar__btn">
           {t('btn.bookNow')} →
         </a>
       ) : (
-        <a href={contacts.whatsapp} class="bookbar__btn" target="_blank" rel="noopener" tabindex="-1">
+        <a href={waHref} class="bookbar__btn" target="_blank" rel="noopener">
           WhatsApp →
         </a>
       )
@@ -933,6 +958,31 @@ const jsonLd = {
     border-top: 1px solid var(--line);
   }
 
+  /* ---------- Что важно знать ---------- */
+  .safety {
+    display: grid;
+    gap: 12px;
+    max-width: 72ch;
+    padding: 20px var(--gutter) 28px;
+    list-style: none;
+  }
+
+  .safety li {
+    padding-left: 16px;
+    border-left: 2px solid var(--gold);
+  }
+
+  /* При сильном увеличении (мало высоты) липкие панели закрывали бы текст. */
+  @media (max-height: 500px) {
+    .subnav {
+      position: static;
+    }
+
+    .bookbar {
+      display: none !important;
+    }
+  }
+
   /* ---------- Нижняя панель ---------- */
   .bookbar {
     position: fixed;
@@ -1029,16 +1079,21 @@ const jsonLd = {
     expandBtn.textContent = (open ? expandBtn.dataset.collapse : expandBtn.dataset.expand) ?? '';
   });
 
+  // Перед печатью раскрываем все дни программы.
+  addEventListener('beforeprint', () => dayEls.forEach((d) => (d.open = true)));
+
+  // Нижняя панель на телефоне видна сразу и прячется только рядом с блоком заявки.
   const bar = document.querySelector<HTMLElement>('[data-bookbar]');
-  const trigger = document.querySelector('[data-bookbar-trigger]');
-  if (bar && trigger) {
+  const book = document.querySelector('[data-book]');
+  if (bar && book) {
     document.body.classList.add('has-bookbar');
-    new IntersectionObserver(([entry]) => {
-      const visible = !entry.isIntersecting;
+    const show = (visible: boolean) => {
       bar.classList.toggle('is-visible', visible);
       bar.setAttribute('aria-hidden', String(!visible));
       bar.querySelectorAll('a').forEach((a) => (a.tabIndex = visible ? 0 : -1));
-    }).observe(trigger);
+    };
+    show(true);
+    new IntersectionObserver(([entry]) => show(!entry.isIntersecting)).observe(book);
   }
 
   const links = document.querySelectorAll<HTMLAnchorElement>('.subnav__link');

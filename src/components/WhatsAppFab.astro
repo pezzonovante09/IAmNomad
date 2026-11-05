@@ -1,16 +1,19 @@
 ---
 import Icon from './Icon.astro';
-import { contacts } from '../data/site';
+import { whatsappLink } from '../data/site';
 import { useTranslations, type Lang } from '../i18n/utils';
 
 interface Props {
   lang: Lang;
+  /** Готовый текст сообщения; у страниц тура и шоу он свой. */
+  text?: string;
 }
 
 const t = useTranslations(Astro.props.lang);
+const href = whatsappLink(Astro.props.text ?? t('whatsapp.text'));
 ---
 
-<a href={contacts.whatsapp} class="wa" target="_blank" rel="noopener" aria-label={t('ui.whatsappChat')}>
+<a href={href} class="wa" target="_blank" rel="noopener" aria-label={t('ui.whatsappChat')}>
   <Icon name="whatsapp" size={22} />
   <span class="wa__label">WhatsApp</span>
 </a>

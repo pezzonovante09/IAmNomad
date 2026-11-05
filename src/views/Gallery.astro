@@ -6,7 +6,7 @@ import VideoEmbed from '../components/VideoEmbed.astro';
 import { galleryPhotos } from '../data/content';
 import { videos } from '../data/site';
 import { useTranslations, type Lang } from '../i18n/utils';
-import { srcset, unsplash } from '../lib/img';
+import { altOf, srcset, unsplash } from '../lib/img';
 import { routes } from '../lib/routes';
 import { bigTiles } from '../lib/tiles';
 
@@ -32,13 +32,13 @@ const big = (i: number) => bigIndexes.includes(i);
           class:list={['gal__item', { 'gal__item--big': big(i) }]}
           data-lightbox="gallery"
           data-full={unsplash(p.id, 1800)}
-          aria-label={p.alt}
+          aria-label={altOf(p, lang)}
           data-reveal="fade"
           style={`--i:${i % 4}`}
         >
-          <img src={unsplash(p.id, 900, 900)} srcset={srcset(p.id, [400, 700, 1000, 1400], 1)} sizes={big(i) ? '(max-width: 700px) 100vw, 50vw' : '(max-width: 700px) 50vw, 25vw'} alt={p.alt} width="900" height="900" loading={i < 4 ? 'eager' : 'lazy'} decoding="async" />
+          <img src={unsplash(p.id, 900, 900)} srcset={srcset(p.id, [400, 700, 1000, 1400], 1)} sizes={big(i) ? '(max-width: 700px) 100vw, 50vw' : '(max-width: 700px) 50vw, 25vw'} alt={altOf(p, lang)} width="900" height="900" loading={i < 4 ? 'eager' : 'lazy'} decoding="async" />
           <span class="gal__cap label num">
-            {String(i + 1).padStart(2, '0')} — {p.alt}
+            {String(i + 1).padStart(2, '0')} — {altOf(p, lang)}
           </span>
         </button>
       ))
