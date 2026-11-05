@@ -13,7 +13,7 @@ const poster = src.replace(/\.(mp4|webm)(\?.*)?$/i, '.jpg');
 <div class="video" data-reveal>
   {
     isFile ? (
-      <video src={src} poster={poster} controls playsinline preload="metadata" aria-label={title}></video>
+      <video src={src} poster={poster} controls playsinline preload="none" aria-label={title}></video>
     ) : (
       <iframe
         src={src}

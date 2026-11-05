@@ -5,134 +5,166 @@
   },
   "heroPhoto": {
     "id": "/uploads/hero-eagle-hunters.jpg",
-    "alt": "Eagle hunters on horseback on the Issyk-Kul shore"
+    "alt": "Eagle hunters on horseback on the Issyk-Kul shore",
+    "altRu": "Беркутчи верхом на берегу Иссык-Куля"
   },
   "aboutPhoto": {
     "id": "/uploads/about-eagle.jpg",
-    "alt": "Golden eagle and its handler"
+    "alt": "Golden eagle and its handler",
+    "altRu": "Беркут и его хозяин"
   },
   "micePhoto": {
     "id": "/uploads/mice-group.jpg",
-    "alt": "Group of guests at a nomad show on Issyk-Kul"
+    "alt": "Group of guests at a nomad show on Issyk-Kul",
+    "altRu": "Гости на шоу кочевников на Иссык-Куле"
   },
   "galleryPhotos": [
     {
       "id": "/uploads/gallery-01.jpg",
-      "alt": "Girls in national dress with traditional treats"
+      "alt": "Girls in national dress with traditional treats",
+      "altRu": "Девушки в национальных костюмах с угощением"
     },
     {
       "id": "/uploads/gallery-02.jpg",
-      "alt": "Folk musicians in national costumes"
+      "alt": "Folk musicians in national costumes",
+      "altRu": "Народные музыканты в национальных костюмах"
     },
     {
       "id": "/uploads/gallery-03.jpg",
-      "alt": "Children dancing a national dance"
+      "alt": "Children dancing a national dance",
+      "altRu": "Дети исполняют национальный танец"
     },
     {
       "id": "/uploads/gallery-04.jpg",
-      "alt": "Horse rider performing a trick"
+      "alt": "Horse rider performing a trick",
+      "altRu": "Всадник выполняет трюк"
     },
     {
       "id": "/uploads/gallery-05.jpg",
-      "alt": "Horseman with a fire torch"
+      "alt": "Horseman with a fire torch",
+      "altRu": "Всадник с горящим факелом"
     },
     {
       "id": "/uploads/gallery-06.jpg",
-      "alt": "Horsewoman in national dress"
+      "alt": "Horsewoman in national dress",
+      "altRu": "Всадница в национальном костюме"
     },
     {
       "id": "/uploads/gallery-07.jpg",
-      "alt": "Performers by the yurt"
+      "alt": "Performers by the yurt",
+      "altRu": "Артисты у юрты"
     },
     {
       "id": "/uploads/gallery-08.jpg",
-      "alt": "Welcome with traditional food"
+      "alt": "Welcome with traditional food",
+      "altRu": "Встреча гостей с национальным угощением"
     },
     {
       "id": "/uploads/gallery-09.jpg",
-      "alt": "Autumn alley with eagle hunters"
+      "alt": "Autumn alley with eagle hunters",
+      "altRu": "Осенняя аллея и беркутчи"
     },
     {
       "id": "/uploads/gallery-10.jpg",
-      "alt": "Eagle hunters lined up on the beach"
+      "alt": "Eagle hunters lined up on the beach",
+      "altRu": "Беркутчи в ряд на пляже"
     },
     {
       "id": "/uploads/gallery-11.jpg",
-      "alt": "Eagle hunters riding along the lake"
+      "alt": "Eagle hunters riding along the lake",
+      "altRu": "Беркутчи едут вдоль озера"
     },
     {
       "id": "/uploads/gallery-12.jpg",
-      "alt": "Singers in white by the yurts"
+      "alt": "Singers in white by the yurts",
+      "altRu": "Певцы в белом у юрт"
     },
     {
       "id": "/uploads/winter-01.jpg",
-      "alt": "Chairlift ride at sunset"
+      "alt": "Chairlift ride at sunset",
+      "altRu": "Кресельный подъёмник на закате"
     },
     {
       "id": "/uploads/winter-02.jpg",
-      "alt": "Skier on the slope at sunrise"
+      "alt": "Skier on the slope at sunrise",
+      "altRu": "Лыжник на склоне на рассвете"
     },
     {
       "id": "/uploads/winter-03.jpg",
-      "alt": "Steaming wooden hot tub among spruce trees"
+      "alt": "Steaming wooden hot tub among spruce trees",
+      "altRu": "Деревянная купель с горячей водой среди елей"
     },
     {
       "id": "/uploads/winter-04.jpg",
-      "alt": "Chairlift above a sea of clouds"
+      "alt": "Chairlift above a sea of clouds",
+      "altRu": "Подъёмник над морем облаков"
     },
     {
       "id": "/uploads/winter-05.jpg",
-      "alt": "Ski slope among spruce trees above a mountain valley"
+      "alt": "Ski slope among spruce trees above a mountain valley",
+      "altRu": "Склон среди елей над горной долиной"
     },
     {
       "id": "/uploads/winter-06.jpg",
-      "alt": "Snowboarder in fresh powder"
+      "alt": "Snowboarder in fresh powder",
+      "altRu": "Сноубордист на свежем снегу"
     },
     {
       "id": "/uploads/winter-07.jpg",
-      "alt": "Chairlift through a snowy spruce forest"
+      "alt": "Chairlift through a snowy spruce forest",
+      "altRu": "Подъёмник в заснеженном еловом лесу"
     },
     {
       "id": "/uploads/winter-08.jpg",
-      "alt": "Snowboarder above the night-lit slopes"
+      "alt": "Snowboarder above the night-lit slopes",
+      "altRu": "Сноубордист над склонами с вечерней подсветкой"
     },
     {
       "id": "/uploads/winter-09.jpg",
-      "alt": "Quad bike on a snowy forest trail"
+      "alt": "Quad bike on a snowy forest trail",
+      "altRu": "Квадроцикл на заснеженной лесной тропе"
     },
     {
       "id": "/uploads/winter-10.jpg",
-      "alt": "Evening by the fire in the snowy mountains"
+      "alt": "Evening by the fire in the snowy mountains",
+      "altRu": "Вечер у костра в заснеженных горах"
     },
     {
       "id": "/uploads/winter-11.jpg",
-      "alt": "Chunkurchak ski resort signpost"
+      "alt": "Chunkurchak ski resort signpost",
+      "altRu": "Указатель горнолыжной базы Чункурчак"
     }
   ],
   "instagramPhotos": [
     {
       "id": "/uploads/insta-01.jpg",
-      "alt": "Rider with the Kyrgyz flag"
+      "alt": "Rider with the Kyrgyz flag",
+      "altRu": "Всадник с флагом Кыргызстана"
     },
     {
       "id": "/uploads/insta-02.jpg",
-      "alt": "Guest with a golden eagle"
+      "alt": "Guest with a golden eagle",
+      "altRu": "Гость с беркутом"
     },
     {
       "id": "/uploads/insta-03.jpg",
-      "alt": "Eagle hunter in autumn"
+      "alt": "Eagle hunter in autumn",
+      "altRu": "Беркутчи осенью"
     },
     {
       "id": "/uploads/insta-04.jpg",
-      "alt": "Traditional food"
+      "alt": "Traditional food",
+      "altRu": "Национальное угощение"
     },
     {
       "id": "/uploads/insta-05.jpg",
-      "alt": "Eagle riders"
+      "alt": "Eagle riders",
+      "altRu": "Всадники с беркутами"
     },
     {
       "id": "/uploads/insta-06.jpg",
-      "alt": "Singers by the yurts"
+      "alt": "Singers by the yurts",
+      "altRu": "Певцы у юрт"
     }
   ]
 }

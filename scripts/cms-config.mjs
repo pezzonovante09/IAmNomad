@@ -73,7 +73,8 @@ const photo = (name, label, hint) => ({
   summary: '{{alt}}',
   fields: [
     { name: 'id', label: 'Фото', widget: 'image', choose_url: true, hint: hint ?? 'Загрузите файл или вставьте ссылку. Старые фото — это ID с Unsplash, их можно оставить.' },
-    { name: 'alt', label: 'Описание фото (для поиска и незрячих)', widget: 'string', required: false },
+    { name: 'alt', label: 'Описание фото на английском (для поиска и незрячих)', widget: 'string', required: false },
+    { name: 'altRu', label: 'Описание фото на русском', widget: 'string', required: false },
   ],
 });
 const photoList = (name, label, extra = {}) => ({
@@ -101,6 +102,7 @@ const video = (name, label) => ({
   widget: 'string',
   required: false,
   hint: 'YouTube: https://www.youtube.com/embed/ID или файл /video/имя.mp4. Пусто — блок не показывается.',
+  pattern: ['^(/video/\\S+\\.(mp4|webm)|https://www\\.youtube\\.com/embed/\\S+|https://player\\.vimeo\\.com/\\S+)?$', 'Нужна ссылка для встраивания YouTube или файл /video/имя.mp4'],
 });
 
 const settings = {
@@ -119,14 +121,33 @@ const settings = {
           widget: 'object',
           fields: [
             { name: 'phone', label: 'Телефон (как показывать)', widget: 'string' },
-            { name: 'phoneHref', label: 'Телефон для звонка (tel:+996…)', widget: 'string' },
-            { name: 'whatsapp', label: 'WhatsApp (https://wa.me/996…)', widget: 'string' },
-            { name: 'email', label: 'Почта', widget: 'string' },
+            { name: 'phoneHref', label: 'Телефон для звонка (tel:+996…)', widget: 'string', pattern: ['^tel:\\+\\d+$', 'Формат: tel:+996XXXXXXXXX'] },
+            { name: 'whatsapp', label: 'WhatsApp (https://wa.me/996…)', widget: 'string', pattern: ['^https://wa\\.me/\\d+$', 'Формат: https://wa.me/996XXXXXXXXX'] },
+            { name: 'email', label: 'Почта', widget: 'string', pattern: ['^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$', 'Проверьте адрес почты'] },
             { name: 'instagram', label: 'Instagram (ссылка)', widget: 'string' },
             { name: 'instagramHandle', label: 'Instagram (@ник)', widget: 'string' },
             { name: 'facebook', label: 'Facebook (ссылка)', widget: 'string' },
             { name: 'youtube', label: 'YouTube (ссылка на канал)', widget: 'string', required: false, hint: 'Пусто — значка YouTube на сайте нет.' },
           ],
+        },
+        {
+          name: 'company',
+          label: 'Реквизиты компании',
+          widget: 'object',
+          hint: 'Показываются в подвале, на странице контактов и в политике конфиденциальности. Пока поля пустые, на сайте их нет.',
+          fields: [
+            { name: 'name', label: 'Название (ОсОО или ИП)', widget: 'string', required: false },
+            { name: 'taxId', label: 'ИНН', widget: 'string', required: false },
+            { name: 'address', label: 'Адрес офиса', widget: 'string', required: false, hint: 'Карта на странице контактов показывает этот адрес.' },
+            { name: 'hours', label: 'Часы работы', widget: 'string', required: false },
+          ],
+        },
+        {
+          name: 'reviewsInMenu',
+          label: 'Показывать «Отзывы» в меню',
+          widget: 'boolean',
+          required: false,
+          hint: 'Включите, когда появятся первые отзывы. Страница /reviews/ работает и без этого.',
         },
         {
           name: 'videos',
@@ -190,7 +211,7 @@ const settings = {
           summary: '{{fields.slug}} · {{fields.status}}',
           hint: 'Тексты туров — в «Тексты → Тур: …». Число пунктов ниже = сколько пунктов из текстов показывать. Порядок в списке = порядок на сайте (перетаскивайте).',
           fields: [
-            { name: 'slug', label: 'Код тура (не менять)', widget: 'string' },
+            { name: 'slug', label: 'Код тура (не менять)', widget: 'string', readonly: true },
             {
               name: 'hidden',
               label: 'Скрыть с сайта',
@@ -198,7 +219,7 @@ const settings = {
               required: false,
               hint: 'Тур пропадает со всех страниц, тексты и фото сохраняются. Для custom заодно скрывается конструктор «Build your tour».',
             },
-            { name: 'card', label: 'Ключ карточки в текстах (не менять)', widget: 'string' },
+            { name: 'card', label: 'Ключ карточки в текстах (не менять)', widget: 'string', readonly: true },
             {
               name: 'category',
               label: 'Категория',
@@ -394,7 +415,6 @@ console.log(`admin config: ${textFiles.length} разделов текстов, 
 // Редактор кладём рядом с config.yml (без .map — они большие и не нужны).
 const cms = path.join(root, 'node_modules/@sveltia/cms/dist');
 fs.copyFileSync(path.join(cms, 'sveltia-cms.js'), path.join(root, 'public/admin/sveltia-cms.js'));
-fs.mkdirSync(path.join(root, 'public/admin/chunks'), { recursive: true });
-for (const f of fs.readdirSync(path.join(cms, 'chunks')).filter((f) => !f.endsWith('.map'))) {
-  fs.copyFileSync(path.join(cms, 'chunks', f), path.join(root, 'public/admin/chunks', f));
-}
+// Части редактора копируются целиком, со вложенными папками; старые версии удаляются.
+fs.rmSync(path.join(root, 'public/admin/chunks'), { recursive: true, force: true });
+fs.cpSync(path.join(cms, 'chunks'), path.join(root, 'public/admin/chunks'), { recursive: true, filter: (f) => !f.endsWith('.map') });

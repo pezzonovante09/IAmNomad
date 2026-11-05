@@ -39,7 +39,8 @@
     "tour__handicraft__faq__q2": "Где мы будем жить?",
     "tour__handicraft__faq__a2": "В гостевых домах, в местной семье и в юрточных лагерях; в некоторых местах удобства могут быть общими. Ночи на Сон-Куле бывают холодными даже летом.",
     "tour__handicraft__faq__q3": "Насколько тур активный и когда он проходит?",
-    "tour__handicraft__faq__a3": "Сложность — от лёгкой до средней. Часть дорог — горные, прогулку в Алтын-Арашане подстроим под ваши силы. Тур проводится с июня до середины сентября, цена — по запросу."
+    "tour__handicraft__faq__a3": "Сложность — от лёгкой до средней. Часть дорог — горные, прогулку в Алтын-Арашане подстроим под ваши силы. Тур проводится с июня до середины сентября, цена — по запросу.",
+    "tour__handicraft__safety": "• Часть маршрута проходит на высоте около 3000 м (Сон-Куль). На такой высоте возможны головная боль, слабость и плохой сон.\n• При болезнях сердца и лёгких, при беременности посоветуйтесь с врачом до поездки.\n• Ночи на Сон-Куле холодные даже летом: возьмите тёплые вещи.\n• Итоговый список услуг и условия проживания подтверждаем при бронировании."
   },
   "en": {
     "tour__handicraft__title": "Kyrgyz Handicraft Tour",
@@ -47,13 +48,13 @@
     "tour__handicraft__group": "2–12 people, private tour",
     "tour__handicraft__season": "June – mid-September",
     "tour__handicraft__program__day1__title": "Day 1. Arrival in Bishkek and Introduction to Felt Art",
-    "tour__handicraft__program__day1__text": "• Meeting at Manas International Airport and hotel transfer.\n• Time to rest.\n• Visit to the Kiiz Duino centre, dedicated to Kyrgyz felt art.\n• Meet local artisans and learn about the main traditions of felt-making.\n• Dinner at a local restaurant.\n• Overnight in Bishkek.",
+    "tour__handicraft__program__day1__text": "• Meeting at Manas International Airport and hotel transfer.\n• Time to rest.\n• Visit to the Kiyiz Duino centre, dedicated to Kyrgyz felt art.\n• Meet local artisans and learn about the main traditions of felt-making.\n• Dinner at a local restaurant.\n• Overnight in Bishkek.",
     "tour__handicraft__program__day2__title": "Day 2. Bishkek — Burana Tower — Chon-Kemin",
     "tour__handicraft__program__day2__text": "• City walk in Bishkek: Ala-Too Square, Oak Park and Osh Bazaar.\n• The Fine Arts Museum and its collection of Kyrgyz decorative and applied arts.\n• After lunch — drive to Chon-Kemin Valley.\n• A stop at Burana Tower, a historic site associated with the ancient city of Balasagun.\n• Traditional dinner at a family-run guesthouse.\n• Overnight in Chon-Kemin.",
     "tour__handicraft__program__day3__title": "Day 3. Chon-Kemin — Tamchy: Silk and Wool Workshop",
     "tour__handicraft__program__day3__text": "• Drive to Tamchy on the northern shore of Issyk-Kul.\n• A local artisan shows a technique that combines silk and wool to create decorative felt.\n• Make your own piece using traditional methods.\n• Afternoon walk by the lake.\n• Overnight at a guesthouse in Tamchy.",
     "tour__handicraft__program__day4__title": "Day 4. Cholpon-Ata — Karakol",
-    "tour__handicraft__program__day4__text": "• Drive along the shore of Issyk-Kul.\n• The open-air petroglyph site, with rock carvings from different historical periods.\n• In Karakol: the wooden Dungan Mosque and the Holy Trinity Orthodox Church.\n• Overnight in Karakol.",
+    "tour__handicraft__program__day4__text": "• Drive along the shore of Issyk-Kul.\n• The open-air petroglyph site, with rock carvings from different historical periods.\n• In Karakol: the wooden Dungan Mosque and the Holy Trinity Orthodox Cathedral.\n• Overnight in Karakol.",
     "tour__handicraft__program__day5__title": "Day 5. Altyn-Arashan Gorge and Hot Springs",
     "tour__handicraft__program__day5__text": "• UAZ off-road ride into the mountain valley of Altyn-Arashan.\n• A walk through alpine meadows.\n• Natural hot springs.\n• Lunch outdoors.\n• Return to Karakol and Dungan cuisine for dinner.\n• Overnight in Karakol.",
     "tour__handicraft__program__day6__title": "Day 6. Jeti-Oguz — Barskoon — Bokonbaevo",
@@ -66,7 +67,7 @@
     "tour__handicraft__program__day9__text": "• A free morning by the lake — on a clear day, the mountain peaks are reflected in the water.\n• Lunch.\n• Return to Bishkek and end of the journey.",
     "tour__handicraft__highlights__title": "Tour Highlights",
     "tour__handicraft__highlights__item1": "Felt workshops in Tamchy and Kara-Suu.",
-    "tour__handicraft__highlights__item2": "The Kiiz Duino felt centre and the Fine Arts Museum in Bishkek.",
+    "tour__handicraft__highlights__item2": "The Kiyiz Duino felt centre and the Fine Arts Museum in Bishkek.",
     "tour__handicraft__highlights__item3": "How yurts are made: a visit to the artisans of Kyzyl-Tuu.",
     "tour__handicraft__highlights__item4": "Ak-Orgo craft community: felt carpets, bags and souvenirs.",
     "tour__handicraft__highlights__item5": "Take home the pieces you make, where the workshop allows.",
@@ -74,13 +75,14 @@
     "tour__handicraft__highlights__item7": "The red rocks of Jeti-Oguz and the petroglyphs of Cholpon-Ata.",
     "tour__handicraft__highlights__item8": "Song-Kul Lake and everyday nomadic life.",
     "tour__handicraft__highlights__item9": "Dungan cuisine and dinner with a local family.",
-    "tour__handicraft__included": "• Private vehicle with a driver throughout the route\n• Airport transfer on Day 1\n• English-speaking guide\n• Workshops in Tamchy and Kara-Suu\n• Visits to the Kiiz Duino centre, the Ak-Orgo craft community and the yurt-making workshops in Kyzyl-Tuu\n• UAZ off-road transfer to Altyn-Arashan\n• Entrance fees and site charges as listed in the programme\n• Four nights in guesthouses, one night with a local family and two nights in yurt camps\n• Meals as per the programme, from Day 2 through lunch on Day 9",
+    "tour__handicraft__included": "• Private vehicle with a driver throughout the route\n• Airport transfer on Day 1\n• English-speaking guide\n• Workshops in Tamchy and Kara-Suu\n• Visits to the Kiyiz Duino centre, the Ak-Orgo craft community and the yurt-making workshops in Kyzyl-Tuu\n• UAZ off-road transfer to Altyn-Arashan\n• Entrance fees and site charges as listed in the programme\n• Four nights in guesthouses, one night with a local family and two nights in yurt camps\n• Meals as per the programme, from Day 2 through lunch on Day 9",
     "tour__handicraft__notIncluded": "• Accommodation in Bishkek on the first night and after the tour (can be arranged on request)\n• International flights\n• Travel insurance\n• Drinks, tips and personal expenses\n• Purchases of handicrafts and souvenirs",
     "tour__handicraft__faq__q1": "Do I need any craft experience?",
     "tour__handicraft__faq__a1": "No previous experience is required — artisans guide you through each activity. You can take home the items you make, subject to the workshop’s materials and arrangements.",
     "tour__handicraft__faq__q2": "What is the accommodation like?",
     "tour__handicraft__faq__a2": "Guesthouses, a local family stay and yurt camps; shared bathroom facilities may be used in some locations. Nights at Song-Kul can be cold even in summer.",
     "tour__handicraft__faq__q3": "How active is the tour, and when does it run?",
-    "tour__handicraft__faq__a3": "Difficulty is easy to moderate. Some routes follow mountain roads, and the walk at Altyn-Arashan can be adapted to your abilities. The tour runs from June to mid-September; price available on request."
+    "tour__handicraft__faq__a3": "Difficulty is easy to moderate. Some routes follow mountain roads, and the walk at Altyn-Arashan can be adapted to your abilities. The tour runs from June to mid-September; price available on request.",
+    "tour__handicraft__safety": "• Part of the route runs at about 3,000 m (Song-Kul). At this altitude headaches, weakness and poor sleep are possible.\n• If you have heart or lung conditions, or are pregnant, talk to your doctor before the trip.\n• Nights at Song-Kul are cold even in summer: bring warm clothes.\n• We confirm the final list of services and accommodation details when you book."
   }
 }

@@ -17,7 +17,7 @@ const { name = '', text = '', avatar = '', rating = 5, index = 0 } = Astro.props
 
 <figure class="rc" data-reveal style={`--i:${index % 3}`}>
   <div class="rc__top">
-    <span class="rc__stars" aria-label={`${rating}/5`} data-rc-stars>
+    <span class="rc__stars" role="img" aria-label={`${rating}/5`} data-rc-stars>
       {[1, 2, 3, 4, 5].map((n) => <span class:list={['rc__star', { 'is-off': n > rating }]}><Icon name="star" size={14} /></span>)}
     </span>
     <time class="label num" data-rc-date></time>

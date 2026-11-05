@@ -11,7 +11,7 @@ interface Props {
 const t = useTranslations(Astro.props.lang);
 ---
 
-<dialog class="vm" data-vm aria-label="Video">
+<dialog class="vm" data-vm aria-label={t('ui.video')}>
   <button class="vm__close" type="button" data-vm-close aria-label={t('ui.close')}>×</button>
   <div class="vm__frame" data-vm-frame></div>
 </dialog>

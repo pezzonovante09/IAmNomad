@@ -27,7 +27,7 @@
     "tour__digital-nomad__program__day11__title": "День 11. Каракол: работа и дунганская кухня",
     "tour__digital-nomad__program__day11__text": "• Работа в первой половине дня.\n• Местный рынок.\n• Кулинарный мастер-класс в дунганской семье: ашлянфу и домашняя лапша.\n• Ночь в Караколе.",
     "tour__digital-nomad__program__day12__title": "День 12. Ущелье Алтын-Арашан",
-    "tour__digital-nomad__program__day12__text": "• На внедорожнике в высокогорную долину Алтын-Арашан.\n• Горные пейзажи.\n• Природные горячие источники.\n• Ночь в Караколе.",
+    "tour__digital-nomad__program__day12__text": "• На внедорожнике в высокогорную долину Алтын-Арашан.\n• Природные горячие источники.\n• Ночь в Караколе.",
     "tour__digital-nomad__program__day13__title": "День 13. Каракол — южный берег Иссык-Куля",
     "tour__digital-nomad__program__day13__text": "• Дорога вдоль южного берега озера.\n• Каньон Сказка с разноцветными скалами.\n• Знакомство с традицией охоты с беркутом у Боконбаево.\n• Ночь в гостевом доме на южном берегу.",
     "tour__digital-nomad__program__day14__title": "День 14. Кочкор — озеро Сон-Куль",
@@ -58,7 +58,8 @@
     "tour__digital-nomad__faq__q2": "Какие условия на Сон-Куле?",
     "tour__digital-nomad__faq__a2": "Ночи на Сон-Куле бывают холодными даже летом — возьмите тёплые вещи. Условия в юртах скромнее, чем в отелях, а удобства могут быть общими.",
     "tour__digital-nomad__faq__q3": "Когда проходит тур и можно ли его изменить?",
-    "tour__digital-nomad__faq__a3": "Тур проводится с июня до середины сентября. Сложность — от лёгкой до средней. Маршрут и уровень проживания можно изменить по договорённости. Цена — по запросу."
+    "tour__digital-nomad__faq__a3": "Тур проводится с июня до середины сентября. Сложность — от лёгкой до средней. Маршрут и уровень проживания можно изменить по договорённости. Цена — по запросу.",
+    "tour__digital-nomad__safety": "• Часть маршрута проходит на высоте около 3000 м (Сон-Куль). На такой высоте возможны головная боль, слабость и плохой сон.\n• При болезнях сердца и лёгких, при беременности посоветуйтесь с врачом до поездки.\n• Ночи на Сон-Куле холодные даже летом: возьмите тёплые вещи.\n• Итоговый список услуг и условия проживания подтверждаем при бронировании."
   },
   "en": {
     "tour__digital-nomad__title": "Digital Nomad Escape",
@@ -88,7 +89,7 @@
     "tour__digital-nomad__program__day11__title": "Day 11. Karakol: Work and Dungan Cuisine",
     "tour__digital-nomad__program__day11__text": "• Work in the first part of the day.\n• Visit to a local market.\n• Cooking session with a Dungan family: ashlyan-fu and homemade noodles.\n• Overnight in Karakol.",
     "tour__digital-nomad__program__day12__title": "Day 12. Altyn-Arashan Gorge",
-    "tour__digital-nomad__program__day12__text": "• Off-road drive into the high mountain valley of Altyn-Arashan.\n• Mountain scenery.\n• Natural hot springs.\n• Overnight in Karakol.",
+    "tour__digital-nomad__program__day12__text": "• Off-road drive into the high mountain valley of Altyn-Arashan.\n• Natural hot springs.\n• Overnight in Karakol.",
     "tour__digital-nomad__program__day13__title": "Day 13. Karakol — Southern Shore of Issyk-Kul",
     "tour__digital-nomad__program__day13__text": "• Drive along the southern shore of the lake.\n• Skazka (Fairy Tale) Canyon with its colourful rock formations.\n• The Kyrgyz tradition of eagle hunting near Bokonbaevo.\n• Overnight at a guesthouse on the southern shore.",
     "tour__digital-nomad__program__day14__title": "Day 14. Kochkor — Song-Kul Lake",
@@ -119,6 +120,7 @@
     "tour__digital-nomad__faq__q2": "What are the conditions at Song-Kul?",
     "tour__digital-nomad__faq__a2": "Nights at Song-Kul can be cold even in summer — bring warm clothes. Yurt accommodation is simpler, and bathroom facilities may be shared.",
     "tour__digital-nomad__faq__q3": "When does the tour run, and can it be tailored?",
-    "tour__digital-nomad__faq__a3": "The tour runs from June to mid-September. Difficulty is easy to moderate. The route and accommodation level can be tailored by arrangement. Price available on request."
+    "tour__digital-nomad__faq__a3": "The tour runs from June to mid-September. Difficulty is easy to moderate. The route and accommodation level can be tailored by arrangement. Price available on request.",
+    "tour__digital-nomad__safety": "• Part of the route runs at about 3,000 m (Song-Kul). At this altitude headaches, weakness and poor sleep are possible.\n• If you have heart or lung conditions, or are pregnant, talk to your doctor before the trip.\n• Nights at Song-Kul are cold even in summer: bring warm clothes.\n• We confirm the final list of services and accommodation details when you book."
   }
 }

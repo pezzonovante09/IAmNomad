@@ -11,7 +11,7 @@ export default defineConfig({
   // Карта сайта с парами ru/en (hreflang) для каждой страницы; 404 в неё не попадает.
   integrations: [
     sitemap({
-      i18n: { defaultLocale: 'ru', locales: { ru: 'ru-RU', en: 'en-US' } },
+      i18n: { defaultLocale: 'ru', locales: { ru: 'ru', en: 'en' } },
       filter: (page) => !page.includes('/404'),
     }),
   ],

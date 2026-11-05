@@ -1,7 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
-import { contacts } from '../data/site';
+import { contacts, whatsappLink } from '../data/site';
 import { languages, localize, useTranslations, type Lang } from '../i18n/utils';
 import { navItems, routes } from '../lib/routes';
 
@@ -14,7 +14,7 @@ interface Props {
 
 const { lang, active, path } = Astro.props;
 const t = useTranslations(lang);
-const bookHref = active === 'home' ? '#contact-form' : localize(routes.contact, lang);
+const bookHref = active === 'home' ? '#contact-form' : `${localize(routes.contact, lang)}#contact-form`;
 const menuItems = [{ key: 'home', href: '/', label: 'nav.home' }, ...navItems];
 ---
 
@@ -44,7 +44,7 @@ const menuItems = [{ key: 'home', href: '/', label: 'nav.home' }, ...navItems];
 </header>
 
 <div class="mn" id="site-menu" data-menu hidden>
-  <nav class="mn__nav" aria-label="Main">
+  <nav class="mn__nav" aria-label={t('ui.nav')}>
     <ol class="mn__list">
       {
         menuItems.map((item, i) => (
@@ -59,9 +59,13 @@ const menuItems = [{ key: 'home', href: '/', label: 'nav.home' }, ...navItems];
     </ol>
   </nav>
   <div class="mn__side">
+    <a href={bookHref} class="btn btn--accent btn--block">
+      {t('btn.bookNow')}
+      <Icon name="arrow-right" />
+    </a>
     <p class="label">{t('footer.contact')}</p>
     <ul class="mn__contacts">
-      <li><a href={contacts.whatsapp} target="_blank" rel="noopener">WhatsApp — {contacts.phone}</a></li>
+      <li><a href={whatsappLink(t('whatsapp.text'))} target="_blank" rel="noopener">WhatsApp — {contacts.phone}</a></li>
       <li><a href={`mailto:${contacts.email}`}>{contacts.email}</a></li>
     </ul>
     <button class="mn__theme label" type="button" data-theme-toggle>
@@ -69,10 +73,6 @@ const menuItems = [{ key: 'home', href: '/', label: 'nav.home' }, ...navItems];
       <Icon name="sun" class="theme-sun" size={16} />
       {t('theme.toggle')}
     </button>
-    <a href={bookHref} class="btn btn--accent btn--block">
-      {t('btn.bookNow')}
-      <Icon name="arrow-right" />
-    </a>
   </div>
 </div>
 
@@ -117,12 +117,15 @@ const menuItems = [{ key: 'home', href: '/', label: 'nav.home' }, ...navItems];
   }
 
   .hd__lang a {
-    padding: 4px 6px;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 7px;
     font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.12em;
     text-decoration: none;
-    opacity: 0.5;
+    opacity: 0.72;
   }
 
   .hd__lang a[aria-current] {
@@ -361,11 +364,6 @@ const menuItems = [{ key: 'home', href: '/', label: 'nav.home' }, ...navItems];
     color: var(--on-accent);
   }
 
-  .mn__num {
-    width: 44px;
-    flex-shrink: 0;
-  }
-
   .mn__title {
     flex: 1;
     font-family: var(--font-display);
@@ -434,10 +432,6 @@ const menuItems = [{ key: 'home', href: '/', label: 'nav.home' }, ...navItems];
 
     .mn__side {
       border-left: 0;
-    }
-
-    .mn__num {
-      width: 36px;
     }
   }
 
@@ -519,4 +513,11 @@ const menuItems = [{ key: 'home', href: '/', label: 'nav.home' }, ...navItems];
       } catch {}
     }),
   );
+</script>
+
+<script>
+  // Смена языка не теряет выбранный тур (?tour=) и якорь формы.
+  document.querySelectorAll<HTMLAnchorElement>('.hd__lang a:not([aria-current])').forEach((a) => {
+    a.href = `${a.pathname}${location.search}${location.hash}`;
+  });
 </script>

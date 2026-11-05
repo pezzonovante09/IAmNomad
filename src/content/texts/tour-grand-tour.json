@@ -7,7 +7,7 @@
     "tour__grand-tour__program__day1__title": "День 1. Прилёт в Бишкек",
     "tour__grand-tour__program__day1__text": "• Встреча в аэропорту и трансфер в отель.\n• Отдых после перелёта.\n• Обзорная экскурсия: площадь Ала-Тоо, парк Победы, парк Панфилова и Ошский базар.\n• Обед и ужин в местных кафе.\n• Ночь в Бишкеке.",
     "tour__grand-tour__program__day2__title": "День 2. Бишкек — башня Бурана — Чон-Кемин",
-    "tour__grand-tour__program__day2__text": "• Башня Бурана — памятник XI века, связанный с древним городом Баласагун.\n• Башня и коллекция каменных изваяний.\n• Переезд в зелёную долину Чон-Кемин.\n• По желанию — конная прогулка после обеда (если будет возможность).\n• Ночь в семейном гостевом доме в Чон-Кемине.",
+    "tour__grand-tour__program__day2__text": "• Башня Бурана — памятник XI века, связанный с древним городом Баласагун, и коллекция каменных изваяний.\n• Переезд в зелёную долину Чон-Кемин.\n• По желанию — конная прогулка после обеда (если будет возможность).\n• Ночь в семейном гостевом доме в Чон-Кемине.",
     "tour__grand-tour__program__day3__title": "День 3. Чон-Кемин — северный берег Иссык-Куля — Каракол",
     "tour__grand-tour__program__day3__text": "• Дорога вдоль северного берега Иссык-Куля.\n• Григорьевское ущелье.\n• Обед на форелевой ферме — здесь могут приготовить свежепойманную рыбу.\n• Долина Кырчын, где проходили Всемирные игры кочевников.\n• Ночь в Караколе.",
     "tour__grand-tour__program__day4__title": "День 4. Каракол — долина Каркыра — Сары-Джаз",
@@ -43,7 +43,8 @@
     "tour__grand-tour__faq__q2": "Насколько сложный маршрут?",
     "tour__grand-tour__faq__a2": "Сложность — средняя. На маршруте горные дороги и долгие переезды: в 7-й день около 9–10 часов в пути. Часть ночей — в юртах или простых гостевых домах с базовыми удобствами. В каждой машине — до трёх пассажиров и водитель.",
     "tour__grand-tour__faq__q3": "Когда проходит тур?",
-    "tour__grand-tour__faq__a3": "Тур проводится в июле и августе. Цена — по запросу."
+    "tour__grand-tour__faq__a3": "Тур проводится в июле и августе. Цена — по запросу.",
+    "tour__grand-tour__safety": "• Маршрут идёт по высокогорным дорогам и перевалам: Сон-Куль лежит на высоте около 3000 м, перевалы выше. На такой высоте возможны головная боль, слабость и плохой сон.\n• При болезнях сердца и лёгких, при беременности посоветуйтесь с врачом до поездки.\n• Дни бывают долгими: до 9–10 часов в пути.\n• Для пограничных зон нужны пропуска, их оформляют заранее, поэтому не откладывайте заявку на последний момент.\n• Итоговый список услуг и условия проживания подтверждаем при бронировании."
   },
   "en": {
     "tour__grand-tour__title": "The Grand Kyrgyzstan Tour",
@@ -53,7 +54,7 @@
     "tour__grand-tour__program__day1__title": "Day 1. Arrival in Bishkek",
     "tour__grand-tour__program__day1__text": "• Airport meeting and hotel transfer.\n• Time to rest after the flight.\n• City tour: Ala-Too Square, Victory Park, Panfilov Park and Osh Bazaar.\n• Lunch and dinner at local cafés.\n• Overnight in Bishkek.",
     "tour__grand-tour__program__day2__title": "Day 2. Bishkek — Burana Tower — Chon-Kemin",
-    "tour__grand-tour__program__day2__text": "• Burana Tower, an 11th-century site associated with the ancient city of Balasagun.\n• The tower and its collection of stone figures.\n• Drive on to the green Chon-Kemin Valley.\n• Optional horse ride in the afternoon, if available.\n• Overnight at a family-run guesthouse in Chon-Kemin.",
+    "tour__grand-tour__program__day2__text": "• Burana Tower, an 11th-century site associated with the ancient city of Balasagun, and its collection of stone figures.\n• Drive on to the green Chon-Kemin Valley.\n• Optional horse ride in the afternoon, if available.\n• Overnight at a family-run guesthouse in Chon-Kemin.",
     "tour__grand-tour__program__day3__title": "Day 3. Chon-Kemin — Northern Issyk-Kul — Karakol",
     "tour__grand-tour__program__day3__text": "• Drive along the northern shore of Issyk-Kul Lake.\n• Grigorievskoe Gorge.\n• Lunch at a trout farm, where freshly caught fish may be prepared.\n• Kyrchyn Valley, known for hosting the World Nomad Games.\n• Overnight in Karakol.",
     "tour__grand-tour__program__day4__title": "Day 4. Karakol — Karkyra Valley — Sary-Jaz",
@@ -89,6 +90,7 @@
     "tour__grand-tour__faq__q2": "How demanding is the route?",
     "tour__grand-tour__faq__a2": "Difficulty is moderate. The route includes mountain tracks and long driving days — about 9–10 hours on the road on Day 7. Some nights are in yurts or simple accommodation with basic facilities. Each vehicle takes up to three passengers plus the driver.",
     "tour__grand-tour__faq__q3": "When does the tour run?",
-    "tour__grand-tour__faq__a3": "The tour is planned for July and August. Price available on request."
+    "tour__grand-tour__faq__a3": "The tour runs in July and August. Price available on request.",
+    "tour__grand-tour__safety": "• The route follows high mountain roads and passes: Song-Kul lies at about 3,000 m and the passes are higher. At this altitude headaches, weakness and poor sleep are possible.\n• If you have heart or lung conditions, or are pregnant, talk to your doctor before the trip.\n• Some days are long: up to 9–10 hours on the road.\n• Border zones need permits, which are arranged in advance, so please do not leave your request to the last minute.\n• We confirm the final list of services and accommodation details when you book."
   }
 }

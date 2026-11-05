@@ -5,7 +5,7 @@ import Icon from './Icon.astro';
 import Ornament from './Ornament.astro';
 import { hasPage, type Tour } from '../data/tours';
 import { defaultLang, has, localize, useTranslations, type Lang } from '../i18n/utils';
-import { srcset, unsplash } from '../lib/img';
+import { altOf, srcset, unsplash } from '../lib/img';
 import { routes } from '../lib/routes';
 
 interface Props {
@@ -30,7 +30,7 @@ const rows = tours.map((tour, i) => {
   };
   // У тура «Скоро» без страницы карточка ведёт на заявку.
   const pageHref = hasPage(tour) ? localize(routes.tour(tour.slug), lang) : '';
-  const cta = { href: `${localize(routes.contact, lang)}?tour=${tour.slug}`, label: t('home.index.contact') };
+  const cta = { href: `${localize(routes.contact, lang)}?tour=${tour.slug}#contact-form`, label: t('home.index.contact') };
   return {
     tour,
     num: pad(i + 1),
@@ -39,7 +39,6 @@ const rows = tours.map((tour, i) => {
     duration: k('duration'),
     days: tour.days ? pad(tour.days) : '—',
     desc: tour.slug === 'custom' ? t('tour.custom.intro.p2') : t(`tour.${tour.slug}.subtitle`),
-    excerpt: k('excerpt'),
     category: t(`tours.tab.${tour.category}`),
     group: own('group') || t('tour.facts.groupValue'),
     season: own('season'),
@@ -83,7 +82,7 @@ const rows = tours.map((tour, i) => {
             )
           }
         </h3>
-        <div class="ti__body" id={`ti-${row.tour.slug}`} inert={i !== open}>
+        <div class:list={['ti__body', { 'is-idle': i !== open }]} id={`ti-${row.tour.slug}`} inert={i !== open}>
           <div class="ti__inner">
             <div class="ti__card">
               <a
@@ -97,7 +96,7 @@ const rows = tours.map((tour, i) => {
                     src={unsplash(row.tour.cover.id, 1400, 900)}
                     srcset={srcset(row.tour.cover.id, [700, 1000, 1400, 1900], 0.64)}
                     sizes="(max-width: 900px) 100vw, 66vw"
-                    alt={row.tour.cover.alt}
+                    alt={altOf(row.tour.cover, lang)}
                     width="1400"
                     height="900"
                     loading={priority && i === open ? 'eager' : 'lazy'}
@@ -260,6 +259,18 @@ const rows = tours.map((tour, i) => {
     display: grid;
     grid-template-rows: 0fr;
     transition: grid-template-rows 0.8s var(--ease-io);
+  }
+
+  /* Свёрнутая строка не рисуется, поэтому её фото не загружаются, пока строку не раскроют. */
+  .ti__body.is-idle {
+    content-visibility: hidden;
+  }
+
+  /* Подпись поверх фото: своя подложка, чтобы читалась на любом кадре. */
+  .ti__badges :global(.badge:not(.badge--gold)) {
+    border-color: transparent;
+    background: rgb(17 17 17 / 0.72);
+    color: #f5f5f3;
   }
 
   .ti__row.is-open .ti__body {
@@ -499,13 +510,35 @@ const rows = tours.map((tour, i) => {
     const canHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
     let timer: number | undefined;
 
+    function setOpen(row: HTMLElement, on: boolean) {
+      const body = row.querySelector<HTMLElement>('.ti__body')!;
+      row.classList.toggle('is-open', on);
+      row.querySelector('[data-row-toggle]')?.setAttribute('aria-expanded', String(on));
+      body.inert = !on;
+      if (on) body.classList.remove('is-idle');
+      else window.setTimeout(() => row.classList.contains('is-open') || body.classList.add('is-idle'), 900);
+    }
+
     function openRow(row: HTMLElement) {
       rows.forEach((r) => {
-        const on = r === row;
-        r.classList.toggle('is-open', on);
-        r.querySelector('[data-row-toggle]')?.setAttribute('aria-expanded', String(on));
-        r.querySelector<HTMLElement>('.ti__body')!.inert = !on;
+        if (r === row) setOpen(r, true);
+        else if (r.classList.contains('is-open')) setOpen(r, false);
       });
+    }
+
+    // На телефоне строка выше схлопывается и утащила бы нажатую за верх экрана.
+    // Пока идёт анимация, держим нажатую строку на месте; касание экрана отменяет это.
+    function holdInPlace(row: HTMLElement) {
+      const top = row.getBoundingClientRect().top;
+      const end = performance.now() + 950;
+      let stopped = false;
+      addEventListener('touchstart', () => (stopped = true), { once: true, passive: true });
+      const step = () => {
+        const shift = row.getBoundingClientRect().top - top;
+        if (Math.abs(shift) > 0.5) scrollBy({ top: shift, behavior: 'instant' as ScrollBehavior });
+        if (!stopped && performance.now() < end) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
     }
 
     rows.forEach((row) => {
@@ -516,15 +549,16 @@ const rows = tours.map((tour, i) => {
         if (toggle instanceof HTMLAnchorElement) {
           if (!row.classList.contains('is-open')) {
             e.preventDefault();
+            if (!canHover) holdInPlace(row);
             openRow(row);
           }
           return;
         }
-        if (row.classList.contains('is-open') && !canHover) {
-          row.classList.remove('is-open');
-          toggle.setAttribute('aria-expanded', 'false');
-          row.querySelector<HTMLElement>('.ti__body')!.inert = true;
-        } else openRow(row);
+        if (row.classList.contains('is-open') && !canHover) setOpen(row, false);
+        else {
+          if (!canHover) holdInPlace(row);
+          openRow(row);
+        }
       });
       if (canHover) {
         row.addEventListener('mouseenter', () => {

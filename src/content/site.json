@@ -3,12 +3,19 @@
     "phone": "+996 706 001 517",
     "phoneHref": "tel:+996706001517",
     "whatsapp": "https://wa.me/996706001517",
-    "email": "Iamnomadkgz@gmail.com",
+    "email": "iamnomadkgz@gmail.com",
     "instagram": "https://www.instagram.com/iamnomad.tours/",
     "instagramHandle": "@iamnomad.tours",
     "facebook": "https://www.facebook.com/iamnomadkg/",
     "youtube": ""
   },
+  "company": {
+    "name": "",
+    "taxId": "",
+    "address": "",
+    "hours": ""
+  },
+  "reviewsInMenu": false,
   "videos": {
     "home": "/video/show-2.mp4",
     "tours": {

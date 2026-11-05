@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import CtaBanner from '../components/CtaBanner.astro';
 import PageHero from '../components/PageHero.astro';
 import { aboutPhoto } from '../data/content';
-import { contacts } from '../data/site';
+import { whatsappLink } from '../data/site';
 import { localize, useTranslations, type Lang } from '../i18n/utils';
 import { routes } from '../lib/routes';
 
@@ -16,7 +16,7 @@ const t = useTranslations(lang);
 ---
 
 <BaseLayout lang={lang} page="about" path={routes.about}>
-  <PageHero kicker="I AM NOMAD" title={t('about.title')} subtitle={t('about.subtitle')} photo={aboutPhoto}>
+  <PageHero lang={lang} kicker="I AM NOMAD" title={t('about.title')} subtitle={t('about.subtitle')} photo={aboutPhoto}>
     <div slot="overlay" class="story">
       <p class="story__lead">{t('about.history.p1')}</p>
       <p>{t('about.history.p2')}</p>
@@ -27,7 +27,7 @@ const t = useTranslations(lang);
   <CtaBanner
     title={t('about.cta.title')}
     primary={{ href: localize(routes.tours, lang), label: t('home.hero.cta') }}
-    secondary={{ href: contacts.whatsapp, label: t('tour.booking.whatsapp'), external: true, icon: 'whatsapp' }}
+    secondary={{ href: whatsappLink(t('whatsapp.text')), label: t('tour.booking.whatsapp'), external: true, icon: 'whatsapp' }}
   />
 </BaseLayout>
 

@@ -7,36 +7,44 @@
       "status": "open",
       "cover": {
         "id": "/uploads/winter-05.jpg",
-        "alt": "Ski slope among spruce trees above a mountain valley"
+        "alt": "Ski slope among spruce trees above a mountain valley",
+        "altRu": "Склон среди елей над горной долиной"
       },
       "gallery": [
         {
           "id": "/uploads/winter-05.jpg",
-          "alt": "Ski slope among spruce trees above a mountain valley"
+          "alt": "Ski slope among spruce trees above a mountain valley",
+          "altRu": "Склон среди елей над горной долиной"
         },
         {
           "id": "/uploads/winter-06.jpg",
-          "alt": "Snowboarder in fresh powder"
+          "alt": "Snowboarder in fresh powder",
+          "altRu": "Сноубордист на свежем снегу"
         },
         {
           "id": "/uploads/winter-03.jpg",
-          "alt": "Steaming wooden hot tub among spruce trees"
+          "alt": "Steaming wooden hot tub among spruce trees",
+          "altRu": "Деревянная купель с горячей водой среди елей"
         },
         {
           "id": "/uploads/winter-10.jpg",
-          "alt": "Evening by the fire in the snowy mountains"
+          "alt": "Evening by the fire in the snowy mountains",
+          "altRu": "Вечер у костра в заснеженных горах"
         },
         {
           "id": "/uploads/winter-02.jpg",
-          "alt": "Skier on the slope at sunrise"
+          "alt": "Skier on the slope at sunrise",
+          "altRu": "Лыжник на склоне на рассвете"
         },
         {
           "id": "/uploads/winter-08.jpg",
-          "alt": "Snowboarder above the night-lit slopes"
+          "alt": "Snowboarder above the night-lit slopes",
+          "altRu": "Сноубордист над склонами с вечерней подсветкой"
         },
         {
           "id": "/uploads/winter-07.jpg",
-          "alt": "Chairlift through a snowy spruce forest"
+          "alt": "Chairlift through a snowy spruce forest",
+          "altRu": "Подъёмник в заснеженном еловом лесу"
         }
       ],
       "mapQuery": "Karakol+Ski+Base+Kyrgyzstan",
@@ -53,32 +61,39 @@
       "status": "open",
       "cover": {
         "id": "/uploads/tour-classic-cover.jpg",
-        "alt": "Nomad show by the yurts on Issyk-Kul"
+        "alt": "Nomad show by the yurts on Issyk-Kul",
+        "altRu": "Шоу кочевников у юрт на Иссык-Куле"
       },
       "gallery": [
         {
           "id": "/uploads/gallery-01.jpg",
-          "alt": "Girls in national dress"
+          "alt": "Girls in national dress",
+          "altRu": "Девушки в национальных костюмах"
         },
         {
           "id": "/uploads/gallery-02.jpg",
-          "alt": "Folk musicians"
+          "alt": "Folk musicians",
+          "altRu": "Народные музыканты"
         },
         {
           "id": "/uploads/gallery-03.jpg",
-          "alt": "Children dancing"
+          "alt": "Children dancing",
+          "altRu": "Танцующие дети"
         },
         {
           "id": "/uploads/tour-classic-cover.jpg",
-          "alt": "Nomad show by the yurts"
+          "alt": "Nomad show by the yurts",
+          "altRu": "Шоу кочевников у юрт"
         },
         {
           "id": "/uploads/gallery-09.jpg",
-          "alt": "Autumn alley with eagle hunters"
+          "alt": "Autumn alley with eagle hunters",
+          "altRu": "Осенняя аллея и беркутчи"
         },
         {
           "id": "/uploads/gallery-08.jpg",
-          "alt": "Traditional food"
+          "alt": "Traditional food",
+          "altRu": "Национальное угощение"
         }
       ],
       "mapQuery": "Song-Kul+Lake+Kyrgyzstan",
@@ -95,32 +110,39 @@
       "status": "open",
       "cover": {
         "id": "/uploads/tour-adventure-cover.jpg",
-        "alt": "Horsewoman galloping on the Issyk-Kul beach"
+        "alt": "Horsewoman galloping on the Issyk-Kul beach",
+        "altRu": "Всадница скачет по пляжу Иссык-Куля"
       },
       "gallery": [
         {
           "id": "/uploads/adv-01.jpg",
-          "alt": "Eagle hunters galloping"
+          "alt": "Eagle hunters galloping",
+          "altRu": "Беркутчи скачут галопом"
         },
         {
           "id": "/uploads/adv-02.jpg",
-          "alt": "Riders with golden eagles"
+          "alt": "Riders with golden eagles",
+          "altRu": "Всадники с беркутами"
         },
         {
           "id": "/uploads/adv-03.jpg",
-          "alt": "Horseman with a fire torch"
+          "alt": "Horseman with a fire torch",
+          "altRu": "Всадник с горящим факелом"
         },
         {
           "id": "/uploads/adv-04.jpg",
-          "alt": "Horse rider performing a trick"
+          "alt": "Horse rider performing a trick",
+          "altRu": "Всадник выполняет трюк"
         },
         {
           "id": "/uploads/adv-05.jpg",
-          "alt": "Archer on horseback"
+          "alt": "Archer on horseback",
+          "altRu": "Конный лучник"
         },
         {
           "id": "/uploads/adv-06.jpg",
-          "alt": "Riders in a horse game"
+          "alt": "Riders in a horse game",
+          "altRu": "Всадники в конной игре"
         }
       ],
       "mapQuery": "Issyk-Kul+Lake+Kyrgyzstan",
@@ -137,28 +159,34 @@
       "status": "open",
       "cover": {
         "id": "/uploads/nomad-01.jpg",
-        "alt": "Yurt on the Issyk-Kul shore"
+        "alt": "Yurt on the Issyk-Kul shore",
+        "altRu": "Юрта на берегу Иссык-Куля"
       },
       "gallery": [
         {
           "id": "/uploads/nomad-01.jpg",
-          "alt": "Yurt on the Issyk-Kul shore"
+          "alt": "Yurt on the Issyk-Kul shore",
+          "altRu": "Юрта на берегу Иссык-Куля"
         },
         {
           "id": "/uploads/nomad-02.jpg",
-          "alt": "Travellers in a mountain gorge"
+          "alt": "Travellers in a mountain gorge",
+          "altRu": "Путешественники в горном ущелье"
         },
         {
           "id": "/uploads/nomad-03.jpg",
-          "alt": "Golden eagle landing on a hunter's glove"
+          "alt": "Golden eagle landing on a hunter's glove",
+          "altRu": "Беркут садится на перчатку охотника"
         },
         {
           "id": "/uploads/nomad-04.jpg",
-          "alt": "Rider galloping along Issyk-Kul"
+          "alt": "Rider galloping along Issyk-Kul",
+          "altRu": "Всадник скачет вдоль Иссык-Куля"
         },
         {
           "id": "/uploads/nomad-05.jpg",
-          "alt": "Dinner with an I AM NOMAD group"
+          "alt": "Dinner with an I AM NOMAD group",
+          "altRu": "Ужин с группой I AM NOMAD"
         }
       ],
       "mapQuery": "Cholpon-Ata+Kyrgyzstan",
@@ -175,28 +203,34 @@
       "status": "open",
       "cover": {
         "id": "/uploads/grand-01.jpg",
-        "alt": "Horsemen with banners below the hills"
+        "alt": "Horsemen with banners below the hills",
+        "altRu": "Всадники со знамёнами у подножия холмов"
       },
       "gallery": [
         {
           "id": "/uploads/grand-01.jpg",
-          "alt": "Horsemen with banners below the hills"
+          "alt": "Horsemen with banners below the hills",
+          "altRu": "Всадники со знамёнами у подножия холмов"
         },
         {
           "id": "/uploads/grand-02.jpg",
-          "alt": "Eagle hunters with golden eagles"
+          "alt": "Eagle hunters with golden eagles",
+          "altRu": "Беркутчи с беркутами"
         },
         {
           "id": "/uploads/grand-03.jpg",
-          "alt": "Horseback archer at full gallop"
+          "alt": "Horseback archer at full gallop",
+          "altRu": "Конный лучник на полном скаку"
         },
         {
           "id": "/uploads/grand-04.jpg",
-          "alt": "Yurt camp by the lake"
+          "alt": "Yurt camp by the lake",
+          "altRu": "Юрточный лагерь у озера"
         },
         {
           "id": "/uploads/grand-05.jpg",
-          "alt": "Komuz players on the shore"
+          "alt": "Komuz players on the shore",
+          "altRu": "Комузисты на берегу"
         }
       ],
       "mapQuery": "Tash+Rabat+Kyrgyzstan",
@@ -213,28 +247,34 @@
       "status": "open",
       "cover": {
         "id": "/uploads/family-01.jpg",
-        "alt": "Girls dancing in national dresses"
+        "alt": "Girls dancing in national dresses",
+        "altRu": "Девушки танцуют в национальных костюмах"
       },
       "gallery": [
         {
           "id": "/uploads/family-01.jpg",
-          "alt": "Girls dancing in national dresses"
+          "alt": "Girls dancing in national dresses",
+          "altRu": "Девушки танцуют в национальных костюмах"
         },
         {
           "id": "/uploads/family-02.jpg",
-          "alt": "Young musicians with komuz"
+          "alt": "Young musicians with komuz",
+          "altRu": "Юные музыканты с комузами"
         },
         {
           "id": "/uploads/family-03.jpg",
-          "alt": "Golden eagle and a horse"
+          "alt": "Golden eagle and a horse",
+          "altRu": "Беркут и лошадь"
         },
         {
           "id": "/uploads/family-04.jpg",
-          "alt": "Eagle hunters with a taigan hound"
+          "alt": "Eagle hunters with a taigan hound",
+          "altRu": "Беркутчи с тайганом"
         },
         {
           "id": "/uploads/family-05.jpg",
-          "alt": "Traditional tug-of-stick game"
+          "alt": "Traditional tug-of-stick game",
+          "altRu": "Национальная игра: перетягивание палки"
         }
       ],
       "mapQuery": "Issyk-Kul+Lake+Kyrgyzstan",
@@ -251,28 +291,34 @@
       "status": "open",
       "cover": {
         "id": "/uploads/craft-01.jpg",
-        "alt": "Craftswoman spinning wool by a yurt lattice"
+        "alt": "Craftswoman spinning wool by a yurt lattice",
+        "altRu": "Мастерица прядёт шерсть у решётки юрты"
       },
       "gallery": [
         {
           "id": "/uploads/craft-01.jpg",
-          "alt": "Craftswoman spinning wool by a yurt lattice"
+          "alt": "Craftswoman spinning wool by a yurt lattice",
+          "altRu": "Мастерица прядёт шерсть у решётки юрты"
         },
         {
           "id": "/uploads/craft-02.jpg",
-          "alt": "Yurt crown (tunduk) seen from inside"
+          "alt": "Yurt crown (tunduk) seen from inside",
+          "altRu": "Тюндюк: купол юрты изнутри"
         },
         {
           "id": "/uploads/craft-03.jpg",
-          "alt": "Girl in national dress by a felt applique panel"
+          "alt": "Girl in national dress by a felt applique panel",
+          "altRu": "Девушка в национальном костюме у войлочного панно"
         },
         {
           "id": "/uploads/craft-04.jpg",
-          "alt": "Yurt with felt patterns on the lake shore"
+          "alt": "Yurt with felt patterns on the lake shore",
+          "altRu": "Юрта с войлочными узорами на берегу озера"
         },
         {
           "id": "/uploads/craft-05.jpg",
-          "alt": "Craftswoman by embroidered felt hangings"
+          "alt": "Craftswoman by embroidered felt hangings",
+          "altRu": "Мастерица у расшитых войлочных панно"
         }
       ],
       "mapQuery": "Kochkor+Kyrgyzstan",
@@ -289,7 +335,8 @@
       "status": "soon",
       "cover": {
         "id": "/uploads/retreat-01.jpg",
-        "alt": "Yurts on a quiet lake shore"
+        "alt": "Yurts on a quiet lake shore",
+        "altRu": "Юрты на тихом берегу озера"
       },
       "gallery": [],
       "days": 0,
@@ -305,7 +352,8 @@
       "status": "soon",
       "cover": {
         "id": "/uploads/sport-01.jpg",
-        "alt": "Archers shooting in mid-leap"
+        "alt": "Archers shooting in mid-leap",
+        "altRu": "Лучники стреляют в прыжке"
       },
       "gallery": [],
       "days": 0,
@@ -321,7 +369,8 @@
       "status": "request",
       "cover": {
         "id": "/uploads/tour-custom-cover.jpg",
-        "alt": "Horsewoman in national dress"
+        "alt": "Horsewoman in national dress",
+        "altRu": "Всадница в национальном костюме"
       },
       "gallery": [],
       "days": 0,

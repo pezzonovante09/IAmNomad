@@ -4,6 +4,20 @@ import site from '../content/site.json';
 
 export const contacts = site.contacts;
 
+export const company = site.company;
+export const reviewsInMenu: boolean = site.reviewsInMenu;
+
+/** Реквизиты компании одной строкой; пусто, пока они не заполнены в админке. */
+export function companyDetails(taxLabel: string): string {
+  return [company.name, company.taxId && `${taxLabel} ${company.taxId}`, company.address, company.hours].filter(Boolean).join(' · ');
+}
+
+/** Ссылка на WhatsApp с готовым первым сообщением: посетителю не приходится придумывать его самому. */
+export function whatsappLink(text: string): string {
+  const separator = contacts.whatsapp.includes('?') ? '&' : '?';
+  return `${contacts.whatsapp}${separator}text=${encodeURIComponent(text)}`;
+}
+
 // Web3Forms: публичный ключ формы (он всё равно виден в HTML), привязан к почте компании.
 // Задан только здесь: старая переменная PUBLIC_WEB3FORMS_KEY в Vercel не используется.
 export const web3forms = {
@@ -31,4 +45,4 @@ export const videos: { home: string; tours: Partial<Record<string, string>>; gal
   gallery: site.videos.gallery.filter(Boolean),
 };
 
-export const officeMapQuery = 'Bishkek+Kyrgyzstan';
+export const officeMapQuery = company.address ? encodeURIComponent(company.address) : 'Bishkek+Kyrgyzstan';

@@ -51,7 +51,7 @@ create trigger leads_rate_limit
   before insert on public.leads
   for each row execute function private.leads_rate_limit();
 
--- Для еженедельного «пинга» (.github/workflows/supabase-keepalive.yml),
+-- Для регулярного «пинга» (.github/workflows/supabase-keepalive.yml),
 -- чтобы бесплатный проект не засыпал.
 create or replace function public.keepalive()
 returns text

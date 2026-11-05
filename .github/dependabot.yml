@@ -1,0 +1,9 @@
+# Раз в неделю проверяет обновления зависимостей и предлагает их отдельными pull request.
+# npm audit не видит уязвимости редактора Sveltia CMS, поэтому без этого о них никто не узнает.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5

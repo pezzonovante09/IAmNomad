@@ -7,11 +7,13 @@ import Icon from '../components/Icon.astro';
 import LeadForm from '../components/LeadForm.astro';
 import Ornament from '../components/Ornament.astro';
 import SectionHeader from '../components/SectionHeader.astro';
+import TourIndex from '../components/TourIndex.astro';
 import VideoModal from '../components/VideoModal.astro';
-import { contacts } from '../data/site';
+import { contacts, whatsappLink } from '../data/site';
+import { hasPage, tours } from '../data/tours';
 import { showGallery, showMoments, showPosters, showStats, showTimeline, showVideos } from '../data/show';
 import { useTranslations, type Lang } from '../i18n/utils';
-import { srcset, unsplash } from '../lib/img';
+import { altOf, srcset, unsplash } from '../lib/img';
 import { routes } from '../lib/routes';
 import { bigTiles } from '../lib/tiles';
 
@@ -55,21 +57,24 @@ const seoTitle =
     : 'I AM NOMAD SHOW | Аутентичное кочевое шоу в Кыргызстане';
 const seoDesc =
   lang === 'en'
-    ? 'Exclusive cultural show in Kyrgyzstan featuring horse performances, eagle hunting, traditional music, national cuisine and interactive experiences.'
+    ? 'A cultural show in Kyrgyzstan featuring horse performances, eagle hunting, traditional music, national cuisine and interactive experiences.'
     : t('page.desc.show');
 
+const abs = (p: string) => (Astro.site ? new URL(p, Astro.site).href : p);
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'TouristAttraction',
   name: 'I AM NOMAD SHOW',
   description: seoDesc,
-  image: unsplash(showPosters.hero.id, 1200, 630),
+  url: abs(lang === 'en' ? `/en${routes.show}` : routes.show),
+  image: abs(unsplash(showPosters.hero.id, 1200, 630)),
   touristType: ['Tour groups', 'VIP', 'Corporate events'],
-  provider: { '@type': 'TravelAgency', name: 'I AM NOMAD', telephone: contacts.phone, email: contacts.email },
+  telephone: contacts.phone,
+  address: { '@type': 'PostalAddress', addressRegion: 'Issyk-Kul', addressCountry: 'KG' },
 };
 ---
 
-<BaseLayout lang={lang} page="show" path={routes.show} fullTitle={seoTitle} description={seoDesc} image={unsplash(showPosters.hero.id, 1200, 630)}>
+<BaseLayout lang={lang} page="show" path={routes.show} fullTitle={seoTitle} description={seoDesc} image={unsplash(showPosters.hero.id, 1200, 630)} whatsappText={t('whatsapp.textShow')}>
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)} />
 
   <!-- HERO -->
@@ -93,7 +98,7 @@ const jsonLd = {
             src={unsplash(showPosters.hero.id, 1920, 1080)}
             srcset={srcset(showPosters.hero.id, [800, 1200, 1920, 2560], 0.5625)}
             sizes="100vw"
-            alt={showPosters.hero.alt}
+            alt={altOf(showPosters.hero, lang)}
             width="1920"
             height="1080"
             fetchpriority="high"
@@ -104,20 +109,20 @@ const jsonLd = {
     <div class="hero__shade" aria-hidden="true"></div>
 
     <div class="hero__top label">
-      <span data-reveal="fade" data-delay="200">{t('show.hero.kicker')}</span>
-      <span class="num" data-reveal="fade" data-delay="300">11:00 — 14:00 · 110+</span>
+      <span>{t('show.hero.kicker')}</span>
+      <span class="num">11:00 — 14:00 · 110+</span>
     </div>
 
     <div class="hero__content">
-      <h1 class="hero__title" data-reveal="up" data-delay="300">
+      <h1 class="hero__title">
         I AM NOMAD <span>SHOW</span>
       </h1>
       <div class="hero__row">
         <div class="hero__text">
-          <p class="hero__subtitle" data-reveal="up" data-delay="550">{t('show.hero.subtitle')}</p>
-          <p class="hero__lead" data-reveal="fade" data-delay="800">{t('show.hero.text')}</p>
+          <p class="hero__subtitle">{t('show.hero.subtitle')}</p>
+          <p class="hero__lead">{t('show.hero.text')}</p>
         </div>
-        <div class="hero__actions" data-reveal="up" data-delay="900">
+        <div class="hero__actions">
           <a href="#show-booking" class="btn btn--gold btn--lg">{t('show.cta')} <span aria-hidden="true">→</span></a>
         </div>
       </div>
@@ -141,7 +146,7 @@ const jsonLd = {
         src={unsplash(showPosters.video.id, 1920, 1000)}
         srcset={srcset(showPosters.video.id, [800, 1200, 1920, 2560], 0.52)}
         sizes="100vw"
-        alt={showPosters.video.alt}
+        alt={altOf(showPosters.video, lang)}
         width="1920"
         height="1000"
         loading="lazy"
@@ -185,7 +190,7 @@ const jsonLd = {
                 src={unsplash(m.photo.id, 1400, 1000)}
                 srcset={srcset(m.photo.id, [700, 1000, 1400, 1900], 0.71)}
                 sizes="(max-width: 900px) 100vw, 60vw"
-                alt={m.photo.alt}
+                alt={altOf(m.photo, lang)}
                 width="1400"
                 height="1000"
                 loading="lazy"
@@ -226,7 +231,7 @@ const jsonLd = {
   <!-- (03) Как проходит день -->
   <section class="block">
     <SectionHeader kicker={t('show.day.kicker')} title={t('show.day.title')} meta="11:00 — 14:00" />
-    <ol class="day">
+    <ol class="day" tabindex="0" aria-label={t('show.day.title')}>
       {
         showTimeline.map((time, i) => (
           <li class="day__step" data-reveal style={`--i:${i}`}>
@@ -300,9 +305,9 @@ const jsonLd = {
               data-kind="video"
               data-reveal="fade"
               style={`--i:${i % 4}`}
-              aria-label={`${t('show.gallery.video')}: ${g.alt}`}
+              aria-label={`${t('show.gallery.video')}: ${altOf(g, lang)}`}
             >
-              <img src={unsplash(g.id, 900, 900)} srcset={srcset(g.id, [400, 700, 1000, 1400], 1)} sizes="(max-width: 700px) 50vw, 25vw" alt={g.alt} width="900" height="900" loading="lazy" decoding="async" />
+              <img src={unsplash(g.id, 900, 900)} srcset={srcset(g.id, [400, 700, 1000, 1400], 1)} sizes="(max-width: 700px) 50vw, 25vw" alt={altOf(g, lang)} width="900" height="900" loading="lazy" decoding="async" />
               <span class="gal__play" aria-hidden="true">
                 <Icon name="play" size={22} />
               </span>
@@ -314,11 +319,11 @@ const jsonLd = {
               data-lightbox="show"
               data-full={unsplash(g.id, 1800)}
               data-kind="photo"
-              aria-label={g.alt}
+              aria-label={altOf(g, lang)}
               data-reveal="fade"
               style={`--i:${i % 4}`}
             >
-              <img src={unsplash(g.id, 900, 900)} srcset={srcset(g.id, [400, 700, 1000, 1400], 1)} sizes="(max-width: 700px) 50vw, 25vw" alt={g.alt} width="900" height="900" loading="lazy" decoding="async" />
+              <img src={unsplash(g.id, 900, 900)} srcset={srcset(g.id, [400, 700, 1000, 1400], 1)} sizes="(max-width: 700px) 50vw, 25vw" alt={altOf(g, lang)} width="900" height="900" loading="lazy" decoding="async" />
               <span class="gal__zoom" aria-hidden="true">
                 <Icon name="expand" size={18} />
               </span>
@@ -348,6 +353,12 @@ const jsonLd = {
     <span class="cta-bar__arrow" aria-hidden="true">→</span>
   </a>
 
+  <!-- Туры: посетителю шоу есть куда идти дальше -->
+  <section class="block">
+    <SectionHeader kicker={t('show.tours.kicker')} title={t('show.tours.title')} />
+    <TourIndex lang={lang} tours={tours.filter(hasPage).slice(0, 4)} open={-1} />
+  </section>
+
   <!-- (09) Бронирование -->
   <section class="book" id="show-booking">
     <div class="book__side">
@@ -364,7 +375,7 @@ const jsonLd = {
           ))
         }
       </ol>
-      <a href={contacts.whatsapp} class="btn btn--glass btn--block" target="_blank" rel="noopener">
+      <a href={whatsappLink(t('whatsapp.textShow'))} class="btn btn--glass btn--block" target="_blank" rel="noopener">
         WhatsApp {contacts.phone}
         <Icon name="whatsapp" />
       </a>
@@ -414,9 +425,14 @@ const jsonLd = {
   .hero__shade {
     position: absolute;
     inset: 0;
-    background:
-      linear-gradient(180deg, rgb(10 10 10 / 0.55) 0%, rgb(10 10 10 / 0) 28%),
-      linear-gradient(0deg, rgb(10 10 10 / 0.92) 0%, rgb(10 10 10 / 0.5) 40%, rgb(10 10 10 / 0) 70%);
+    background: linear-gradient(180deg, rgb(10 10 10 / 0.62) 0%, rgb(10 10 10 / 0.64) 55%, rgb(10 10 10 / 0.92) 100%);
+  }
+
+  /* На телефоне текст занимает почти весь кадр и стоит поверх светлого неба. */
+  @media (max-width: 900px) {
+    .hero__shade {
+      background: linear-gradient(180deg, rgb(10 10 10 / 0.68) 0%, rgb(10 10 10 / 0.62) 58%, rgb(10 10 10 / 0.92) 100%);
+    }
   }
 
   .hero__top {
@@ -428,7 +444,7 @@ const jsonLd = {
     justify-content: space-between;
     gap: 12px;
     padding: 20px var(--gutter);
-    color: var(--gold);
+    color: #f5f5f3;
   }
 
   .hero__content {
@@ -444,7 +460,7 @@ const jsonLd = {
   }
 
   .hero__title span {
-    color: var(--gold);
+    color: #dcbf82; /* светлее фирменного золотого: на фото тот не читается */
   }
 
   .hero__row {
@@ -1118,158 +1134,6 @@ const jsonLd = {
     }
   }
 
-  /* ---------- (07) Отзывы ---------- */
-  .rev-head {
-    display: grid;
-    justify-items: end;
-    gap: 6px;
-  }
-
-  .rev-rating {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .rev-rating__num {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 44px;
-    line-height: 1;
-  }
-
-  .rev-rating__stars {
-    display: flex;
-    color: var(--gold);
-  }
-
-  .rev-nav {
-    display: flex;
-    margin-top: 8px;
-    border: 1px solid var(--line);
-  }
-
-  .rev-nav button {
-    width: 48px;
-    height: 44px;
-    border: 0;
-    background: transparent;
-    font-size: 18px;
-    transition:
-      background-color 0.4s,
-      color 0.4s;
-  }
-
-  .rev-nav button + button {
-    border-left: 1px solid var(--line);
-  }
-
-  .rev-nav button:hover {
-    background: var(--ink);
-    color: var(--bg);
-  }
-
-  .rev {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(300px, calc((100% - 2px) / 3));
-    overflow-x: auto;
-    list-style: none;
-    border-top: 1px solid var(--line);
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    scrollbar-width: none;
-  }
-
-  .rev::-webkit-scrollbar {
-    display: none;
-  }
-
-  .rev__card {
-    display: flex;
-    flex-direction: column;
-    border-right: 1px solid var(--line);
-    scroll-snap-align: start;
-  }
-
-  .rev__media {
-    position: relative;
-    display: block;
-    aspect-ratio: 4 / 3;
-    overflow: hidden;
-    border-bottom: 1px solid var(--line);
-    background: var(--accent);
-  }
-
-  .rev__media img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 1.4s var(--ease);
-  }
-
-  .rev__card:hover .rev__media img {
-    transform: scale(1.05);
-  }
-
-  .rev__play {
-    position: absolute;
-    left: 16px;
-    bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 12px;
-    background: var(--gold);
-    color: #111;
-  }
-
-  .rev__body {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    gap: 16px;
-    padding: 24px var(--gutter);
-  }
-
-  .rev__stars {
-    display: flex;
-    gap: 2px;
-    color: var(--gold);
-  }
-
-  .rev__text {
-    margin: 0;
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: clamp(17px, 1.4vw, 21px);
-    line-height: 1.35;
-  }
-
-  .rev__author {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: auto;
-  }
-
-  .rev__author img {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-
-  @media (max-width: 900px) {
-    .rev {
-      grid-auto-columns: 82%;
-    }
-
-    .rev-head {
-      justify-items: start;
-    }
-  }
-
   /* ---------- (09) Бронирование ---------- */
   .book {
     display: grid;
@@ -1363,7 +1227,7 @@ const jsonLd = {
     transform: none;
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 900px) and (min-height: 501px) {
     .mbook {
       display: flex;
     }
@@ -1421,16 +1285,6 @@ const jsonLd = {
   );
   counters.forEach((c) => io.observe(c));
 
-  // Слайдер отзывов
-  const track = document.querySelector<HTMLElement>('[data-rev-track]');
-  const move = (dir: number) => {
-    if (!track) return;
-    const card = track.querySelector<HTMLElement>('li');
-    track.scrollBy({ left: dir * (card?.offsetWidth ?? 320), behavior: 'smooth' });
-  };
-  document.querySelector('[data-rev-prev]')?.addEventListener('click', () => move(-1));
-  document.querySelector('[data-rev-next]')?.addEventListener('click', () => move(1));
-
   // Фильтр галереи (если есть видео)
   const galBtns = document.querySelectorAll<HTMLButtonElement>('[data-gal-filter]');
   galBtns.forEach((btn) =>
@@ -1458,6 +1312,7 @@ const jsonLd = {
       document.body.classList.toggle('has-bookbar', on);
     };
     new IntersectionObserver(([e]) => ((pastHero = !e.isIntersecting), sync())).observe(hero);
-    new IntersectionObserver(([e]) => ((atForm = e.isIntersecting), sync())).observe(booking);
+    // Ниже формы панель тоже не нужна: заявка уже позади.
+    new IntersectionObserver(([e]) => ((atForm = e.isIntersecting || e.boundingClientRect.top < 0), sync())).observe(booking);
   }
 </script>
