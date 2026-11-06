@@ -15,7 +15,7 @@
     "address": "",
     "hours": ""
   },
-  "reviewsInMenu": false,
+  "reviewsInMenu": true,
   "videos": {
     "home": "/video/show-2.mp4",
     "tours": {
