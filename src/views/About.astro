@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CtaBanner from '../components/CtaBanner.astro';
 import PageHero from '../components/PageHero.astro';
+import SectionHeader from '../components/SectionHeader.astro';
 import { aboutPhoto } from '../data/content';
 import { whatsappLink } from '../data/site';
 import { localize, useTranslations, type Lang } from '../i18n/utils';
@@ -13,6 +14,7 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
+const facts = [1, 2, 3, 4].map((n) => ({ value: t(`about.fact${n}.value`), label: t(`about.fact${n}.label`) }));
 ---
 
 <BaseLayout lang={lang} page="about" path={routes.about}>
@@ -23,6 +25,20 @@ const t = useTranslations(lang);
       <p>{t('about.history.p3')}</p>
     </div>
   </PageHero>
+
+  <section class="facts">
+    <SectionHeader title={t('about.facts.title')} />
+    <dl class="facts__grid">
+      {
+        facts.map((f, i) => (
+          <div class="facts__cell" data-reveal style={`--i:${i}`}>
+            <dt class="facts__value num">{f.value}</dt>
+            <dd class="facts__label label">{f.label}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
 
   <CtaBanner
     title={t('about.cta.title')}
@@ -42,5 +58,51 @@ const t = useTranslations(lang);
     font-weight: 600;
     font-size: clamp(20px, 2vw, 30px);
     line-height: 1.3;
+  }
+
+  .facts__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .facts__cell {
+    min-width: 0;
+    padding: 28px var(--gutter);
+    border-right: 1px solid var(--line);
+  }
+
+  .facts__cell:last-child {
+    border-right: 0;
+  }
+
+  .facts__value {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(30px, 3.2vw, 48px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+
+  .facts__label {
+    margin: 8px 0 0;
+    color: var(--ink-mute);
+  }
+
+  @media (max-width: 900px) {
+    .facts__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .facts__cell:nth-child(2) {
+      border-right: 0;
+    }
+
+    .facts__cell:nth-child(-n + 2) {
+      border-bottom: 1px solid var(--line);
+    }
   }
 </style>

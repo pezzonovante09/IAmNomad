@@ -186,7 +186,6 @@ const settings = {
           widget: 'object',
           fields: [
             { name: 'id', label: 'Фото', widget: 'image', choose_url: true },
-            { name: 'height', label: 'Высота места над морем, м (подпись справа сверху)', widget: 'number', value_type: 'int' },
           ],
         },
         photo('heroPhoto', 'Фото для страниц без своего фото'),

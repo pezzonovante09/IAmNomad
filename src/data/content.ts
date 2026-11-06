@@ -3,8 +3,8 @@
 import type { Photo } from '../lib/img';
 import photos from '../content/photos.json';
 
-/** Первый экран главной: фото и высота места над уровнем моря (подпись — region.sonkul.*). */
-export const homeHero: { id: string; height: number } = photos.homeHero;
+/** Фото первого экрана главной. */
+export const homeHero: { id: string } = photos.homeHero;
 
 export const galleryPhotos: Photo[] = photos.galleryPhotos;
 export const instagramPhotos: Photo[] = photos.instagramPhotos;
